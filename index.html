@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html id="wap">
+  <head>
+    <meta charset="utf-8">
+    <link rel = "Shortcut icon" href = "./static/img/static/logo1.png">
+    <link rel = "Bookmark" href = "./static/img/static/logo1.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <meta name="baidu-site-verification" content="" />
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>Allptp</title>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=UpOYpyMier3cY3wfrsUsufrOw0tTKLux"></script>
+    <script type="text/javascript" src="https://res2.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+  </head>
+	<style>
+		li{
+			list-style: none;
+		}
+	</style>
+  <body>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+<script>
+  function flag(){
+   var flag = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
+    if(flag) {
+      document.getElementById('wap').style.fontSize = '10px'
+    }else{
+      document.getElementById('wap').style.fontSize = '16px'
+    }
+  }
+  flag();
+
+</script>
+</html>
+

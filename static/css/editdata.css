@@ -1,0 +1,62 @@
+.alter{
+  position:absolute;
+  cursor: pointer;
+}
+.mandatory{
+	width: 100%;
+}
+.data_input{
+	width: 600px;
+}
+.data_smalltxt{
+	text-align: left;
+	font-size: 13px;
+	color: gray;
+	line-height: 20px;
+}
+.contact_bg{
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 998;
+	background-color: rgba(0,0,0,.8);
+}
+.contact_con{
+	position: fixed;
+	top:50%;
+	right: 0;
+	bottom: 0;
+	left:50%;
+	z-index: 999;
+	width: 400px;
+	height: 460px;
+	margin-left: -200px;
+	margin-top: -230px;
+	background-color: white;
+	border-radius: 10px;
+}
+.contact_dialog{
+	width: 360px;
+	margin: 0 auto;
+}
+.contact_dialogtitle{
+	display: flex;
+	justify-content: space-between;
+	margin-top: 20px;
+}
+.add_address{
+	position: fixed;
+	top:50%;
+	right: 0;
+	bottom: 0;
+	left:50%;
+	z-index: 999;
+	width: 400px;
+	height: 600px;
+	margin-left: -200px;
+	margin-top: -300px;
+	background-color: white;
+	border-radius: 10px;
+}

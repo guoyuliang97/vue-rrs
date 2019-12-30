@@ -1,0 +1,96 @@
+.experience{
+	min-width: 1080px;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+}
+.experience_content{
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 82px;
+	display: flex;
+	justify-content: space-between;
+}
+.experience_nav{
+	width: 15%;
+	height: 100%;
+	overflow: auto;
+}
+.experience_container{
+	width:70%;
+	height: 100%;
+	overflow: auto;
+}
+.experience_last{
+	width: 30%;
+	height: 100%;
+	overflow: auto;
+}
+.last_top{
+	width: 100%;
+	height:760px;
+	background-color: #008489;
+}
+.last_con{
+	width: 90%;
+	margin: 0 auto;
+	text-align: left;
+}
+.last_detail{
+	color: white;
+	margin-top: 15px;
+}
+.about_user{
+	margin-top: 15px;
+	padding: 0 15px 20px 15px;
+	background-color: white;
+	cursor: pointer;
+	text-align: left;
+	
+}
+.about_user:hover{
+	background-color: rgba(0,132,137,.3);
+}
+.user_top{
+	display: flex;
+	height: 50px;
+	justify-content: space-between;
+}
+.user_topleft{
+	line-height: 50px;
+	width: 140px;
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
+}
+.user_topavator{
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	background-color: gray;
+}
+.exp_lastDetail{
+	background-color: white;
+	cursor: pointer;
+	position: relative;
+}
+.exp_lastDetail:hover{
+	background-color: rgba(0,132,137,.3);
+}
+.exp_lastTopline{
+	border-top: 1px solid #dcdcdc;
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+.detail_whitebg{
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: rgba(255,255,255,.5);
+}
