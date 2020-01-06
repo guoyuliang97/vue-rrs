@@ -91,26 +91,34 @@
     },
     methods:{
 		  saveBank(){
-		    this.$http.post(this.api + '/banks',{
-		      token: localStorage.getItem('token'),
-          bank_name: this.bank,
-          card_number: this.card,
-          user_name: this.name
-        })
-          .then(res=>{
-            if(res.data.code == 1){
-              this.getBank()
-              this.isAddcard = false
-            }else if(res.data.code == 3){
-              this.$http.post(this.api + '/home/Index/token')
-                .then(res=>{
-                  localStorage.setItem('token',res.data.data)
-                  this.saveBank()
-                })
-            }else{
-              alert(res.data.msg)
-            }
+        if(!this.card){
+          this.$message({type:'info',message:'请填写银行卡号'})
+        }else if(!this.name){
+          this.$message({type:'info',message:'请填写用户姓名'})
+        }else if(!this.bank){
+          this.$message({type:'info',message:'请填写银行名称'})
+        }else {
+          this.$http.post(this.api + '/banks',{
+            token: localStorage.getItem('token'),
+            bank_name: this.bank,
+            card_number: this.card,
+            user_name: this.name
           })
+            .then(res=>{
+              if(res.data.code == 1){
+                this.getBank()
+                this.isAddcard = false
+              }else if(res.data.code == 3){
+                this.$http.post(this.api + '/home/Index/token')
+                  .then(res=>{
+                    localStorage.setItem('token',res.data.data)
+                    this.saveBank()
+                  })
+              }else if(res.data.code == 0){
+                alert(res.data.msg)
+              }
+            })
+        }
       },
       getBank(){
 		    this.$http.post(this.api + '/bankl',{
@@ -134,6 +142,20 @@
 		    this.deletBank = !this.deletBank
       },
       deleteBnak(item,index){
+        this.$confirm('此操作将永久删除绑定银行卡, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+         this.deleteAllA(item,index)
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+      },
+      deleteAllA(item,index){
         this.$http.post(this.api + '/bankd',{
           token: localStorage.getItem('token'),
           bank_id: item.bank_id
@@ -145,9 +167,9 @@
               this.$http.post(this.api + '/home/index/token')
                 .then(res=>{
                   localStorage.setItem('token',res.data.data)
-                  this.deleteBnak(item,index)
+                  this.deleteAllA(item,index)
                 })
-            }else{
+            }else if(res.data.code == 0){
               alert(res.data.msg)
             }
           })

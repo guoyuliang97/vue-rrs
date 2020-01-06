@@ -12,7 +12,7 @@
               <div style="width:10px;height: 10px;border-radius: 50%" :style="{backgroundColor:clickIndex == index? '#008489':'#C0C0C0'}">
               </div>
               <div style="margin: 0 15px;">{{item.name}}</div>
-              <div>尾号 789</div>
+              <div>{{item.card_number.replace(/\s/g,'').replace(/(\d{4})\d+(\d{4})$/, "**** **** **** $2")}}</div>
             </div>
           </div>
           <div v-if="!bankList.length" style="color:#858585;border:1px solid #858585;padding: 10px 20px;">还没有添加银行卡</div>
@@ -153,29 +153,37 @@
           this.isAddcard = true
         },
         saveBank(){
-          this.isWait = true
-          this.$http.post(this.api + '/banks',{
-            token: localStorage.getItem('token'),
-            bank_name: this.bank,
-            card_number: this.card,
-            user_name: this.name
-          })
-            .then(res=>{
-              if(res.data.code == 1){
-                this.getbank()
-                this.isAddcard = false
-                this.isWait = false
-              }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/Index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.saveBank()
-                  })
-              }else if(res.data.code == 0){
-                this.isWait = false
-                alert(res.data.msg)
-              }
+          if(!this.card){
+            this.$message({type:'info',message:'请填写银行卡号'})
+          }else if(!this.name){
+            this.$message({type:'info',message:'请填写用户姓名'})
+          }else if(!this.bank){
+            this.$message({type:'info',message:'请填写银行名称'})
+          }else{
+            this.isWait = true
+            this.$http.post(this.api + '/banks',{
+              token: localStorage.getItem('token'),
+              bank_name: this.bank,
+              card_number: this.card,
+              user_name: this.name
             })
+              .then(res=>{
+                if(res.data.code == 1){
+                  this.getbank()
+                  this.isAddcard = false
+                  this.isWait = false
+                }else if(res.data.code == 3){
+                  this.$http.post(this.api + '/home/Index/token')
+                    .then(res=>{
+                      localStorage.setItem('token',res.data.data)
+                      this.saveBank()
+                    })
+                }else if(res.data.code == 0){
+                  this.isWait = false
+                  alert(res.data.msg)
+                }
+              })
+          }
         },
         refer(){
           let reg = /((^[1-9]\d*)|^0)(\.\d{0,2}){0,1}$/
@@ -244,7 +252,7 @@
       },
       created(){
           this.de_banlece = this.$route.query.information
-        this.banKAllList = test()
+          this.banKAllList = test()
       }
     }
 </script>

@@ -139,7 +139,6 @@
                   setTimeout(()=>{
                     this.ShowBottom()
                   },5)
-
                 }else{
                   let a = res.data.data.data.reverse()
                   this.replayList = a.concat(this.replayList )

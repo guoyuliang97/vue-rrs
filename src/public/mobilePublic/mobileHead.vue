@@ -25,6 +25,9 @@
       <div @click="checkApp" style="position:fixed;top:80%;right:0;z-index:9;background: linear-gradient(to right, #008489 , #26BAC0);border-top-left-radius: 2rem;border-bottom-left-radius: 2rem;font-size: 1.5rem;padding:0.5rem 1rem;color:#fff;">
         <p>打开App</p>
       </div>
+      <div @click="openApp" style="position:fixed;top:70%;right:0;z-index:9;background: linear-gradient(to right, #008489 , #26BAC0);border-top-left-radius: 2rem;border-bottom-left-radius: 2rem;font-size: 1.5rem;padding:0.5rem 1rem;color:#fff;">
+        <p>下载App</p>
+      </div>
     </div>
 </template>
 
@@ -135,6 +138,18 @@
             },5000)
           }
           test();
+        },
+        openApp(){
+          var userAgent = navigator.userAgent ;
+          var url="",downUrl="";
+          if(userAgent.indexOf("Android")>-1){
+            url='/app-release.apk';//安卓版App地址，由安卓同事提供
+            downUrl='/app-release.apk'; //安卓版App下载地址，由安卓同事提供
+          }else{
+            url='https://apps.apple.com/us/app/%E4%BA%BA%E4%BA%BA%E8%80%8D/id1482092521?l=zh&ls=1';//IOS版App地址，由IOS同事提供
+            downUrl="https://apps.apple.com/us/app/%E4%BA%BA%E4%BA%BA%E8%80%8D/id1482092521?l=zh&ls=1"; //IOS版App下载地址，由IOS同事提供
+          }
+          window.open(downUrl)
         }
       },
       mounted() {

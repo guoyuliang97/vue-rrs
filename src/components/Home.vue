@@ -545,6 +545,22 @@ export default {
       this.getBanner()
       this.getVist()
       this.getKind()
+      this.sendBuidu()
+    },
+    sendBuidu(){
+      this.$http.post(this.api + '/BaiduPush',{
+        token: localStorage.getItem('token'),
+        url: encodeURIComponent(window.location.href)
+      })
+        .then(res=>{
+          if(res.data.code == 1){
+            console.log('成功')
+          }else if(res.data.code == 3){
+            this.sendBuidu()
+          }else if(res.data.code == 0){
+            alert(res.data.msg)
+          }
+        })
     },
     //首页轮播
     getBanner(){

@@ -480,6 +480,7 @@
         if(localStorage.getItem('isLogin')){
           _this.getOwers()
         }
+        _this.sendBuidu()
         _this.getComment(1)
         _this.getActls()
         _this.imgUrl = localStorage.getItem('userImg')
@@ -532,6 +533,21 @@
         }
       },
       methods:{
+        sendBuidu(){
+          this.$http.post(this.api + '/BaiduPush',{
+            token: localStorage.getItem('token'),
+            url: encodeURIComponent(window.location.href)
+          })
+            .then(res=>{
+              if(res.data.code == 1){
+                console.log('成功')
+              }else if(res.data.code == 3){
+                this.sendBuidu()
+              }else if(res.data.code == 0){
+                alert(res.data.msg)
+              }
+            })
+        },
        /* getData(){
           var url =window.location.href + '&'+ 'userId' +'='+this.isOwer
           this.$http.post(this.api + '/WechaShare',{

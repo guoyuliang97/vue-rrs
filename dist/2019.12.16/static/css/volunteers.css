@@ -1,0 +1,69 @@
+.volunteers{
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding: 20px 20px 20px 20px;
+}
+.volunteers_content{
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: space-around;
+}
+.volunteers_left{
+	width: 50%;
+	position: relative;
+}
+.volunteers_right{
+	width: 50%;
+}
+.volunteers_logo{
+	text-align: left;
+	font-size: 22px;
+	font-weight: bold;
+	cursor: pointer;
+}
+.pages{
+	width: 70%;
+	text-align: left;
+	margin: 0 auto;
+	margin-top:80px;
+}
+.pages_bigtitle{
+	font-size: 30px;
+}
+.volunteers_txt{
+	margin-top: 25px;
+}
+.volunteers_btn{
+	margin-top: 30px;
+}
+.volunteers_btn span{
+	padding: 12px 15px 12px 15px;
+	background-color: #008489;
+	border-radius: 5px;
+	color: white;
+	cursor: pointer;
+}
+.volunteers_btn a{
+	color:#008489 ;
+	cursor: pointer;
+	margin-left: 10px;
+}
+.back_btn{
+	cursor: pointer;
+	position: absolute;
+	left: 15%;
+	bottom: 10px;
+}
+.show_txt{
+	text-align: center;
+	height: 40px;
+	line-height: 40px;
+	font-size: 26px;
+	position: absolute;
+	top: 50%;
+	margin-top: -20px;
+}

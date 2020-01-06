@@ -164,8 +164,8 @@
                 <div v-if="changeColor == 1" style="width:90%;height:100%">
                   <LoadingImg type="2" :src="imgList[photoIndex].img" style="height:100%;max-width:100%;overflow: hidden"></LoadingImg>
                 </div>
-                <div v-if="changeColor == 2&& imgList.length" style="height:500px;position: relative">
-                  <video id="videoI" controls :src="imgList[photoIndex].img" style="height:100%; object-fit: fill"  ></video>
+                <div v-if="changeColor == 2&& imgList.length" style="width:90%;height:100%;position: relative">
+                  <video id="videoI" controls :src="imgList[photoIndex].img" style="max-width:90%;height:100%; object-fit: fill"  ></video>
                   <img id="player" @click="lookVideo" src="../../static/img/static/video.png" style="position: absolute;z-index:999;top:50%;left:50%;margin-left:-43px;margin-top:-43px;cursor: pointer" />
                 </div>
                 <div style="color:#fff;display: flex;align-items: center;">

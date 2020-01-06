@@ -8,7 +8,7 @@
       </div>
       <div class="margin">
         <h4>服务费</h4>
-        <p class="language_txt">人人耍对每笔预订收取20%的费用。 了解更多关于人人耍服务费的信息。</p>
+        <p class="language_txt">人人耍对每笔预订收取10%的费用。 了解更多关于人人耍服务费的信息。</p>
       </div>
       <div class="margin">
         <h4>专属体验</h4>
