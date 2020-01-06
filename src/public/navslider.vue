@@ -8,11 +8,11 @@
 				</div>
 			</div>
 			<div class="slider_hidden">
-				<div>
+<!--				<div>
 					<el-input placeholder="提问或使用关键词搜索" style="margin-top: 20px;" v-model="searchData" class="input-with-select">
 						<el-button slot="append" icon="el-icon-search"></el-button>
 					</el-input>
-				</div>
+				</div>-->
 				<p style="font-size: 12px;margin-top: 30px;" class="fontweight">建议的话题</p>
 				<div style="margin-top: 30px;overflow-x: hidden;">
 					<el-collapse v-model="activeNames" @change="handleChange">
@@ -97,8 +97,8 @@
 				</div>
 			</div>
 			<div style="height: 100px;position: absolute;width: 320px;left: 15px;bottom: 0;border-top: 1px solid #dcdcdc;">
-				<el-button type="primary" style="width: 100%;margin-top: 15px;">访问帮助中心</el-button>
-				<p style="text-align: center;margin-top: 10px;color: #008489;cursor: pointer;">提供反馈</p>
+<!--				<el-button type="primary" style="width: 100%;margin-top: 15px;">访问帮助中心</el-button>
+				<p style="text-align: center;margin-top: 10px;color: #008489;cursor: pointer;">提供反馈</p>-->
 			</div>
 		</div>
 </template>
