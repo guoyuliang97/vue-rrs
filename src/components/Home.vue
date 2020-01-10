@@ -548,19 +548,20 @@ export default {
       this.sendBuidu()
     },
     sendBuidu(){
-      this.$http.post(this.api + '/BaiduPush',{
-        token: localStorage.getItem('token'),
-        url: encodeURIComponent(window.location.href)
-      })
-        .then(res=>{
-          if(res.data.code == 1){
-            console.log('成功')
-          }else if(res.data.code == 3){
-            this.sendBuidu()
-          }else if(res.data.code == 0){
-            alert(res.data.msg)
-          }
+      if(window.location.href.indexOf('.top') == -1 && window.location.href.indexOf('localhost') == -1){
+        this.$http.post(this.api + '/BaiduPush',{
+          token: localStorage.getItem('token'),
+          url: encodeURIComponent(window.location.href)
         })
+          .then(res=>{
+            if(res.data.code == 1){
+            }else if(res.data.code == 3){
+              this.sendBuidu()
+            }else if(res.data.code == 0){
+              alert(res.data.msg)
+            }
+          })
+      }
     },
     //首页轮播
     getBanner(){

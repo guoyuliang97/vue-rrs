@@ -2,7 +2,6 @@
     <div>
       <Head type="publishPage" v-on:onreload="reload" ></Head>
       <hr style="margin-top:82px;border: 1px solid #eee;">
-
       <div style="margin:40px auto 0;width:80%;">
         <div style="display:flex;justify-content: flex-start">
           <div id="activePhoto" >
@@ -47,7 +46,6 @@
                 <p>{{userName?userName:'匿名用户'}}</p>
                 <p v-if="userId != isOwer " @click="contactPlanner" style="font-size:13px;color:#008489;cursor: pointer;margin-top:15px;">联系策划人</p>
               </div>
-
             </div>
             <div style="border-bottom: 1px solid #eee;padding:30px 0;display: flex;justify-content: space-between">
               <div>
@@ -73,7 +71,6 @@
               </div>
             </div>
           </div>
-
         </div>
       </div>
       <!--翻译弹窗-->
@@ -476,7 +473,6 @@
       mounted(){
         let _this = this
         _this.nextOver = true
-
         if(localStorage.getItem('isLogin')){
           _this.getOwers()
         }
@@ -534,19 +530,20 @@
       },
       methods:{
         sendBuidu(){
-          this.$http.post(this.api + '/BaiduPush',{
-            token: localStorage.getItem('token'),
-            url: encodeURIComponent(window.location.href)
-          })
-            .then(res=>{
-              if(res.data.code == 1){
-                console.log('成功')
-              }else if(res.data.code == 3){
-                this.sendBuidu()
-              }else if(res.data.code == 0){
-                alert(res.data.msg)
-              }
+          if(window.location.href.indexOf('.top') == -1 && window.location.href.indexOf('localhost') == -1){
+            this.$http.post(this.api + '/BaiduPush',{
+              token: localStorage.getItem('token'),
+              url: encodeURIComponent(window.location.href)
             })
+              .then(res=>{
+                if(res.data.code == 1){
+                }else if(res.data.code == 3){
+                  this.sendBuidu()
+                }else if(res.data.code == 0){
+                  alert(res.data.msg)
+                }
+              })
+          }
         },
        /* getData(){
           var url =window.location.href + '&'+ 'userId' +'='+this.isOwer
