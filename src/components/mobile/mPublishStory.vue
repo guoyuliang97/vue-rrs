@@ -24,7 +24,6 @@
 </template>
 
 <script>
-
   import LoadingImg from '../../public/loadingImg'
     export default {
         name: "mPublishStory",
@@ -39,7 +38,7 @@
       },
       methods:{
         goBack(){
-          this.$router.go(-1)
+          this.$router.push('/')
         },
         getStory(val){
           this.$http.post(this.api + '/storyc',{

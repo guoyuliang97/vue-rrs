@@ -71,16 +71,13 @@
                     <img :src="item.user.head_image?item.user.headimage.domain+item.user.headimage.image_url:'../../../static/img/static/user.png'" style="width:4rem;height:4rem;border-radius: 50%;">
                   </div>
                   <div style="margin-left:1rem;">
-                    <p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"><b>{{item.user.family_name+item.user.middle_name+item.user.name?item.user.family_name+item.user.middle_name+item.user.name:'匿名用户'}}</b></p>
-                    <p style="margin: 0.5rem 0;">{{item.create_time}}</p>
+                    <p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><b>{{item.user.family_name+item.user.middle_name+item.user.name?item.user.family_name+item.user.middle_name+item.user.name:'匿名用户'}}</b></p>
+                    <p style="margin: 0.5rem 0;font-size: 12px">{{item.create_time}}</p>
                     <p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap">{{item.content}}</p>
                     <p style="color:#008489;">{{item.leaving_num}}条回复</p>
                   </div>
                 </div>
-                <div style="display: flex;justify-content: flex-end;margin-left:10px">
-                  <span style="font-size: 1.5rem">{{item.praise_num}}</span>
-                  <i @click="clickPrease(item,index)" class="iconfont icon-zan" style="margin-left:0.5rem;font-size: 1.5rem;" :style="{'color': item.is_praise == 0? '#999999':'#008489'}"></i>
-                </div>
+
               </div>
             </div>
             <div v-if="!disList.length" style="margin:20px 0;text-align: center">
@@ -129,6 +126,15 @@
               </div>
             </div>
           </div>
+          <div style="position: fixed;">
+            <div @click="checkApp" style="position:fixed;top: 80%;right:0;z-index:9;background: linear-gradient(to right, #008489 , #26BAC0);border-top-left-radius: 2rem;border-bottom-left-radius: 2rem;font-size: 1.5rem;padding:0.5rem 1rem;color:#fff;">
+              <p>打开App</p>
+            </div>
+            <div @click="openApp"  style="position:fixed;top:70%;right:0;z-index:9;background: linear-gradient(to right, #008489 , #26BAC0);border-top-left-radius: 2rem;border-bottom-left-radius: 2rem;font-size: 1.5rem;padding:0.5rem 1rem;color:#fff;">
+              <p>下载App</p>
+            </div>
+          </div>
+
           <div style="display: flex;justify-content: space-between;position: fixed;background-color: white;left:0;right:0;padding: 0.5rem 1rem;border-top: 1px solid #eee;" :style="{bottom:bottom + 'px'}">
             <div>
               <p style="font-size: 1.5rem;font-weight: bold"><span v-if="activeData.price">￥{{activeData.price}}/人</span><span v-if="!activeData.price" style="color:red">已过期/已满</span></p>
@@ -143,9 +149,12 @@
               <el-button size="mini" plain @click="lookMoreImg" style="border:1px solid #008489;color:#008489;">预定</el-button>
             </div>
           </div>
+
         </div>
       </div>
+
     </div>
+
 </template>
 
 <script>
@@ -207,63 +216,60 @@
         }
       },
       methods:{
-        /*getData(){
-          if(this.isOwer){
-            var url =encodeURIComponent(window.location.href + '&'+ 'userId' +'='+this.isOwer)
+        openApp(){
+          var userAgent = navigator.userAgent ;
+          var url="",downUrl="";
+          if(userAgent.indexOf("Android")>-1){
+            url='/app-release.apk';//安卓版App地址，由安卓同事提供
+            downUrl='/app-release.apk'; //安卓版App下载地址，由安卓同事提供
           }else{
-            var url =encodeURIComponent(window.location.href)
+            url='https://apps.apple.com/us/app/%E4%BA%BA%E4%BA%BA%E8%80%8D/id1482092521?l=zh&ls=1';//IOS版App地址，由IOS同事提供
+            downUrl="https://apps.apple.com/us/app/%E4%BA%BA%E4%BA%BA%E8%80%8D/id1482092521?l=zh&ls=1"; //IOS版App下载地址，由IOS同事提供
           }
-          this.$http.post(this.api + '/WechaShare',{
+          window.open(downUrl)
+        },
+        checkApp(){
+          var userAgent = navigator.userAgent ;
+          var url="",downUrl="";
+          if(userAgent.indexOf("Android")>-1){
+            MessageBox.alert('暂时没有安卓APP，请耐心等待！')
+          }else{
+            url='https://apps.apple.com/us/app/%E4%BA%BA%E4%BA%BA%E8%80%8D/id1482092521?l=zh&ls=1';//IOS版App地址，由IOS同事提供
+            downUrl="https://apps.apple.com/us/app/%E4%BA%BA%E4%BA%BA%E8%80%8D/id1482092521?l=zh&ls=1"; //IOS版App下载地址，由IOS同事提供
+          }
+          function test(){
+            window.location.href = url;
+            setTimeout(function(){
+              window.location.href = downUrl;
+            },5000)
+          }
+          test();
+        },
+        getComment(val){
+          this.$http.post(this.api + '/home/Comment/comment_list',{
             token: localStorage.getItem('token'),
-            url:url
+            table_id:this.activity_id,
+            flag: 1,
+            order: 1,
+            page: val
           })
             .then(res=>{
               if(res.data.code == 1){
-                wx.config({
-                  debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                  appId: res.data.data.appId, // 必填，公众号的唯一标识
-                  timestamp: res.data.data.timestamp, // 必填，生成签名的时间戳
-                  nonceStr: res.data.data.nonceStr, // 必填，生成签名的随机串
-                  signature: res.data.data.signature,// 必填，签名
-                  jsApiList: [
-                    "updateAppMessageShareData"//自定义“分享给朋友”及“分享到QQ”按钮的分享内容
-                    //自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容
-                  ]//获取“分享到腾讯微博”按钮点击状态及自定义分享内容接口] // 必填，需要使用的JS接口列表 这里填写需要用到的微信api openlocation为使用微信内置地图查看位置接口
-                });
-                wx.ready(function(){
-                  wx.updateAppMessageShareData({
-                    title:'...ihuiugiu', // 分享标题
-                    link: decodeURIComponent(url), // 分享链接
-                    imgUrl:'https://www.allptp.cn/image/uploads/20190918/01128a82cd3930913efd8e27b12df1d0.png', // 分享图标
-                    desc: 'ihihiuhi', // 分享描述
-                    success:function(){
-                      alert(6666)
-                    },
-                    cancel:function(){
-                      alert('false')
-                    },
-                    fail:function(){
-                      alert('失败')
-                    }
-                  })
-                })
-              }else if(res.data.code == 3){
-                this.getData()
+                let data = res.data.data.data
+                this.disList = data
+                this.total =  res.data.data.total
+              }else if(res.data.code == 3 || res.data.code == 4){
+                this.getComment(val)
               }else if(res.data.code == 0){
                 alert(res.data.msg)
               }
             })
-          wx.error(function(res){
-            alert('false')
-//config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-          });
-        },*/
-
+        },
         lookMoreImg(){
           MessageBox.alert('请前往APP或者客户端查看')
         },
         goBack(){
-          this.$router.go(-1)
+          this.$router.push('/')
         },
         //获取手机屏幕高度
         getHeight(){
@@ -295,6 +301,7 @@
         getParams(){
           this.activity_id = this.$route.query.information
           this.getActive()
+          this.getComment()
         },
         getActive(){
           this.$http.post(this.api + '/home/Activity/get_activity',{
