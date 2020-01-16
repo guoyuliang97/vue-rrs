@@ -185,7 +185,7 @@
               {img: '../../../static/img/static/1.jpg'},
               {img: '../../../static/img/static/3.jpg'},
             ],
-            score:4,
+            score:0,
             bottom: -60,
             jionDress:[],
             activeData:'',
@@ -314,6 +314,7 @@
                 let data = res.data.data
                 this.activeData = data
                 this.imgList.push(data.cover)
+                this.score = data.score
                 for(let i =0;i<data.image.length;i++){
                   this.imgList.push(data.image[i])
                 }
