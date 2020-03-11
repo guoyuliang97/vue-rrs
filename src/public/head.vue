@@ -83,7 +83,8 @@
         volunteer:false,
         pageIndex:-1,
         aeditSearch:'',
-        isPlayer:false
+        isPlayer:false,
+        userDefult: '../../static/img/static/user.png' ,
       };
 		},
 		components:{
@@ -230,20 +231,17 @@
       regist(res) {
         this.isLogin = true
         this.showDialog = false
-        console.log(res)
-        if(res.data.data.headimage){
-          this.userImg = res.data.data.headimage.domain + res.data.data.headimage.image_url
-          localStorage.setItem('userImg',this.userImg)
-        }else{
-          this.userImg = '../../static/img/static/user.png'
-          localStorage.setItem('userImg',this.userImg)
-        }
+
+     
+          this.userImg = res.data.data.headimage? res.data.data.headimage.domain + res.data.data.headimage.image_url :this.userDefult
+
         if(res.data.data.audit_face == 2 && res.data.data.isplanner == 1){
           this.someThing = true
         }
         if(res.data.data.isvolunteer == 1 && res.data.data.audit_idcard == 1 ){
           this.volunteer = true
         }
+        localStorage.setItem('userImg',this.userImg)
         this.$emit('reload')
       },
       exitAccount(){
@@ -318,45 +316,48 @@
       toZhiyuan(){
 			  this.$router.push('/myWant')
       },
-      getToken(){
+      getToken(){ 
         if(localStorage.getItem('token')){
           if(localStorage.getItem('isLogin')){
             this.getMesage()
             this.isLogin = localStorage.getItem('isLogin')
-            this.$http.post(this.api + '/home/User/get_user',{
-              token: localStorage.getItem('token')
-            })
-              .then(res=>{
-                if(res.data.code == 1){
-                  if(res.data.data.length > 0){
-                    if(res.data.data[0].headimage){
-                      this.userImg = res.data.data[0].headimage.domain + res.data.data[0].headimage.image_url
-                    }else{
-                      this.userImg = '../../static/img/static/user.png'
-                    }
-                    if(res.data.data[0].isplanner == 1 && res.data.data[0].audit_face == 2 ){
-                      this.someThing = true
-                    }
-                    if(res.data.data[0].isvolunteer == 1 && res.data.data[0].audit_idcard == 1){
-                      this.volunteer = true
-                    }
-                    this.$emit('reload',res)
-                    this.getNoReadAll()
-                  }
-                }else if(res.data.code == 3){
-                  this.$http.post(this.api + '/home/Index/token')
-                    .then(res=>{
-                      localStorage.setItem('token',res.data.data)
-                      this.$emit('reload')
-                      localStorage.removeItem('isLogin')
-                      localStorage.removeItem('userImg')
-                    })
-                }else{
-                  this.$emit('reload')
-                  localStorage.removeItem('isLogin')
-                  localStorage.removeItem('userImg')
-                }
-              })
+            this.$emit('reload')
+            this.getNoReadAll()
+            this.userImg = localStorage.getItem('userImg')
+            // this.$http.post(this.api + '/home/User/get_user',{
+            //   token: localStorage.getItem('token')
+            // })
+            //   .then(res=>{
+            //     if(res.data.code == 1){
+            //       if(res.data.data.length > 0){
+            //         if(res.data.data[0].headimage){
+            //           this.userImg = res.data.data[0].headimage.domain + res.data.data[0].headimage.image_url
+            //         }else{
+            //           this.userImg = '../../static/img/static/user.png'
+            //         }
+            //         if(res.data.data[0].isplanner == 1 && res.data.data[0].audit_face == 2 ){
+            //           this.someThing = true
+            //         }
+            //         if(res.data.data[0].isvolunteer == 1 && res.data.data[0].audit_idcard == 1){
+            //           this.volunteer = true
+            //         }
+            //         this.$emit('reload',res)
+            //         this.getNoReadAll()
+            //       }
+            //     }else if(res.data.code == 3){
+            //       this.$http.post(this.api + '/home/Index/token')
+            //         .then(res=>{
+            //           localStorage.setItem('token',res.data.data)
+            //           this.$emit('reload')
+            //           localStorage.removeItem('isLogin')
+            //           localStorage.removeItem('userImg')
+            //         })
+            //     }else{
+            //       this.$emit('reload')
+            //       localStorage.removeItem('isLogin')
+            //       localStorage.removeItem('userImg')
+            //     }
+            //   })
           }else{
             this.$http.post(this.api + '/home/User/get_user',{
               token: localStorage.getItem('token')
@@ -369,6 +370,7 @@
                     }else{
                       this.userImg = '../../static/img/static/user.png'
                     }
+                    
                     if( res.data.data[0].isplanner == 1 && res.data.data[0].audit_face == 2){
                       this.someThing = true
                     }

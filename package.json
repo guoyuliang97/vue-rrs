@@ -32,7 +32,8 @@
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1",
     "vue-video-player": "^5.0.2",
-    "weixin-js-sdk": "^1.4.0-test"
+    "weixin-js-sdk": "^1.4.0-test",
+    "xss": "^1.0.6"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

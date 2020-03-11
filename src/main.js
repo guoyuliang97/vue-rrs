@@ -16,7 +16,8 @@ import './assets/theme/index.css'
 import '../static/css/animate.min.css'
 import '../src/axios/request'
 
-
+import xss from 'xss'
+Vue.prototype.Xss = xss
 import globalVariable from '@/api/global_variable.js'
 Vue.prototype.GLOBAL = globalVariable
 

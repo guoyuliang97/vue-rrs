@@ -15,13 +15,13 @@
           <div v-for="(item,index) in publishList" style="display: flex;justify-content: space-around;margin-top:50px">
             <LoadingImg type="3" :src="item.cover.domain + item.cover.image_url" style="width:300px;height:200px"></LoadingImg>
             <div style="line-height:40px;width:300px;">
-              <h4>{{item.title}}</h4>
+              <h4 v-html="Xss(item.title)"></h4>
               <div style="display: flex;justify-content: flex-start">
                 <div v-for="(items,indexs) in item.kind" >
                   <span>/{{items.kind_name}}&nbsp;</span>
                 </div>
               </div>
-              <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">{{item.content }}</div>
+              <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;" v-html="Xss(item.content)"></div>
               <el-button type="primary" plain @click="toPublish(item,index)">查看</el-button>
               <el-button type="primary" plain @click="toRemake(item,index)">修改</el-button>
             </div>

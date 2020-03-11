@@ -38,7 +38,7 @@
             <div style="border-bottom: 1px solid #eee;padding:30px 0;display: flex;justify-content: space-between">
               <div>
                 <h3 >关于策划人介绍</h3>
-                <div style="min-width:450px;margin-top:20px;line-height:40px;word-wrap:break-word;white-space:pre-wrap;">{{userintroduce}}</div>
+                <div style="min-width:450px;margin-top:20px;line-height:40px;word-wrap:break-word;white-space:pre-wrap;" v-html="Xss(userintroduce)"></div>
                 <span v-if="best_introduce" style="color:#008489;">最佳翻译：{{best_introduce}}！</span>
               </div>
               <div style="text-align: center;min-width:150px">
@@ -50,7 +50,7 @@
             <div style="border-bottom: 1px solid #eee;padding:30px 0;display: flex;justify-content: space-between">
               <div>
                 <h3>关于体验内容</h3>
-                <div style="min-width:450px;margin-top:20px;word-wrap:break-word;white-space:pre-wrap;line-height:40px">{{content}}</div>
+                <div style="min-width:450px;margin-top:20px;word-wrap:break-word;white-space:pre-wrap;line-height:40px" v-html="Xss(content)"></div>
                 <span v-if="best_descripte" style="color:#008489;">最佳翻译：{{best_descripte}}！</span>
               </div>
               <div style="min-width:150px;text-align: center">
@@ -1195,20 +1195,20 @@
             })
         },
         getRevie(){
-        this.$http.post(this.api + '/home/Comment/collegroup_list',{
-            token: localStorage.getItem('token'),
-            table_id: this.routerParams,
-            flag: 1
-          })
-            .then(res=>{
-              if(res.data.code == 1){
-               this.wishList = res.data.data
-              }else if(res.data.code == 3 || res.data.code == 4){
-                this.getRevie()
-              }else if(res.data.code == 0){
-                alert(res.data.msg)
-              }
+          this.$http.post(this.api + '/home/Comment/collegroup_list',{
+              token: localStorage.getItem('token'),
+              table_id: this.routerParams,
+              flag: 1
             })
+              .then(res=>{
+                if(res.data.code == 1){
+                this.wishList = res.data.data
+                }else if(res.data.code == 3 || res.data.code == 4){
+                  this.getRevie()
+                }else if(res.data.code == 0){
+                  alert(res.data.msg)
+                }
+              }) 
         },
         like(){
           if(localStorage.getItem('isLogin')){

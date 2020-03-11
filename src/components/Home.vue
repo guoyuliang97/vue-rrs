@@ -310,6 +310,7 @@ export default {
         }
       })
     },
+    
     showHead(){
       var winHeight =  document.documentElement.clientHeight
       var hotPlace = document.getElementById('hotPlace').offsetTop
@@ -414,12 +415,10 @@ export default {
             path: 'moreActive',
             query:{
               key: this.hotIndex,
-              information: JSON.stringify( this.hotnav[i])
             }
           })
         }
       }
-
     },
     moreStory(){
       this.$router.push('/story')
