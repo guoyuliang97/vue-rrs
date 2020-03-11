@@ -29,7 +29,7 @@
       <div  style="margin: 10px 0;font-size:14px;"><span style="cursor: pointer" :style="{color:is_report?'#008489':'#000'}" v-show="!isOwer"  @click="openInform">{{is_report? '已举报':'举报'}}·</span><span style="margin: 0 0;cursor: pointer"  @click="talk" v-if="isLogin == true">{{isOwer? '删除':'回复'}}·</span><i class="iconfont icon-zan" style="width:16px;height:16px;" @click="parise" :style="{'color':is_praise?'#008489':'#000'}"></i>{{parseNum}}</div>
     </div>
     <div v-if="type=='story'"  style="text-align:left;margin:10px 0;">
-      <span>{{mess}}</span>
+      <span v-html="Xss(mess)"></span>
     </div>
     <!-- 个人资料页面游客评论-->
     <div v-if="type=='3'" style="display:flex;justify-content: flex-start">

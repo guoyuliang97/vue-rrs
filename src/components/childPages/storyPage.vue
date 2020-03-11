@@ -18,8 +18,8 @@
               <loadingImg type="3" :src="item.img" width="100%" height="100%"></loadingImg>
             </div>
             <div style="text-align:left;line-height:30px;">
-              <h2 style="text-align: center">{{title}}</h2>
-              <div style=" word-wrap:break-word;white-space:pre-wrap;text-indent: 2rem">{{content}}</div >
+              <h2 style="text-align: center" v-html="Xss(title)"></h2>
+              <div style=" word-wrap:break-word;white-space:pre-wrap;text-indent: 2rem" v-html="Xss(content)"></div >
             </div>
             <div style="margin:30px 0 0; display:flex;justify-content: space-between">
               <div>
@@ -1030,20 +1030,19 @@
 </script>
 
 <style scoped>
-
-a{
-  color:#008489;
-}
-.share{
-  width:105px;
-  height:105px;
-  border-radius:50%;
-  background-color:#f9f9f9;
-  cursor: pointer
-}
-.shareI{
-  font-size:24px;margin:40px;color:#000
-}
+  a{
+    color:#008489;
+  }
+  .share{
+    width:105px;
+    height:105px;
+    border-radius:50%;
+    background-color:#f9f9f9;
+    cursor: pointer
+  }
+  .shareI{
+    font-size:24px;margin:40px;color:#000
+  }
   .ad{
     font-size:24px;margin:0 40px;color:#000
   }

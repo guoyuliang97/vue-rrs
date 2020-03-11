@@ -31,7 +31,7 @@
       </div>
       <p style="border-bottom: 2px solid #eee;margin: 30px 0px;"></p>
       <div style="text-align: left">
-        <p style="margin:20px 0;">蜀ICP备19001672号</p>
+        <p style="margin:20px 0;"><a href="http://www.beian.miit.gov.cn" target="_blank">蜀ICP备19001672号</a></p>
         <p style="">眉山市人人游网络科技有限公司</p>
       </div>
 
@@ -70,6 +70,9 @@
             ],
             value2:''
           }
+        },
+        methods:{
+       
         },
       created(){
           this.options = test()
