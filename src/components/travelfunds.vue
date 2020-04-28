@@ -166,7 +166,7 @@
       getEWM(){
 		    this.$http.post(this.api + '/home/Upload/getqrcode',{
 		      token: localStorage.getItem('token'),
-          url: this.asd+'?'+'userId' +'='+this.user.user_id,
+          url: this.asd
         })
           .then(res=>{
            if(res.data.code == 1){
@@ -229,8 +229,10 @@
         }
       },
       reload(res){
+        console.log(res)
         this.user = res.data.data[0]
         this.asd =location.host + '/share?userId='+res.data.data[0].user_id
+        this.getEWM()
       },
       handleAvatarSuccess(res, file) {
 		    console.log(res)
@@ -441,7 +443,7 @@
     },
     mounted() {
 		  this.getImg()
-      this.getEWM()
+  
     },
   }
 </script>
