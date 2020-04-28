@@ -229,9 +229,8 @@
         }
       },
       reload(res){
-        console.log(res)
         this.user = res.data.data[0]
-        this.asd =location.host + '/share?userId='+res.data.data[0].user_id
+        this.asd =location.origin + '/share?userId='+res.data.data[0].user_id
         this.getEWM()
       },
       handleAvatarSuccess(res, file) {
