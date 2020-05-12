@@ -17,11 +17,11 @@
         <p style="margin:10px 0;">如果每人的费用高于输入的最低价格，参与者将支付较高的金额。</p>
 
         <div v-if="checked == true">
-          <el-button type="primary" plain @click="sendActive">{{complete?'保存':'下一步'}}</el-button> <el-button type="primary" plain @click="cancel">撤销</el-button>
+          <el-button type="primary" plain @click="sendActive">{{complete == '1'?'保存':'下一步'}}</el-button> <el-button type="primary" plain @click="cancel">撤销</el-button>
         </div>
       </div>
       <div v-if="checked == false">
-        <el-button type="primary" plain @click="sendActive">{{complete?'保存':'下一步'}}</el-button>
+        <el-button type="primary" plain @click="sendActive">{{complete == '1'?'保存':'下一步'}}</el-button>
       </div>
 
     </div>
@@ -69,7 +69,7 @@
                   })
                     .then(res=>{
                       if(res.data.code == 1){
-                        if(!this.complete){
+                        if(this.complete == '0'){
                           this.$emit('changeRouter',{id:16,router:'needVolunter',information: this.active_id,complete: this.complete})
                         }else{
                           this.$message({
@@ -113,7 +113,7 @@
                 })
                   .then(res=>{
                     if(res.data.code == 1){
-                      if(!this.complete){
+                      if(this.complete == '0'){
                          this.$emit('changeRouter',{id:16,router:'needVolunter',information: this.active_id,complete:this.complete})
                       }else{
                         this.$message({

@@ -36,7 +36,7 @@
 		style="margin-top: 20px;">
 		</el-input>
 		<div class="exp_btn">
-			<el-button type="primary" @click="changeRouter">{{complete?'保存':'下一步'}}</el-button>
+			<el-button type="primary" @click="changeRouter">{{complete == '1'?'保存':'下一步'}}</el-button>
 		</div>
 	</div>
 </template>
@@ -86,7 +86,7 @@
               })
                 .then(res=>{
                   if(res.data.code == 1){
-                    if(!this.complete){
+                    if(this.complete == '0'){
                       this.$emit('changeRouter',{id:8,router:"Photo",information: this.active_id,complete: this.complete})
                     }else{
                       this.$message({
@@ -140,6 +140,7 @@
       window.scroll(0,0)
       this.complete = this.$route.query.complete
       this.active_id = this.$route.query.information
+      console.log(this.complete)
 		},
     mounted() {
 		  let _this = this

@@ -14,7 +14,7 @@
       <el-input type="textarea" :autosize="{minRows:3,maxRows:5}" v-model="needThing" placeholder="在此输入项目"></el-input>
     </div>
 			<div class="exp_btn">
-				<el-button type="primary" plain @click="changeRouter">{{complete?'保存':'下一步'}}</el-button>
+				<el-button type="primary" plain @click="changeRouter">{{complete == '1'?'保存':'下一步'}}</el-button>
 			</div>
 
 		</div>
@@ -59,7 +59,7 @@
           })
             .then(res=>{
               if(res.data.code == 1){
-                if(!this.complete){
+                if(this.complete == '0'){
                   this.$emit('changeRouter',{id:7,router:"Title",information: this.active_id,complete: this.complete})
                 }else{
                   this.$message({

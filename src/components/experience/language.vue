@@ -22,7 +22,7 @@
       <el-option  v-for="(item,index) in languages" :disabled="main_laguage === index" :label="item.label" :value="item.value"></el-option>
     </el-select>
 		<div class="exp_btn">
-			<el-button type="primary" plain @click="changeRouter">{{complete?'保存':'下一步'}}</el-button>
+			<el-button type="primary" plain @click="changeRouter">{{complete == '1' ?'保存':'下一步'}}</el-button>
 		</div>
 	</div>
 </template>
@@ -59,7 +59,7 @@ import test from '../../../static/js/language'
               step: 0
             }).then(res=>{
               if(res.data.code == 1){
-                if(!this.complete){
+                if(this.complete == '0'){
                   this.$emit('changeRouter',{id:1,router:"Type",information: this.active_id,complete: this.complete})
                 }else{
                   this.$message({

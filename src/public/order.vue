@@ -39,9 +39,10 @@
                         <p style="background-color:#999999;height:1px;position:absolute;width:40px;transform: rotate(-45deg);top:20px;"></p>
                       </div>
                     </div>
-                    <div v-if="item != ' '&& color[index].index == '0'" style="cursor:pointer;width:100%;height:100%;display: flex;justify-content: center;align-items: center;background-color: #008489;color:#fff;">
-                      <div style="width:40px;height:40px;text-align: center;line-height:40px;position: relative;">
-                        {{item}}
+                    <div v-if="item != ' '&& color[index].index == '0'" style="cursor:pointer;width:100%;height:100%;display: flex;justify-content: center;align-items: center;background-color: #14C5CA;color:#FFF;">
+                      <div :style="{lineHeight:color[index].is_discount?'20px':'40px'}" style="width:40px;height:40px;text-align: center;position: relative;">
+                        <p>{{item}}</p>
+                        <p class="contentTitle" v-if="color[index].is_discount">{{Number(color[index].is_discount)}}折</p>
                       </div>
                     </div>
                     <div v-if="item != ' '&& color[index].index == '00' " style="background-color:#E1F5F6;width:100%;height:100%;display: flex;justify-content: center;align-items: center" >
@@ -57,9 +58,10 @@
                         <p style="background-color:#999999;height:1px;position:absolute;width:40px;transform: rotate(-45deg);top:20px;"></p>
                       </div>
                     </div>
-                    <div v-if="item != ' '&& color[index].index == '0'" style="cursor:pointer;width:100%;height:100%;display: flex;justify-content: center;align-items: center" :style="{backgroundColor:colorIndex == index?'#008489':'#E1F5F6',color:colorIndex == index?'#FFF':'#008489'}">
-                      <div style="width:40px;height:40px;text-align: center;line-height:40px;position: relative;">
-                        {{item}}
+                    <div v-if="item != ' '&& color[index].index == '0'" style="cursor:pointer;width:100%;height:100%;display: flex;justify-content: center;align-items: center" :style="{backgroundColor:colorIndex == index?'#14C5CA':'#E5FAFB',color:colorIndex == index?'#FFF':'#008489'}">
+                      <div :style="{lineHeight:color[index].is_discount?'20px':'40px'}" style="width:40px;height:40px;text-align: center;position: relative;">
+                        <p>{{item}}</p>
+                        <p class="contentTitle" v-if="color[index].is_discount">{{Number(color[index].is_discount)}}折</p>
                       </div>
                     </div>
                     <div v-if="item != ' '&& color[index].index == '00' " style="background-color:#E1F5F6;width:100%;height:100%;display: flex;justify-content: center;align-items: center" >
@@ -77,58 +79,172 @@
           <div v-show="nextOrder">
             <p style="font-size:30px">下个可{{orderVolunteer? '报名': '预定'}}的体验</p>
             <h3>选择日期以查看{{orderVolunteer? '可报名': '可订'}}状态。</h3>
+              <p class="childTip" v-if="kids_stand_high && !orderVolunteer">小贴士:儿童价年龄标准为{{kids_stand_low}}至{{kids_stand_high}}岁</p>
             <div style="width:480px;height:530px;overflow:hidden">
               <ul style="width:467px;height:530px;overflow-y: scroll;padding: 0 10px">
-                <li v-if="dayMonth.length == 0&&item.status != 2" v-for="(item,index) in longMonth"  style="height:150px;margin: 10px 0;line-height: 50px;">
-                  <p>{{item.beginTime}}——{{item.endTime}}</p>
-                  <div style="border-top:1px solid #eee;border-bottom:1px solid #eee;display: flex;justify-content: space-between;line-height:50px;height:100px;padding:0 20px;">
-                    <div style="font-size:14px;" :style="{lineHeight:!orderVolunteer?'':'100px'}">
-                      <span>{{item.begin_time}} —— {{item.end_time}}</span><br><span v-if="!orderVolunteer">每人￥{{item.price}}</span>&nbsp;&nbsp;<span v-if="!orderVolunteer" style="color:#008489;font-size:14px;font-weight: bold">·还剩{{item.max_person_num - item.order_person_num}}个名额</span>
-                    </div>
-                    <div v-if="orderVolunteer" style="height: 100px;line-height:100px;">
-                      <el-button type="primary" plain @click="choose(item,index)">报名</el-button>
-                    </div>
-                    <div v-if="!orderVolunteer" style="height: 100px;line-height:100px;">
-                      <el-button type="primary" :style="{color:(item.max_person_num - item.order_person_num)>0?'':'red'}"  plain :disabled="(item.max_person_num - item.order_person_num)>0?false:true" @click="choose(item,index)">{{(item.max_person_num - item.order_person_num)>0?'选择':'已满'}}</el-button>
+                <li v-if="dayMonth.length == 0&&item.status != 2" v-for="(item,index) in longMonth"  style="margin: 10px 0;line-height: 50px;">
+                  <p class="fontweight">{{item.begin_date}}——{{item.end_date}}</p>
+                  <!-- 修改套餐新增 -->
+                  <div  style="border-top:1px solid #eee;border-bottom:1px solid #eee;line-height: 30px;padding: 0px 20px;">
+                    <div style="font-size:14px;" :style="">
+                      <div class="flexBetween">
+                        <div >
+                            <p class="fontweight">{{item.begin_time}} —— {{item.end_time}}</p>
+                              <p v-if="!orderVolunteer">
+                              <p>标准:￥{{item.price}}
+                                <span class="oldPrice" v-if="item.is_discount">
+                                (原价￥{{item.price_origin}}) 
+                                <hr class="delteLine">
+                                </span>
+                              </p> 
+                              <p v-if="item.price">
+                                儿童:￥{{item.kids_price}}
+                                <span class="oldPrice" v-if="item.is_discount">
+                                (原价￥{{item.kids_price_origin}})
+                                  <hr class="delteLine">
+                                </span>
+                              </p>
+                            </p>
+                        </div>
+                        <div>
+                          <div v-if="orderVolunteer" style="height: 100px;line-height:100px;">
+                            <el-button type="primary" plain @click="choose(item,index)">报名</el-button>
+                          </div>
+                          <div v-if="!orderVolunteer" style="height: 100px;line-height:100px;">
+                            <el-button type="primary"  :style="{color:(item.max_person_num - item.order_person_num)>0?'':'red'}" plain :disabled="(item.max_person_num - item.order_person_num)>0? false:true" @click="choose(item,index)">{{(item.max_person_num - item.order_person_num)>0?'选择':'已满'}}</el-button>
+                          </div>
+                        </div>
+                      </div>
+                      <p v-if="item.combine.length">包含套餐</p>
+                      <div class="flexWrap">
+                        <div v-for="(items,indexs) in item.combine" class="marginRight">
+                          <span class="comnibe" v-if="items.type == 1">
+                            亲子 
+                            <span>{{items.adult}}成人</span>
+                            <span>{{items.kids}}儿童</span>
+                            <span>￥{{items.price}}</span>
+                          </span>
+                          <span class="comnibe" v-if="items.type == 2">
+                            <span>{{items.name}}</span>
+                            <span>{{items.adult}}人</span>
+                            <span>￥{{items.price}}</span>
+                          </span>
+                        </div>
+                      </div>
+                      <p v-if="!orderVolunteer" style="color:#E43333;font-size:14px;font-weight: bold">{{item.max_person_num}}个名额·还剩{{item.max_person_num - item.order_person_num}}个名额</p>
                     </div>
                   </div>
                 </li>
                 <li v-if="item.status != 2" v-for="(item,index) in dayMonth"  :key="index" style="margin:20px 0;">
-                  <p style="margin: 20px 0;"><b>{{item.day}}</b></p>
-                  <div v-if="items.status != 2" v-for="(items,indexs) in item.list" style="border-top:1px solid #eee;border-bottom:1px solid #eee;display: flex;justify-content: space-between;height:100px;line-height:33px;padding: 0 20px;">
-                    <div style="font-size:14px;height:100px;" :style="{lineHeight:!orderVolunteer?'':'100px'}">
-                      <p>{{items.time[0]}} —— {{items.time[1]}}</p><p v-if="!orderVolunteer">每人￥{{items.price}}</p><p v-if="!orderVolunteer" style="color:#008489;font-size:14px;font-weight: bold">{{items.personNum}}个名额·还剩{{items.personNum - items.order_person_num}}个名额</p>
-                    </div>
-                    <div v-if="orderVolunteer" style="height: 100px;line-height:100px;">
-                      <el-button type="primary" plain @click="choose(item,indexs)">报名</el-button>
-                    </div>
-                     <div v-if="!orderVolunteer" style="height: 100px;line-height:100px;">
-                      <el-button type="primary"  :style="{color:(items.personNum - items.order_person_num)>0?'':'red'}" plain :disabled="(items.personNum - items.order_person_num)>0? false:true" @click="choose(item,indexs)">{{(items.personNum - items.order_person_num)>0?'选择':'已满'}}</el-button>
+                  <p style="margin: 20px 0;"><b>{{item.date}}</b></p>
+                  <div style="border-top:1px solid #eee;border-bottom:1px solid #eee;line-height: 30px;padding: 0px 20px;">
+                    <div style="font-size:14px;">
+                      <div class="flexBetween">
+                        <div :style="{lineHeight:orderVolunteer?'100px':''}">
+                            <p class="fontweight">{{item.begin_time}} —— {{item.end_time}}</p>
+                            <div v-if="!orderVolunteer">
+                              <p>标准:￥{{item.price}}
+                                <span class="oldPrice" v-if="item.is_discount">
+                                (原价￥{{item.price_origin}}) 
+                                <hr class="delteLine">
+                                </span>
+                              </p> 
+                              <p v-if="item.price">
+                                儿童:￥{{item.kids_price}}
+                                <span class="oldPrice" v-if="item.is_discount">
+                                (原价￥{{item.kids_price_origin}})
+                                  <hr class="delteLine">
+                                </span>
+                              </p>
+                            </div>
+                        </div>
+                        <div>
+                          <div v-if="orderVolunteer" style="height: 100px;line-height:100px;">
+                            <el-button type="primary" plain @click="choose(item,index)">报名</el-button>
+                          </div>
+                          <div v-if="!orderVolunteer" style="height: 100px;line-height:100px;">
+                            <el-button type="primary"  :style="{color:(item.max_person_num - item.order_person_num)>0?'':'red'}" plain :disabled="(item.max_person_num - item.order_person_num)>0? false:true" @click="choose(item,index)">{{(item.max_person_num - item.order_person_num)>0?'选择':'已满'}}</el-button>
+                          </div>
+                        </div>
+                      </div>
+                      <div v-if="!orderVolunteer">
+                        <p v-if="item.combine.length">包含套餐</p>
+                        <div class="flexWrap">
+                          <div v-for="(items,indexs) in item.combine" class="marginRight">
+                            <span class="comnibe" v-if="items.type == 1">
+                              亲子 
+                              <span>{{items.adult}}成人</span>
+                              <span>{{items.kids}}儿童</span>
+                              <span>￥{{items.price}}</span>
+                            </span>
+                            <span class="comnibe" v-if="items.type == 2">
+                              <span>{{items.name}}</span>
+                              <span>{{items.adult}}人</span>
+                              <span>￥{{items.price}}</span>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      
+                      <p v-if="!orderVolunteer" style="color:#E43333;font-size:14px;font-weight: bold">{{item.max_person_num}}个名额·还剩{{item.max_person_num - item.order_person_num}}个名额</p>
                     </div>
                   </div>
                 </li>
-                <p v-if="!dayMonth.length && !longMonth.length" style="line-height: 503px;text-align: center">该月没有活动喔`，请查看其他月份</p>
+                <p v-if="!dayMonth.length && !longMonth.length" style="line-height: 503px;text-align: center">该月没有活动喔！，请查看其他月份</p>
               </ul>
             </div>
           </div>
           <div v-show="clickOrder">
-            <div v-for="(item,index) in clickList" :key="index">
+            <div >
               <p style="font-size:30px">{{amount}}个可{{orderVolunteer?'报名':'预定'}}</p>
-              <p style="margin:20px 0;"><span>活动/住宿日期&nbsp;&nbsp;{{item.checkDate}}</span><span style="float:right;color:#008489;cursor: pointer" @click="deletTime">清除日期</span></p>
+              <p class="childTip" v-if="kids_stand_high && !orderVolunteer">小贴士:儿童价年龄标准为{{kids_stand_low}}至{{kids_stand_high}}岁</p>
+              <p style="margin:20px 0;"><span>活动/住宿日期&nbsp;&nbsp;<span class="margin"></span>{{checkDate}}</span><span style="float:right;color:#14C5CA;cursor: pointer" @click="deletTime">清除日期</span></p>
               <div style="width:480px;height:530px;overflow:hidden">
                 <ul style="width:477px;height:530px;overflow-y: scroll;padding: 0 10px">
-                  <li v-for="(items,indexs) in item.list" style="height:150px;margin: 10px 0;line-height: 50px">
-                    <div style="border-top:1px solid #eee;border-bottom:1px solid #eee;display: flex;justify-content:space-between;height:100px; padding:0 20px;">
-                      <div style="line-height:33px;font-size:14px;" :style="{lineHeight:!orderVolunteer?'':'100px'}">
-                        <p>{{items.time[0]}}——{{items.time[1]}}</p>
-                        <p v-if="!orderVolunteer">每人￥{{items.price}}</p>
-                        <p v-if="!orderVolunteer" style="color:#008489"><b>{{items.personNum}}个名额&nbsp;&nbsp;·还剩个{{items.personNum - items.order_person_num}}名额 </b></p>
+                   <li v-if="item.status != 2" v-for="(item,index) in clickList"  :key="index" style="margin:20px 0;">
+                    <div v-if="item.status != 2" style="border-top:1px solid #eee;border-bottom:1px solid #eee;display: flex;line-height: 30px;justify-content: space-between;padding: 0px 20px;">
+                      <div style="font-size:14px;width:70%;" :style="{lineHeight:!orderVolunteer?'':'100px'}">
+                        <p class="fontweight">{{item.begin_time}} —— {{item.end_time}}</p>
+                        <div v-if="!orderVolunteer">
+                          <p>标准:￥{{item.price}}
+                            <span class="oldPrice" v-if="item.is_discount">
+                              (原价￥{{item.price_origin}}) 
+                              <hr class="delteLine">
+                              </span>
+                            </p> 
+                          <p v-if="item.price">
+                            儿童:￥{{item.kids_price}}
+                              <span class="oldPrice" v-if="item.is_discount">
+                              (原价￥{{item.kids_price_origin}})
+                                <hr class="delteLine">
+                              </span>
+                            </p>
+                        </div>
+                        <div v-if="!orderVolunteer">
+                           <p v-if="item.combine.length">包含套餐</p>
+                          <div v-for="(items,indexs) in item.combine">
+                            <span class="comnibe" v-if="items.type == 1">
+                              亲子 
+                              <span>{{items.adult}}成人</span>
+                              <span>{{items.kids}}儿童</span>
+                              <span>￥{{items.price}}</span>
+                            </span>
+                            <span class="comnibe" v-if="items.type == 2">
+                              <span>{{items.name}}</span>
+                              <span>{{items.adult}}人</span>
+                              <span>￥{{items.price}}</span>
+                            </span>
+                          </div>
+                        </div>
+                       
+                        <p v-if="!orderVolunteer" style="color:#E43333;font-size:14px;font-weight: bold">{{item.max_person_num}}个名额·还剩{{item.max_person_num - item.order_person_num}}个名额</p>
                       </div>
                       <div v-if="orderVolunteer" style="height: 100px;line-height:100px;">
-                        <el-button type="primary" plain @click="choose(item,indexs)">报名</el-button>
+                        <el-button type="primary" plain @click="choose(item,index)">报名</el-button>
                       </div>
                       <div v-if="!orderVolunteer" style="height: 100px;line-height:100px;">
-                        <el-button  :disabled="(items.personNum - items.order_person_num)>0? false:true" :style="{color:(items.personNum - items.order_person_num)>0?'#008489':'red'}" plain @click="choose(item,indexs)">{{(items.personNum - items.order_person_num)>0?'选择':'已满'}}</el-button>
+                        <el-button type="primary"  :style="{color:(item.max_person_num - item.order_person_num)>0?'':'red'}" plain :disabled="(item.max_person_num - item.order_person_num)>0? false:true" @click="choose(item,index)">{{(item.max_person_num - item.order_person_num)>0?'选择':'已满'}}</el-button>
                       </div>
                     </div>
                   </li>
@@ -226,7 +342,9 @@
           dayMonth:[],
           longMonth:[],
           allTime:[],
-          firstlanguage:''
+          firstlanguage:'',
+          kids_stand_low:'',
+          kids_stand_high:''
         }
       },
       components:{
@@ -244,16 +362,13 @@
         },
         '$route':'getParams',
       },
-      mounted(){
-          this.isLoading = true
-        this.getALLtime()
-      },
+      
       methods:{
           changeAlltime(){
             var a = []
             if(this.longDay == 1){
               for(let i = 0;i<this.allTime.length;i++){
-                if(this.parseDate(this.allTime[i].day)>= new Date(this.year,this.month-1,1).getTime() && this.parseDate(this.allTime[i].day) <= new Date(this.year,this.month,0).getTime() && this.parseDate(this.allTime[i].day) > Date.now() - 8.64e7 ){
+                if(this.parseDate(this.allTime[i].date)>= new Date(this.year,this.month-1,1).getTime() && this.parseDate(this.allTime[i].date) <= new Date(this.year,this.month,0).getTime() && this.parseDate(this.allTime[i].date) > Date.now() - 8.64e7 ){
                   a.push(this.allTime[i])
                 }
                this.dayMonth = a
@@ -261,62 +376,36 @@
             }else{
               for(let i =0;i<this.allTime.length;i++){
                 if(this.parseDate(this.allTime[i].begin_date) >= new Date(this.year,this.month-1,1).getTime() && this.parseDate(this.allTime[i].begin_date) <= new Date(this.year,this.month,0).getTime()&& this.parseDate(this.allTime[i].end_date) > Date.now() - 8.64e7){
-                  a.push({
-                    beginTime: this.allTime[i].begin_date,
-                    endTime:this.allTime[i].end_date,
-                    begin_time: this.allTime[i].begin_time,
-                    end_time: this.allTime[i].end_time,
-                    max_person_num: this.allTime[i].max_person_num,
-                    order_person_num: this.allTime[i].order_person_num,
-                    price: this.allTime[i].price,
-                    slot_id: this.allTime[i].slot_id,
-                    status:this.allTime[i].status
-                  })
+                  a.push(this.allTime[i])
                 }
               }
               this.longMonth = a
+        
             }
           },
           getALLtime(){
-            this.$http.post(this.api + '/home/Activity/get_activity',{
+            // /home/Activity/get_activity
+            this.$http.post(this.api + '/ActivitySlotUserTwo',{
               token: localStorage.getItem('token'),
               activity_id : this.activeId,
-              visit : 0
+              verson: 2.0
             })
               .then(res=>{
                 if(res.data.code == 1){
                   let data = res.data.data
-                  this.longDay = data.long_day
-                  this.allTime = data.slot
-                  if(data.issatay == 1){
-                    this.isHouse = true
-                  }else{
-                    this.isHouse = false
+                  for(var i = 0; i< data.length; i++){
+                   this.longDay = data[i].long_day
+                   if(data[i].online == 0){
+                      if(data[i].long_day == 1){
+                      this.dayList.push(data[i])
+                    }else{
+                      this.activeList.push(data[i])
+                    }
+                   }
+                   this.allTime = data[i].long_day?this.dayList:this.activeList
                   }
                   this.changeAlltime()
-                  if(data.long_day == 1){
-                    for(let i = 0;i<data.slot.length;i++){
-                      if(data.slot[i].list.length){
-                        this.dayList.push(data.slot[i])
-                      }
-                    }
-                    this.chooseTime()
-                  }else{
-                    for(let i =0;i<data.slot.length;i++){
-                      this.activeList.push({
-                        beginTime: data.slot[i].begin_date,
-                        endTime:data.slot[i].end_date,
-                        begin_time: data.slot[i].begin_time,
-                        end_time: data.slot[i].end_time,
-                        max_person_num: data.slot[i].max_person_num,
-                        order_person_num: data.slot[i].order_person_num,
-                        price: data.slot[i].price,
-                        slot_id: data.slot[i].slot_id,
-                        status:data.slot[i].status
-                      })
-                    }
-                    this.chooseTime()
-                  }
+                  this.chooseTime()
                 }else if(res.data.code == 3){
                   this.$http.post(this.api + '/home/index/token')
                     .then(res=>{
@@ -343,23 +432,34 @@
             b.push({index:i})
             if(this.activeList.length){
               for(let j = 0;j<this.activeList.length;j++){
-                if(new Date(this.year,this.month -1,i).getTime() > Date.now()- 8.64e7 && new Date(this.year,this.month -1,i).getTime() >= this.parseDate(this.activeList[j].beginTime) && new Date(this.year,this.month -1,i).getTime() <= this.parseDate(this.activeList[j].endTime)){
-                  b[i-1]=({index:'0'})
-                }else if(new Date(this.year,this.month -1,i).getTime() < Date.now()- 8.64e7 && new Date(this.year,this.month -1,i).getTime() >= this.parseDate(this.activeList[j].beginTime) && new Date(this.year,this.month -1,i).getTime() <= this.parseDate(this.activeList[j].endTime)){
-                  b[i-1]=({index:'1'})
-                  }else{
+                if(new Date(this.year,this.month -1,i).getTime() > Date.now()- 8.64e7 && new Date(this.year,this.month -1,i).getTime() >= this.parseDate(this.activeList[j].begin_date) && new Date(this.year,this.month -1,i).getTime() <= this.parseDate(this.activeList[j].end_date)){
+              
+                   b[i-1]=({index:'0',is_discount:this.activeList[j].is_discount?this.activeList[j].price_discount:''})
+                
+                }else if(new Date(this.year,this.month -1,i).getTime() < Date.now()- 8.64e7 && new Date(this.year,this.month -1,i).getTime() >= this.parseDate(this.activeList[j].begin_date) && new Date(this.year,this.month -1,i).getTime() <= this.parseDate(this.activeList[j].end_date)){
+          
+                  b[i-1]=({index:'1',is_discount:this.activeList[j].is_discount?this.activeList[j].price_discount:''})
+                }else{
                   if( b[i-1].index != '0'){
-                    b[i-1]=({index:'1'})
+                    b[i-1]=({index:'1',is_discount:this.activeList[j].is_discount?this.activeList[j].price_discount:''})
                   }
-                  }
+                }
               }
             }else{
               for(let j=0;j<this.dayList.length;j++){
-                if(new Date(this.year,this.month -1,i).getTime() > Date.now()- 8.64e7  && new Date(this.year,this.month -1,i).getTime() == this.parseDate(this.dayList[j].day)){
+                if(new Date(this.year,this.month -1,i).getTime() > Date.now()- 8.64e7  && new Date(this.year,this.month -1,i).getTime() == this.parseDate(this.dayList[j].date)){
                   if(this.dayList[j].status !=2 ){
-                    b[i-1]=({index:'0'})
+                    if(b[i-1].is_discount){
+                       b[i-1]=({index:'0',is_discount:Number(this.dayList[j].price_discount) < Number(b[i-1].is_discount)?this.activeList[j].price_discount:b[i-1].is_discount})
+                    }else{
+                       b[i-1]=({index:'0',is_discount:this.dayList[j].is_discount?this.dayList[j].price_discount:''})
+                    }
                   }else{
-                    b[i-1]=({index:'1'})
+                   if(b[i-1].is_discount){
+                       b[i-1]=({index:'1',is_discount:Number(this.dayList[j].is_discount) < Number(b[i-1].is_discount)?this.activeList[j].price_discount:b[i-1].is_discount})
+                    }else{
+                       b[i-1]=({index:'1',is_discount:this.dayList[j].is_discount?this.dayList[j].price_discount:''})
+                    }
                   }
                 }else{
                   if( b[i-1].index != '0'){
@@ -437,12 +537,15 @@
           }else{
             this.checkDate = this.year +'-'+ this.month +'-'+ item
           }
+          var arr = []
           for(let i =0;i<this.dayList.length;i++){
-            if(this.checkDate == this.dayList[i].day){
-              this.amount = this.dayList[i].list.length
-              this.clickList = [{list:this.dayList[i].list,checkDate:this.checkDate}]
+            if(this.checkDate == this.dayList[i].date){
+              arr.push(this.dayList[i])
+              
             }
           }
+          this.clickList = arr
+          this.amount = arr.length
         },
         goBack(){
           this.$router.go(-1)
@@ -452,11 +555,11 @@
               if(this.orderVolunteer){
                 this.volunteer = true
                 if(!this.longDay){
-                  this.jionTion = [item.beginTime,item.endTime]
+                  this.jionTion = [item.begin_date,item.end_date]
                   this.timeSolt = [item.slot_id]
                 }else{
                   this.jionTion = [item.day]
-                  this.timeSolt = [item.list[index].slot_id]
+                  this.timeSolt = [item.slot_id]
                 }
               }else{
                 if(this.isHouse){
@@ -465,83 +568,30 @@
                     cancelButtonText: '不预定',
                     type: 'warning'
                   }).then(() => {
-                    var a = []
-                    if(item.list){
-                      if(this.colorIndex != -1){
-                        for(let i = 0;i<item.list.length;i++){
-                          if(i == index){
-                            a=[{day:item.checkDate,list:item.list[i],status:item.status}]
-                          }
-                        }
-                      }else{
-                        for(let i = 0;i<item.list.length;i++){
-                          if(i == index){
-                            a=[{day:item.day,list:item.list[i],status:item.status}]
-                          }
-                        }
-                      }
-                    }else{
-                      a.push(item)
-                    }
+                    
                     this.$router.push({
                       name: 'allHouse',
                       query:{
                         activeId: this.activeId,
-                        slot_id:!this.longDay?item.slot_id:item.list[index].slot_id,
-                        chooseTime: JSON.stringify(a)
+                        slot_id:item.slot_id,
+                        chooseTime: JSON.stringify(item)
                       }
                     })
                   }).catch(() => {
-                    var a = []
-                    if(item.list){
-                      if(this.colorIndex != -1){
-                        for(let i = 0;i<item.list.length;i++){
-                          if(i == index){
-                            a=[{day:item.checkDate,list:item.list[i],status:item.status}]
-                          }
+                      this.$router.push({
+                        name: 'choose',
+                        query:{
+                          activeId: this.activeId,
+                          chooseTime: JSON.stringify(item)
                         }
-                      }else{
-                        for(let i = 0;i<item.list.length;i++){
-                          if(i == index){
-                            a=[{day:item.day,list:item.list[i],status:item.status}]
-                          }
-                        }
-                      }
-                    }else{
-                      a.push(item)
-                    }
-                    this.$router.push({
-                      name: 'choose',
-                      query:{
-                        activeId: this.activeId,
-                        chooseTime: JSON.stringify(a)
-                      }
-                    })
+                      })
                   });
                 }else{
-                  var a = []
-                  if(item.list){
-                    if(this.colorIndex != -1){
-                      for(let i = 0;i<item.list.length;i++){
-                        if(i == index){
-                          a=[{day:item.checkDate,list:item.list[i],status:item.status}]
-                        }
-                      }
-                    }else{
-                      for(let i = 0;i<item.list.length;i++){
-                        if(i == index){
-                          a=[{day:item.day,list:item.list[i],status:item.status}]
-                        }
-                      }
-                    }
-                  }else{
-                    a.push(item)
-                  }
                   this.$router.push({
                     name: 'choose',
                     query:{
                       activeId: this.activeId,
-                      chooseTime: JSON.stringify(a)
+                      chooseTime: JSON.stringify(item)
                     }
                   })
                 }
@@ -560,6 +610,7 @@
         },
         getParams(){
           this.activeId = this.$route.query.information
+          this.isHouse = this.$route.query.isflag
         },
         getTime(){
 
@@ -613,6 +664,22 @@
               })
           }
         },
+        getOld(){
+          this.$http.post(this.api + '/ActivityETwo',{
+            token: localStorage.getItem('token'),
+            activity_id: this.activeId
+          })
+          .then(res=>{
+            if(res.data.code == 1){
+              this.kids_stand_low = res.data.data.kids_stand_low
+              this.kids_stand_high = res.data.data.kids_stand_high
+            }else if(res.data.code == 3){
+              this.getOld()
+            }else if(res.data.code == 0){
+              this.$message({type: 'error',message:res.data.msg})
+            }
+          })
+        },
         //查看是否可以预定
         reload(res){
           let data = res.data.data[0]
@@ -621,12 +688,18 @@
           }else{
             this.isChoose = false
           }
+          this.getOld()
         }
+      },
+      mounted(){
+          this.isLoading = true
+          this.getALLtime()
       },
       created() {
         this.getParams()
         if(this.$route.query.orderVolunteer){
           this.orderVolunteer = this.$route.query.orderVolunteer
+          console.log(this.orderVolunteer)
         }
         this.stillist = Lan()
       },
@@ -647,7 +720,7 @@
     border-top-left-radius: 10px;
     color:#fff;
     text-align:center;
-    background-color:#008489;
+    background-color:#14C5CA;
     border-bottom: 1px solid #ccc;
     font-weight:bold;
   }
@@ -710,5 +783,31 @@
     text-align:left;
     padding:20px;
     border-radius:10px;
+  }
+  .oldPrice{
+    color: #999999;
+    font-size:12px;
+    position: relative;
+  }
+  .delteLine{
+    position: absolute;
+    right: 0px;
+    top: 6px;
+    width:70px;
+  }
+  .comnibe{
+    padding: 5px 10px;
+    background:rgba(243,245,247,1);
+    border-radius:4px;
+
+  }
+  .childTip{
+    width:230px;
+    color:#14C5CA;
+    font-size:15px;
+    font-weight:400;
+    padding: 5px 10px;
+    background:rgba(232,255,255,1);
+    margin-top: 10px;
   }
 </style>

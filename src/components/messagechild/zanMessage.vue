@@ -3,7 +3,7 @@
       <div v-for="(item,index) in ZanList" style="display: flex;justify-content: flex-start;padding:20px 0;border-bottom: 1px solid #eee;align-items: center ">
          <div>
            <div style="width:40px;height:40px;">
-             <LoadingImg type="6" :src="item.domain + item.image_url"></LoadingImg>
+             <LoadingImg type="6" style="width:100%;height: 100%;" :src="item.domain + item.image_url"></LoadingImg>
            </div>
          </div>
           <div style="text-align: left;margin-left:20px;">

@@ -3,67 +3,143 @@
       <Head type="myPlay" v-on:reload="reload"></Head>
       <div style="width:1080px;margin:106px auto 0;text-align: left">
         <div style="border-bottom: 1px solid #eee;padding:10px 0;display: flex;justify-content: space-between">
-          <span v-for="(item,index) in clickArr"><span @click="changeClick(item.index)" style="padding:10px 20px;cursor: pointer;font-weight: bold" :style="{borderBottom:clickIndex == item.index? '2px solid #008489':'',color:clickIndex == item.index? '#008489':'#000'}">{{item.name}}</span><span style="color:#008489" v-if="index == 1">({{order_num}})</span><span style="color:#008489" v-if="index == 2">({{enroll_num}})</span><span style="color:#008489" v-if="index == 3">({{refund_num}})</span><span style="color:#008489" v-if="index == 4">({{complete_num}})</span></span>
+          <span v-for="(item,index) in clickArr">
+            <span @click="changeClick(item.index)" style="padding:10px 20px;cursor: pointer;font-weight: bold" :style="{borderBottom:clickIndex == item.index? '2px solid #14C5CA':'',color:clickIndex == item.index? '#14C5CA':'#000'}">{{item.name}}</span>
+            <span style="color:#14C5CA" v-if="index == 1">({{order_num}})</span>
+            <span style="color:#14C5CA" v-if="index == 2">({{enroll_num}})</span>
+            <span style="color:#14C5CA" v-if="index == 3">({{refund_num}})</span>
+            <span style="color:#14C5CA" v-if="index == 4">({{complete_num}})</span></span>
         </div>
-      <div style="margin-top:30px;" v-show="clickIndex == 1">
-        <h2>活动日历</h2>
-        <p style="font-size:12px;margin-top:5px;">可查看您单日或多天的活动时间列表</p>
-        <div style="width:1080px;margin:20px auto;text-align: left;display: flex;justify-content: space-between;">
-          <div style="width:490px;">
-            <div style="width:490px;background-color: #008489;border-radius: 5px;padding: 20px 0;margin-top:15px;color:#fff;">
-              <div style="display: flex;justify-content: space-between;margin: 20px 0;">
-                <div style="cursor: pointer" @click="reduce(1)">&lt;</div>
-                <div>{{year}}</div>
-                <div style="cursor: pointer" @click="add(1)">&gt;</div>
+        <div style="margin-top:30px;" v-show="clickIndex == 1">
+          <h2>活动日历</h2>
+          <p style="font-size:12px;margin-top:5px;">可查看您单日或多天的活动时间列表</p>
+          <div style="width:1080px;margin:20px auto;text-align: left;display: flex;justify-content: space-between;">
+            <div style="width:490px;">
+              <div style="width:490px;background-color: #14C5CA;border-radius: 5px;padding: 20px 0;margin-top:15px;color:#fff;">
+                <div style="display: flex;justify-content: space-between;margin: 20px 0;">
+                  <div style="cursor: pointer" @click="reduce(1)">&lt;</div>
+                  <div>{{year}}</div>
+                  <div style="cursor: pointer" @click="add(1)">&gt;</div>
+                </div>
+                <div style="display: flex;justify-content: space-between;padding: 30px 15px 0 ;">
+                  <div @click="reduce(2)" style="cursor: pointer">&lt;</div>
+                  <div>{{month}}</div>
+                  <div @click="add(2)" style="cursor: pointer">&gt;</div>
+                </div>
               </div>
-              <div style="display: flex;justify-content: space-between;padding: 30px 15px 0 ;">
-                <div @click="reduce(2)" style="cursor: pointer">&lt;</div>
-                <div>{{month}}</div>
-                <div @click="add(2)" style="cursor: pointer">&gt;</div>
+              <div style="width:490px;display:flex;justify-content: space-between;padding:20px 0;text-align: center">
+                <p class="DateWeek">一</p>
+                <p class="DateWeek">二</p>
+                <p class="DateWeek">三</p>
+                <p class="DateWeek">四</p>
+                <p class="DateWeek">五</p>
+                <p class="DateWeek">六</p>
+                <p class="DateWeek">日</p>
               </div>
-            </div>
-            <div style="width:490px;display:flex;justify-content: space-between;padding:20px 0;text-align: center">
-              <p class="DateWeek">一</p>
-              <p class="DateWeek">二</p>
-              <p class="DateWeek">三</p>
-              <p class="DateWeek">四</p>
-              <p class="DateWeek">五</p>
-              <p class="DateWeek">六</p>
-              <p class="DateWeek">日</p>
-            </div>
-            <div style="width:490px;margin-top:15px;display: flex;flex-wrap: wrap;">
-              <div  @mousedown="item != ' '&& color[index].index != 2?chooseMore(item,index):''" @mouseover="item != ' '&&color[index].index != 2?leaveMore(item,index):''" @mouseup="item != ' '&&color[index].index != 2?dlete(item,index):''" class="dateList" v-for="(item,index) in dayCount"  :style="{backgroundColor:color[index].index == 1&&color[index].today != 1?'#E1F5F6':color[index].index == 2&&color[index].today != 1?'#F0F0F0':color[index].index == 3&&color[index].today != 1? '#008489':color[index].today == 1?'#EE395B':'',color:color[index].index==3||color[index].today == 1?'#fff':'#000',lineHeight: color[index].today == 1||color[index].online ==1? '35px':'' }">
-                <p>{{item}}</p>
-                <p v-if="color[index].today == 1&&color[index].online !=1">进行中</p>
-                <p v-if="color[index].online ==1">有取消</p>
-                <div v-if="color[index].flag == 1" style="color:red;position: absolute;top:10px;left:10px;background-color: #EE395B;width:10px;height:10px;border-radius: 50%;">
+              <div style="width:490px;margin-top:15px;display: flex;flex-wrap: wrap;">
+                <div  @mousedown="item != ' '&& color[index].index != 2?chooseMore(item,index):''" @mouseover="item != ' '&&color[index].index != 2?leaveMore(item,index):''" @mouseup="item != ' '&&color[index].index != 2?dlete(item,index):''" class="dateList" v-for="(item,index) in dayCount"  :style="{backgroundColor:color[index].index == 1&&color[index].today != 1?'#E1F5F6':color[index].index == 2&&color[index].today != 1?'#F0F0F0':color[index].index == 3&&color[index].today != 1? '#14C5CA':color[index].today == 1?'#EE395B':'',color:color[index].index==3||color[index].today == 1?'#fff':'#000',lineHeight: color[index].today == 1||color[index].online ==1? '35px':'' }">
+                  <p>{{item}}</p>
+                  <p v-if="color[index].today == 1&&color[index].online !=1">进行中</p>
+                  <p v-if="color[index].online ==1">有取消</p>
+                  <div v-if="color[index].flag == 1" style="color:red;position: absolute;top:10px;left:10px;background-color: #EE395B;width:10px;height:10px;border-radius: 50%;">
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div style="width:565px;margin-left:25px;padding:10px 0;position: relative">
-            <h2>我的策划</h2>
-            <div v-show="dateActive.length" v-for="(item,index) in dateActive" style="border: 1px solid #CCCCCC;font-size:12px;margin-top:15px;padding: 11px 10px;" >
-              <div v-if="chooseTime.length" :style="{color:item.online == 0?'#000':'#999999'}">
-                <p ><b>{{item.day?item.day:''}}&nbsp;&nbsp;&nbsp;{{item.time}}</b></p>
-                <div style="display: flex;justify-content: flex-start;border-bottom: 1px solid #E8E8E8;padding: 10px 0;">
-                  <div @click="toPublish(item,index)" style="position: relative;width:200px;height:120px;">
-                    <loadingImg type="3"  :src="item.cover.domain+ item.cover.image_url" style="width:200px;height:120px;"></loadingImg>
-                    <span v-if="item.online == 0" style="padding:5px 10px;color:#fff;position: absolute;font-size:12px;top:0" :style="{backgroundColor:item.is_doing ==0? '#008489':'#FA9F00'}">
-                 {{item.is_doing == 0? '已发布':'进行中'}}
-                </span>
-                    <span v-if="item.online == 1" style="z-index:999;padding:5px 10px;color:#fff;position: absolute;font-size:12px;top:0;left:0;right:0;bottom:0;background-color: rgba(102,102,102,.5);display: flex;justify-content: center;align-items: center">
-                  已取消
-                </span>
+            <div style="width:565px;margin-left:25px;padding:10px 0;position: relative">
+              <h2>我的策划</h2>
+              <div v-show="dateActive.length" v-for="(item,index) in dateActive" style="" >
+                <div v-if="chooseTime.length" :style="{color:item.online == 0?'#000':'#999999'}">
+                      <div v-if="JSON.stringify(item.differ)!=''&& !item.day" class="flexStart fontweight" style="margin: 11px 0;padding: 5px;background:rgba(243,245,248,1);color:#476785;font-size:12px">
+                          <div style="width:60px;">
+                            [返差价]
+                          </div>
+                          <div style="width:483px;">
+                            当前同时间段内用户参与者共{{item.sale_num}}人,活动结束时
+                            <span >
+                              满{{item.differ.num}}人,返预付{{Number(item.differ.refund_rate)}}%;
+                            </span>
+                          </div>
+                      </div>
+                      <div style="border: 1px solid #CCCCCC;font-size:12px;margin-top:15px;padding: 11px 10px;">
+                         <p ><b>{{item.day?item.day:''}}&nbsp;&nbsp;&nbsp;{{item.time}}</b></p>
+                          <div v-if="JSON.stringify(item.differ)!=''&& item.day" class="flexStart fontweight" style="margin: 11px 0;padding: 5px;background:rgba(243,245,248,1);color:#476785;font-size:12px">
+                              <div style="width:60px;">
+                                [返差价]
+                              </div>
+                              <div style="width:483px;">
+                                当前同时间段内用户参与者共{{item.sale_num}}人,活动结束时
+                                <span >
+                                  满{{item.differ.num}}人,返预付{{Number(item.differ.refund_rate)}}%;
+                                </span>
+                              </div>
+                          </div>
+                          <div style="display: flex;justify-content: flex-start;border-bottom: 1px solid #E8E8E8;padding: 10px 0;">
+                            <div @click="toPublish(item,index)" style="position: relative;width:200px;height:120px;">
+                              <loadingImg type="3"  :src="item.cover.domain+ item.cover.image_url" style="width:200px;height:120px;"></loadingImg>
+                              <span v-if="item.online == 0" style="padding:5px 10px;color:#fff;position: absolute;font-size:12px;top:0" :style="{backgroundColor:item.is_doing ==0? '#008489':'#FA9F00'}">
+                                {{item.is_doing == 0? '已发布':'进行中'}}
+                              </span>
+                              <span v-if="item.online == 1" style="z-index:999;padding:5px 10px;color:#fff;position: absolute;font-size:12px;top:0;left:0;right:0;bottom:0;background-color: rgba(102,102,102,.5);display: flex;justify-content: center;align-items: center">
+                              已取消
+                            </span>
+                          </div>
+                          <div style="margin-left:15px;line-height:30px;width:300px;">
+                            <p><span v-for="items in item.kind">{{'/'+items.kind_name}}</span></p>
+                            <p><b>{{item.title}}</b></p>
+                            <div style="display: flex;justify-content: space-between;margin-top:20px;">
+                              <div>
+                                <span>￥{{item.price}}每人</span><span style="margin-left:10px;" :style="{color:item.online == 0?'#008489':'#999999'}">{{item.sale_num}}人预定</span>
+                              </div>
+                              <div @click="item.online == 1?'':lookOrder(item,index)" :style="{cursor:item.online == 1?'':'pointer',color:item.online == 0?'#008489':'#999999',borderColor:item.online==0?'#008489':'#999999'}" style="border:2px solid;padding: 0 10px;border-radius: 3px;font-weight: bold">
+                                查看预定
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                      <div style="display: flex;justify-content: space-between;margin-top:15px;">
+                      <div style="display: flex;justify-content: flex-start;cursor: pointer">
+                        <span @click="deleteActive(item,index)" style="color:#000;" >删除</span>
+                        <span  style="margin: 0 10px;color:#000;" @click="item.online == 1?restore(item,index):abolish(item,index)">{{item.online == 1?'恢复':'取消'}}</span>
+                        <span>修改</span>
+                      </div>
+                      <div style="display: flex;justify-content: space-between;width:300px;">
+                        <span  :style="{cursor:item.online == 1?'':'pointer',}" @click="item.online == 1?'':backMoney(item,index)"><b>退款申请({{item.refund_num}})</b></span>
+                        <span @click="toApplication(item,index)"  :style="{color:item.online == 0?'#008489':'#999999',cursor:item.online == 1?'':'pointer',}"><b>志愿者申请({{item.enroll_count}})</b></span>
+                        <span :style="{color:item.online == 0?'#008489':'#999999',cursor:item.online == 1?'':'pointer',}" @click="item.online == 1?'':toInvite(item,index)"><b>邀请志愿者</b></span>
+                      </div>
+                    </div>
+                    </div>
+                    
+                  </div>
+                  <div v-if="!chooseTime.length" style="border: 1px solid #CCCCCC;font-size:12px;margin-top:15px;padding: 11px 10px;" >
+                    <p ><b>发布时间：{{item.create_time}}</b></p>
+                     <div class="flexStart fontweight" style="margin: 11px 0;padding: 5px;background:rgba(243,245,248,1);color:#476785;font-size:12px">
+                      <div style="width:60px;">
+                        [返差价]
+                      </div>
+                      <div style="width:483px;">
+                        活动结束时同时间段内用户参与者
+                        <span v-for="(v,i) in item.differ">
+                          满{{v.num}}人,返预付{{Number(v.refund_rate)}}%;
+                        </span>
+                      </div>
+                    </div>
+                    <div style="display: flex;justify-content: flex-start;border-bottom: 1px solid #E8E8E8;padding: 10px 0;">
+                      <div @click="toPublish(item,index)" style="position: relative;width:200px;height:120px;">
+                        <loadingImg type="3"  :src="item.cover.domain+ item.cover.image_url" style="width:200px;height:120px;"></loadingImg>
+                        <span  style="padding:5px 10px;color:#fff;position: absolute;font-size:12px;top:0" :style="{backgroundColor:item.is_doing ==0? '#008489':'#FA9F00'}">
+                  {{item.is_doing == 0? '已发布':'进行中'}}
+                  </span>
                     </div>
                     <div style="margin-left:15px;line-height:30px;width:300px;">
                       <p><span v-for="items in item.kind">{{'/'+items.kind_name}}</span></p>
                       <p><b>{{item.title}}</b></p>
                       <div style="display: flex;justify-content: space-between;margin-top:20px;">
                         <div>
-                          <span>￥{{item.price}}每人</span><span style="margin-left:10px;" :style="{color:item.online == 0?'#008489':'#999999'}">{{item.sale_num}}人预定</span>
+                          <span v-if="item.price">￥{{item.price}}每人</span><span style="margin-left:10px;color:#008489">{{item.sale_num}}人预定</span>
                         </div>
-                        <div @click="item.online == 1?'':lookOrder(item,index)" :style="{cursor:item.online == 1?'':'pointer',color:item.online == 0?'#008489':'#999999',borderColor:item.online==0?'#008489':'#999999'}" style="border:2px solid;padding: 0 10px;border-radius: 3px;font-weight: bold">
+                        <div @click="lookOrder(item,index)"  style="color:#008489;cursor:pointer;border:2px solid #008489;padding: 0 10px;border-radius: 3px;font-weight: bold">
                           查看预定
                         </div>
                       </div>
@@ -71,242 +147,207 @@
                   </div>
                   <div style="display: flex;justify-content: space-between;margin-top:15px;">
                     <div style="display: flex;justify-content: flex-start;cursor: pointer">
-                      <span @click="deleteActive(item,index)" style="color:#000;" >删除</span>
-                      <span  style="margin: 0 10px;color:#000;" @click="item.online == 1?restore(item,index):abolish(item,index)">{{item.online == 1?'恢复':'取消'}}</span>
-                      <span>修改</span>
+                      <span style="color:#000;" @click="deleteActive(item,index)">删除</span>
+                      <span  style="margin: 0 10px;color:#000;" @click="abolish(item,index)">取消</span>
+                      <span @click="toRemake(item,index)">修改</span>
                     </div>
                     <div style="display: flex;justify-content: space-between;width:300px;">
-                      <span  :style="{cursor:item.online == 1?'':'pointer',}" @click="item.online == 1?'':backMoney(item,index)"><b>退款申请({{item.refund_num}})</b></span>
-                      <span @click="toApplication(item,index)"  :style="{color:item.online == 0?'#008489':'#999999',cursor:item.online == 1?'':'pointer',}"><b>志愿者申请({{item.enroll_count}})</b></span>
-                      <span :style="{color:item.online == 0?'#008489':'#999999',cursor:item.online == 1?'':'pointer',}" @click="item.online == 1?'':toInvite(item,index)"><b>邀请志愿者</b></span>
+                      <span  style="cursor: pointer" @click="backMoney(item,index)"><b>退款申请({{item.refund_num}})</b></span>
+                      <span  style="color:#008489;cursor: pointer"  @click="toApplication(item,index)"><b>志愿者申请({{item.enroll_count}})</b></span>
+                      <span style="color:#008489;cursor: pointer" @click="toInvite(item,index)"><b>邀请志愿者</b></span>
                     </div>
                   </div>
                 </div>
-                <div v-if="!chooseTime.length" >
-                  <p ><b>发布时间：{{item.create_time}}</b></p>
-                  <div style="display: flex;justify-content: flex-start;border-bottom: 1px solid #E8E8E8;padding: 10px 0;">
-                    <div @click="toPublish(item,index)" style="position: relative;width:200px;height:120px;">
-                      <loadingImg type="3"  :src="item.cover.domain+ item.cover.image_url" style="width:200px;height:120px;"></loadingImg>
-                      <span  style="padding:5px 10px;color:#fff;position: absolute;font-size:12px;top:0" :style="{backgroundColor:item.is_doing ==0? '#008489':'#FA9F00'}">
-                 {{item.is_doing == 0? '已发布':'进行中'}}
-                </span>
-                  </div>
-                  <div style="margin-left:15px;line-height:30px;width:300px;">
-                    <p><span v-for="items in item.kind">{{'/'+items.kind_name}}</span></p>
-                    <p><b>{{item.title}}</b></p>
-                    <div style="display: flex;justify-content: space-between;margin-top:20px;">
-                      <div>
-                        <span v-if="item.price">￥{{item.price}}每人</span><span style="margin-left:10px;color:#008489">{{item.sale_num}}人预定</span>
-                      </div>
-                      <div @click="lookOrder(item,index)"  style="color:#008489;cursor:pointer;border:2px solid #008489;padding: 0 10px;border-radius: 3px;font-weight: bold">
-                        查看预定
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div style="display: flex;justify-content: space-between;margin-top:15px;">
-                  <div style="display: flex;justify-content: flex-start;cursor: pointer">
-                    <span style="color:#000;" @click="deleteActive(item,index)">删除</span>
-                    <span  style="margin: 0 10px;color:#000;" @click="abolish(item,index)">取消</span>
-                    <span @click="toRemake(item,index)">修改</span>
-                  </div>
-                  <div style="display: flex;justify-content: space-between;width:300px;">
-                    <span  style="cursor: pointer" @click="backMoney(item,index)"><b>退款申请({{item.refund_num}})</b></span>
-                    <span  style="color:#008489;cursor: pointer"  @click="toApplication(item,index)"><b>志愿者申请({{item.enroll_count}})</b></span>
-                    <span style="color:#008489;cursor: pointer" @click="toInvite(item,index)"><b>邀请志愿者</b></span>
-                  </div>
+              </div>
+              <div v-show="!dateActive.length">
+                <none type="myPlay"></none>
+              </div>
+              <div v-if="isDate || isADate" style="position: fixed;top:0;left:0;right:0;bottom:0;z-index:999;background-color: rgba(255,255,255,.9);display: flex;justify-content: center;align-items: center">
+                <Loading></Loading>
+              </div>
+            </div>
+          </div>
+          <div v-show="isInvite" style="position: fixed;top:0;left:0;right:0;bottom:0;background-color: rgba(0,0,0,.3);z-index:999;overflow: hidden">
+            <div style="text-align:left;position:fixed;top:50%;left:50%;width:400px;height:350px;padding:20px;background-color:#fff;border-radius:10px;margin-top:-220px;margin-left:-220px;font-size:15px;">
+              <div style="display: flex;justify-content: space-between">
+                <el-checkbox v-model="checked">全选</el-checkbox>
+                <i @click="isInvite = false" style="font-size:25px;cursor: pointer" class="el-icon-circle-close-outline"></i>
+              </div>
+              <div>
+                <p>选择您想要{{remakeTime == 1? '删除':'取消'}}的日期</p>
+                <div style="margin:20px 0;">
+                  <el-select v-model="date" style="width:100%" multiple collapse-tags placeholder="请选择" @change="changeTime">
+                    <el-option
+                      v-for="item in datePicker"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
                 </div>
               </div>
-            </div>
-            <div v-show="!dateActive.length">
-              <none type="myPlay"></none>
-            </div>
-            <div v-if="isDate || isADate" style="position: fixed;top:0;left:0;right:0;bottom:0;z-index:999;background-color: rgba(255,255,255,.9);display: flex;justify-content: center;align-items: center">
-              <Loading></Loading>
-            </div>
-          </div>
-        </div>
-        <div v-show="isInvite" style="position: fixed;top:0;left:0;right:0;bottom:0;background-color: rgba(0,0,0,.3);z-index:999;overflow: hidden">
-          <div style="text-align:left;position:fixed;top:50%;left:50%;width:400px;height:350px;padding:20px;background-color:#fff;border-radius:10px;margin-top:-220px;margin-left:-220px;font-size:15px;">
-            <div style="display: flex;justify-content: space-between">
-              <el-checkbox v-model="checked">全选</el-checkbox>
-              <i @click="isInvite = false" style="font-size:25px;cursor: pointer" class="el-icon-circle-close-outline"></i>
-            </div>
-            <div>
-              <p>选择您想要{{remakeTime == 1? '删除':'取消'}}的日期</p>
-              <div style="margin:20px 0;">
-                <el-select v-model="date" style="width:100%" multiple collapse-tags placeholder="请选择" @change="changeTime">
-                  <el-option
-                    v-for="item in datePicker"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
+              <div v-if="timePicker.length">
+                <p>请选择{{remakeTime == 1? '删除':'取消'}}的时间段</p>
+                <div style="margin-top:20px">
+                  <el-select v-model="dateTime" style="width:100%" multiple collapse-tags placeholder="请选择">
+                    <el-option
+                      v-for="item in timePicker"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </div>
+              </div>
+              <div>
+                <el-button type="primary" @click="abolishInvite" :disabled="date.length||dateTime.length?false:true" style="position:absolute;width:400px;bottom: 20px;left:20px;">确定</el-button>
               </div>
             </div>
-            <div v-if="timePicker.length">
-              <p>请选择{{remakeTime == 1? '删除':'取消'}}的时间段</p>
-              <div style="margin-top:20px">
-                <el-select v-model="dateTime" style="width:100%" multiple collapse-tags placeholder="请选择">
-                  <el-option
-                    v-for="item in timePicker"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
+          </div>
+        </div>
+        <div style="margin-top:30px;" v-show="clickIndex == 2">
+          <div style="display:flex;justify-content: space-between">
+            <div style="font-size: 13px;display: flex;justify-content: flex-start">
+              <span @click="changeClickList(items,indexs)" v-for="(items,indexs) in serchList" class="aras" :style="{backgroundColor: ListIndex == indexs? '#008489':'#F1F1F1',color:ListIndex == indexs?'#fff':'#000'}">{{items.name}}</span>
+            </div>
+            <div  style="font-size: 13px;position: relative">
+              <span @click="orderClick" style="cursor: pointer">排序<i :class=" Isorder ? 'el-icon-arrow-up':'el-icon-arrow-down'"></i></span>
+              <div v-if="Isorder" style="position: absolute;background-color: #F3F3F3;padding:10px 20px;width:100px;left:-100px;">
+                <p v-for="(items,indexs) in orderList" @click="changeOrder(items,indexs)" style="padding:10px 0;font-size: 12px;font-weight: bold;cursor: pointer" :style="{color:orderIndex == indexs?'#008489':'#000'}">{{items.name}}</p>
               </div>
             </div>
-            <div>
-              <el-button type="primary" @click="abolishInvite" :disabled="date.length||dateTime.length?false:true" style="position:absolute;width:400px;bottom: 20px;left:20px;">确定</el-button>
+          </div>
+          <div style="display: flex;justify-content: space-between;background-color:#F4F6F9;color:#A8A8A8;font-size:12px;margin-top:20px;text-align: center;line-height:25px;">
+            <div class="miniwidth">预定用户</div><div class="miniwidth">预定体验</div><div class="miniwidth">参与人数</div><div class="miniwidth">预定活动时间</div><div class="miniwidth">预定住宿</div><div class="miniwidth">联系电话</div><div class="miniwidth">未/已支付</div><div class="miniwidth">下单时间</div><div class="miniwidth">操作</div>
+          </div>
+          <div v-for="(item,index) in orderActive" :key="index" style="border-bottom: 1px solid #E6E6E6">
+            <div style="display: flex;justify-content: space-between;font-size:12px;text-align: center;">
+              <div style="display: flex;justify-content:flex-start;width:120px;padding:19px 0;">
+                <img :src="item.user.head_image?item.user.headimage.domain + item.user.headimage.image_url:'../../../static/img/static/user.png'" width="32px" height="32px" style="border-radius: 50%;margin-left:40px;">
+                <div style="line-height:32px;margin-left:10px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{(item.user.family_name+item.user.middle_name+ item.user.name)?(item.user.name):'匿名用户'}}</div>
+              </div>
+              <div><el-popover
+                placement="top-start"
+                trigger="click"
+                width="120"
+                :content="item.title"
+              >
+                <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.title}}</el-button>
+              </el-popover></div>
+              <div class="width">{{item.num}}</div>
+              <div><el-popover
+                placement="top-start"
+                trigger="click"
+                width="120"
+                @show="takeUp(item,index)"
+                :content="timeContent"
+              >
+                <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.activ_begin_time}}-{{item.activ_end_time}}</el-button>
+              </el-popover></div>
+              <div style="width:120px;height: 70px;">
+                <el-button  style="border:none;padding:0;margin-top:30px;" :style="{color:item.house.length?'#008489':'#000'}" slot="reference"  plain>{{item.house.length?'已预定':'无'}}</el-button>
+                <p @click="lookXq(item,index)" style="margin-top:5px;font-weight:bold;cursor:pointer;" v-if="item.house.length">查看详情&gt;</p>
+              </div>
+              <div><el-popover
+                placement="top-start"
+                trigger="click"
+                width="200"
+                :content="item.introduce"
+              >
+                <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.user.mobile}}</el-button>
+              </el-popover></div>
+              <div class="width" style="color:#008489">
+                <span >{{item.ispay == 1? '￥'+item.total_price:'￥'+item.total_price+'(未)' }}</span>
+              </div>
+              <div class="width" style="color:#008489">
+                {{item.create_time}}
+              </div>
+              <div class="width" v-if="item.status == 0 && item.ispay == 1" >
+                <span  style="cursor: pointer"  @click="changeErollA(item,1)" >私信</span>
+                <span  @click="toRefundDes(item,1)" style="margin: 0 5px;cursor: pointer">查看详情</span>
+                <span  style="cursor: pointer"  @click="changeErollA(item,2)" plain>退款</span>
+              </div>
+              <div class="width" v-if="item.status == 0 && item.ispay == 0">
+                <span style="cursor: pointer"    @click="changeErollA(item,1)" >私信</span>
+                <span style="cursor: pointer"   @click="changeErollA(item,3)" plain>查看详情</span>
+              </div>
+              <div class="width" v-if="item.status">
+                <el-button type="primary" size="mini" :style="{backgroundColor:item.status == 2? '#fff':'#008489',color:item.status == 2? 'red':'#fff',borderColor:item.audit==2?'red':'#008489'}">{{item.audit == 1?'申请中':'已退款'}}</el-button>
+                <span  @click="toRefundDes(item,1)" style="margin-left:10px;cursor: pointer">查看详情</span>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div style="margin-top:30px;" v-show="clickIndex == 2">
-        <div style="display:flex;justify-content: space-between">
-          <div style="font-size: 13px;display: flex;justify-content: flex-start">
-            <span @click="changeClickList(items,indexs)" v-for="(items,indexs) in serchList" class="aras" :style="{backgroundColor: ListIndex == indexs? '#008489':'#F1F1F1',color:ListIndex == indexs?'#fff':'#000'}">{{items.name}}</span>
+          <div v-show="!orderActive.length">
+            <none type='lookOrder'></none>
           </div>
-          <div  style="font-size: 13px;position: relative">
-            <span @click="orderClick" style="cursor: pointer">排序<i :class=" Isorder ? 'el-icon-arrow-up':'el-icon-arrow-down'"></i></span>
-            <div v-if="Isorder" style="position: absolute;background-color: #F3F3F3;padding:10px 20px;width:100px;left:-100px;">
-               <p v-for="(items,indexs) in orderList" @click="changeOrder(items,indexs)" style="padding:10px 0;font-size: 12px;font-weight: bold;cursor: pointer" :style="{color:orderIndex == indexs?'#008489':'#000'}">{{items.name}}</p>
-            </div>
+          <div v-if="paginationShow" style="margin:20px 0;">
+            <el-pagination  @current-change="handleOrderChange" :current-page="index" :page-size="10" layout="total, prev, pager, next" :total="ordertotal"></el-pagination>
           </div>
         </div>
-        <div style="display: flex;justify-content: space-between;background-color:#F4F6F9;color:#A8A8A8;font-size:12px;margin-top:20px;text-align: center;line-height:25px;">
-          <div class="miniwidth">预定用户</div><div class="miniwidth">预定体验</div><div class="miniwidth">参与人数</div><div class="miniwidth">预定活动时间</div><div class="miniwidth">预定住宿</div><div class="miniwidth">联系电话</div><div class="miniwidth">未/已支付</div><div class="miniwidth">下单时间</div><div class="miniwidth">操作</div>
-        </div>
-        <div v-for="(item,index) in orderActive" :key="index" style="border-bottom: 1px solid #E6E6E6">
-          <div style="display: flex;justify-content: space-between;font-size:12px;text-align: center;">
-            <div style="display: flex;justify-content:flex-start;width:120px;padding:19px 0;">
-              <img :src="item.user.head_image?item.user.headimage.domain + item.user.headimage.image_url:'../../../static/img/static/user.png'" width="32px" height="32px" style="border-radius: 50%;margin-left:40px;">
-              <div style="line-height:32px;margin-left:10px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{(item.user.family_name+item.user.middle_name+ item.user.name)?(item.user.name):'匿名用户'}}</div>
-            </div>
-            <div><el-popover
-              placement="top-start"
-              trigger="click"
-              width="120"
-              :content="item.title"
-            >
-              <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.title}}</el-button>
-            </el-popover></div>
-            <div class="width">{{item.num}}</div>
-            <div><el-popover
-              placement="top-start"
-              trigger="click"
-              width="120"
-              @show="takeUp(item,index)"
-              :content="timeContent"
-            >
-              <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.activ_begin_time}}-{{item.activ_end_time}}</el-button>
-            </el-popover></div>
-            <div style="width:120px;height: 70px;">
-              <el-button  style="border:none;padding:0;margin-top:30px;" :style="{color:item.house.length?'#008489':'#000'}" slot="reference"  plain>{{item.house.length?'已预定':'无'}}</el-button>
-              <p @click="lookXq(item,index)" style="margin-top:5px;font-weight:bold;cursor:pointer;" v-if="item.house.length">查看详情&gt;</p>
-            </div>
-            <div><el-popover
-              placement="top-start"
-              trigger="click"
-              width="200"
-              :content="item.introduce"
-            >
-              <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.user.mobile}}</el-button>
-            </el-popover></div>
-            <div class="width" style="color:#008489">
-              <span >{{item.ispay == 1? '￥'+item.total_price:'￥'+item.total_price+'(未)' }}</span>
-            </div>
-            <div class="width" style="color:#008489">
-              {{item.create_time}}
-            </div>
-            <div class="width" v-if="item.status == 0 && item.ispay == 1" >
-              <span  style="cursor: pointer"  @click="changeErollA(item,1)" >私信</span>
-              <span  @click="toRefundDes(item,1)" style="margin: 0 5px;cursor: pointer">查看详情</span>
-              <span  style="cursor: pointer"  @click="changeErollA(item,2)" plain>退款</span>
-            </div>
-            <div class="width" v-if="item.status == 0 && item.ispay == 0">
-              <span style="cursor: pointer"    @click="changeErollA(item,1)" >私信</span>
-              <span style="cursor: pointer"   @click="changeErollA(item,3)" plain>查看详情</span>
-            </div>
-            <div class="width" v-if="item.status">
-              <el-button type="primary" size="mini" :style="{backgroundColor:item.status == 2? '#fff':'#008489',color:item.status == 2? 'red':'#fff',borderColor:item.audit==2?'red':'#008489'}">{{item.audit == 1?'申请中':'已退款'}}</el-button>
-              <span  @click="toRefundDes(item,1)" style="margin-left:10px;cursor: pointer">查看详情</span>
+        <div style="margin-top: 30px;" v-show="clickIndex == 3">
+          <div style="display: flex;justify-content: space-between;background-color:#F4F6F9;color:#A8A8A8;font-size:12px;margin-top:20px;text-align: center;line-height:25px;">
+            <div class="minivolunwidth">头像/昵称</div><div class="minivolunwidth">性别</div><div class="minivolunwidth">语言/技能</div><div class="minivolunwidth">申请时间</div><div class="minivolunwidth">备注</div><div class="minivolunwidth">志愿人评分</div><div class="minivolunwidth">操作</div>
+          </div>
+          <div v-for="(item,index) in volunList" :key="index" style="border-bottom: 1px solid #E6E6E6">
+            <div style="display: flex;justify-content: space-between;font-size:12px;text-align: center;">
+              <div style="display: flex;justify-content:flex-start;width:150px;padding:19px 0;">
+                <img :src="item.user.head_image?item.user.headimage.domain + item.user.headimage.image_url:'../../../static/img/static/user.png'" width="32px" height="32px" style="border-radius: 50%;margin-left:40px;">
+                <div style="line-height:32px;margin-left:10px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{(item.user.family_name+item.user.middle_name+ item.user.name)?(item.user.name):'匿名用户'}}</div>
+              </div>
+              <div class="volunwidth">{{sexArr[item.user.six].label}}</div>
+              <div><el-popover
+                placement="top-start"
+                trigger="click"
+                width="200"
+                @show="takevolunUp(item,index)"
+                :content="voluncontent"
+              >
+                <el-button class="volunwidth" style="border:none;padding:0;" slot="reference"  plain>{{languageList[item.main_language].label}},<span v-for="(items,indexs) in item.language">{{languageList[items].label}},</span>/{{item.skill}}</el-button>
+              </el-popover></div>
+              <div><el-popover
+                placement="top-start"
+                trigger="click"
+                width="200"
+                :content="item.slot_id[0].begin_time+'—'+item.slot_id[0].end_time"
+              >
+                <el-button class="volunwidth" style="border:none;padding:0;" slot="reference"  plain>{{item.slot_id[0].begin_time}}-{{item.slot_id[0].end_time}}</el-button>
+              </el-popover></div>
+              <div><el-popover
+                placement="top-start"
+                trigger="click"
+                width="200"
+                :content="item.introduce"
+              >
+                <el-button class="volunwidth" style="border:none;padding:0;" slot="reference"  plain>{{item.introduce}}</el-button>
+              </el-popover></div>
+              <div  style="width:150px;padding:19px 0">
+                <el-rate
+                  v-bind="parseInt(item.score)"
+                  disabled
+                  show-score
+                  :colors="['#008489','#008489','#008489']"
+                  text-color="#008489"
+                  score-template="{value}">
+                </el-rate></div>
+              <div class="volunwidth" v-if="item.audit == 0">
+                <el-button type="primary"  size="mini" @click="changeVolunErollA(item,1)" >同意</el-button>
+                <el-button type="primary" size="mini" @click="changeVolunErollA(item,2)" plain>谢绝</el-button>
+              </div>
+              <div class="volunwidth" v-if="item.audit">
+                <el-button type="primary" size="mini" :style="{backgroundColor:item.audit == 2? '#fff':'#008489',color:item.audit == 2? 'red':'#fff',borderColor:item.audit==2?'red':'#008489'}">{{item.audit == 1?'已同意':'已谢绝'}}</el-button>
+              </div>
             </div>
           </div>
-        </div>
-        <div v-show="!orderActive.length">
-          <none type='lookOrder'></none>
-        </div>
-        <div v-if="paginationShow" style="margin:20px 0;">
-          <el-pagination  @current-change="handleOrderChange" :current-page="index" :page-size="10" layout="total, prev, pager, next" :total="ordertotal"></el-pagination>
-        </div>
-      </div>
-      <div style="margin-top: 30px;" v-show="clickIndex == 3">
-        <div style="display: flex;justify-content: space-between;background-color:#F4F6F9;color:#A8A8A8;font-size:12px;margin-top:20px;text-align: center;line-height:25px;">
-          <div class="minivolunwidth">头像/昵称</div><div class="minivolunwidth">性别</div><div class="minivolunwidth">语言/技能</div><div class="minivolunwidth">申请时间</div><div class="minivolunwidth">备注</div><div class="minivolunwidth">志愿人评分</div><div class="minivolunwidth">操作</div>
-        </div>
-        <div v-for="(item,index) in volunList" :key="index" style="border-bottom: 1px solid #E6E6E6">
-          <div style="display: flex;justify-content: space-between;font-size:12px;text-align: center;">
-            <div style="display: flex;justify-content:flex-start;width:150px;padding:19px 0;">
-              <img :src="item.user.head_image?item.user.headimage.domain + item.user.headimage.image_url:'../../../static/img/static/user.png'" width="32px" height="32px" style="border-radius: 50%;margin-left:40px;">
-              <div style="line-height:32px;margin-left:10px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{(item.user.family_name+item.user.middle_name+ item.user.name)?(item.user.name):'匿名用户'}}</div>
-            </div>
-            <div class="volunwidth">{{sexArr[item.user.six].label}}</div>
-            <div><el-popover
-              placement="top-start"
-              trigger="click"
-              width="200"
-              @show="takevolunUp(item,index)"
-              :content="voluncontent"
-            >
-              <el-button class="volunwidth" style="border:none;padding:0;" slot="reference"  plain>{{languageList[item.main_language].label}},<span v-for="(items,indexs) in item.language">{{languageList[items].label}},</span>/{{item.skill}}</el-button>
-            </el-popover></div>
-            <div><el-popover
-              placement="top-start"
-              trigger="click"
-              width="200"
-              :content="item.slot_id[0].begin_time+'—'+item.slot_id[0].end_time"
-            >
-              <el-button class="volunwidth" style="border:none;padding:0;" slot="reference"  plain>{{item.slot_id[0].begin_time}}-{{item.slot_id[0].end_time}}</el-button>
-            </el-popover></div>
-            <div><el-popover
-              placement="top-start"
-              trigger="click"
-              width="200"
-              :content="item.introduce"
-            >
-              <el-button class="volunwidth" style="border:none;padding:0;" slot="reference"  plain>{{item.introduce}}</el-button>
-            </el-popover></div>
-            <div  style="width:150px;padding:19px 0">
-              <el-rate
-                v-bind="parseInt(item.score)"
-                disabled
-                show-score
-                :colors="['#008489','#008489','#008489']"
-                text-color="#008489"
-                score-template="{value}">
-              </el-rate></div>
-            <div class="volunwidth" v-if="item.audit == 0">
-              <el-button type="primary"  size="mini" @click="changeVolunErollA(item,1)" >同意</el-button>
-              <el-button type="primary" size="mini" @click="changeVolunErollA(item,2)" plain>谢绝</el-button>
-            </div>
-            <div class="volunwidth" v-if="item.audit">
-              <el-button type="primary" size="mini" :style="{backgroundColor:item.audit == 2? '#fff':'#008489',color:item.audit == 2? 'red':'#fff',borderColor:item.audit==2?'red':'#008489'}">{{item.audit == 1?'已同意':'已谢绝'}}</el-button>
-            </div>
+          <div v-show="!volunList.length">
+            <none type='application'></none>
+          </div>
+          <div v-if="isLoading" style="position: fixed;top:0;left:0;right:0;bottom:0;z-index:999;background-color: rgba(255,255,255,.8);display: flex;justify-content: center;align-items: center">
+            <Loading></Loading>
+          </div>
+          <div style="margin:20px 0;">
+            <el-pagination  @current-change="handlevolunChange" :current-page="index" :page-size="10" layout="total, prev, pager, next" :total="voluntotal"></el-pagination>
           </div>
         </div>
-        <div v-show="!volunList.length">
-          <none type='application'></none>
-        </div>
-        <div v-if="isLoading" style="position: fixed;top:0;left:0;right:0;bottom:0;z-index:999;background-color: rgba(255,255,255,.8);display: flex;justify-content: center;align-items: center">
-          <Loading></Loading>
-        </div>
-        <div style="margin:20px 0;">
-          <el-pagination  @current-change="handlevolunChange" :current-page="index" :page-size="10" layout="total, prev, pager, next" :total="voluntotal"></el-pagination>
-        </div>
-      </div>
       <div style="margin-top: 30px;" v-show="clickIndex == 4">
         <div style="display: flex;justify-content: space-between;background-color:#F4F6F9;color:#A8A8A8;font-size:12px;margin-top:20px;text-align: center;line-height:25px;padding:10px 0;">
           <div class="refundWidth">退款用户</div><div class="refundWidth">预定时间</div><div class="refundWidth">退款方式</div><div class="refundWidth">退款人数</div><div class="refundWidth">退款住宿</div><div class="refundWidth">退款金额</div><div class="refundWidth">操作</div>
@@ -856,14 +897,16 @@
         },
           //获取预定
         getOrid(val,flag,sort,status,iscomplete,type){
-          this.$http.post(this.api + '/OrderLPlanner',{
+          this.$http.post(this.api + '/OrderLPlannerTwo',{
             token: localStorage.getItem('token'),
             flag: flag,
             page: val,
             status:status,
             iscomplete:iscomplete,
             sort:sort,
-            type:type
+            type:type,
+            verson:2.0,
+            per_page:10
           })
             .then(res=>{
               if(res.data.code == 1){
@@ -1401,14 +1444,16 @@
           this.getDateActive()
         },
         getDateActive(){
-          this.$http.post(this.api + '/ActivityList',{
+          this.$http.post(this.api + '/ActivityListTwo',{
             token: localStorage.getItem('token'),
-            date:JSON.stringify(this.chooseTime)
+            date:JSON.stringify(this.chooseTime),
+            verson:2.0
           })
             .then(res=>{
               if(res.data.code == 1){
                 let data = res.data.data
                 let a = []
+                
                 if(this.chooseTime.length){
                   for(let i =0;i< data.length;i++){
                     if(data[i].long_day){
@@ -1428,7 +1473,8 @@
                             sale_num:data[i].slot[m].list[j].order_num,
                             is_doing:data[i].is_doing,
                             online:data[i].slot[m].list[j].online,
-                            refund_num:data[i].slot[m].list[j].refund_num
+                            refund_num:data[i].slot[m].list[j].refund_num,
+                            differ: data[i].slot[m].list[j].no_reach_differ
                           })
                         }
                       }
@@ -1447,7 +1493,8 @@
                           sale_num:data[i].slot[j].order_num,
                           is_doing:data[i].is_doing,
                           online:data[i].slot[j].online,
-                          refund_num:data[i].slot[j].refund_num
+                          refund_num:data[i].slot[j].refund_num,
+                          differ:data[i].slot[j].no_reach_differ
                         })
                       }
                     }
@@ -1456,15 +1503,12 @@
                   a = res.data.data
                 }
                 this.dateActive = a
+         
                 this.isADate = false
               }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.getDateActive()
-                  })
+                this.getDateActive()
               }else if(res.data.code == 0){
-                alert(res.data.msg)
+                this.$message({type:'error',message:res.data.msg})
               }
             })
         },

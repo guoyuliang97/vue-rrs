@@ -1,13 +1,201 @@
 <template>
     <div>
         <Head type='refundDescirbe'></Head>
-        <div v-if="Rdata" style="margin: 80px auto;width:1080px;text-align:left">
-            <p><b>我的策划&gt;{{type == 4? '已完成':type == 3?'退款申请':'查看预定'}}&gt;{{type == 3? '申请详情':type == 1?'预定申请':type == 4?'已完成详情':'预定详情'}}</b></p>
-              <div style="display: flex;justify-content: space-between">
-                <h2 style="margin: 15px 0;">{{type == 3?'申请详情':type == 4?'详情':''}}</h2>
+        <div v-if="Rdata" class="fontweight" style="margin: 80px auto;width:1080px;text-align:left;font-size:16px;">
+            <p style="font-szie:14px;" v-if="type != '5'" ><b>我的策划&gt;{{type == 4? '已完成':type == 3?'退款申请':'查看预定'}}&gt;{{type == 3? '申请详情':type == 1?'预定详情':type == 4?'已完成详情':'预定详情'}}</b></p>
+            <p style="font-szie:14px;" v-if="type == '5'" ><b>我的策划&gt;已主动退款</b></p>
+
+              <div class="flexBetween">
+                <p class="fontweight" style="margin: 32px 0;font-size:18px">{{type == 3?'申请详情':type == 4?'详情':type=='1'?'订单详情':'详情'}}</p>
                 <el-button icon="el-icon-arrow-left" style="width:50px;height:50px;" @click="goBack"  circle></el-button>
               </div>
-            <div style="margin: 20px 0;padding: 25px 15px;background-color:#FBFBFB">
+              <div class="flexStart">
+                <LoadinImg type="user" :src="Rdata.user.head_image?Rdata.user.headimage.domain + Rdata.user.headimage.image_url:''" style="width:92.04px;height:92.04px;" ></LoadinImg>
+                <div style="margin-left:10px;line-height:92px;font-size:29px;">
+                    <b>{{Rdata.user.family_name+Rdata.user.middle_name+Rdata.user.name?Rdata.user.family_name+Rdata.user.middle_name+Rdata.user.name:'匿名用户'}}</b>
+                    <span v-if="Rdata.is_refund == 1" style="color:#F13636;font-size:12px">(有退款)</span>
+                </div>
+              </div>
+              <div style="margin-top: 25px;">
+                <p>参与人数：{{Rdata.num}}人</p>
+                <p class="marginT">预定时间：{{Rdata.activ_begin_time}}—{{Rdata.activ_end_time}}</p>
+              </div>
+              <hr class="lineS">
+              <div class="flexStart">
+                <div>价格详情：</div>
+                <div v-if="Rdata.detail.length">
+                  <div class="marginTop" v-for="(item,index) in Rdata.detail">
+                    <div v-if="item.type == '1'||item.type == '2'">
+                      {{item.type =='1'?'亲子':item.name}}<span class="marginLeft"></span>{{item.adult}}成人<span v-if="item.type == '1'">{{item.kids}}儿童</span>	<span class="marginLeft"></span>¥{{item.price}}
+                    </div>
+                    <div v-if="item.type == '0'">
+                      <div class="marginTop">标准<span class="marginLeft"></span>{{item.adult}}人<span class="marginLeft"></span>¥{{item.adult_price}}</div>
+                      <div >儿童<span class="marginLeft"></span>{{item.kids}}人<span class="marginLeft"></span>¥{{item.kids_price}}</div>	
+                    </div>
+                  </div>
+                </div>
+                <div v-if="!Rdata.detail.length">
+                  无
+                </div>
+              </div>
+              <div class="flexStart marginT">
+                <div>住宿信息：</div>
+                <div v-if="Rdata.house.length">
+                  <p class="marginTop" v-for="(item,index) in Rdata.house"> 
+                    <span>{{item.title}}</span>
+                    <span class="marginLeft"></span>
+                    <span>房数<i class="el-icon-close"></i>{{item.num}}</span>
+                    <span class="marginLeft"></span>
+                    <span>总额￥&nbsp;{{item.price}}</span>
+                  </p>
+                </div>
+                <div v-if="!Rdata.house.length">无</div>
+              </div>
+               <hr class="lineS">
+               <div v-if="type != '3'" class="flexStart">
+                  <div>游客信息：</div>
+                  <div v-if="Rdata.person.length">
+                    <p class="marginTop" v-for="(item,index) in Rdata.person"> 
+                      <span>{{item.name}}</span>
+                      <span class="marginLeft"></span>
+                      <span>联系电话：{{item.mobile}}</span>
+                    </p>
+                  </div>
+                  <div v-if="!Rdata.person.length">无</div>
+               </div>
+               <div class="flexStart marginT">
+                  <div>用户电话：</div>
+                  <div>
+                    {{Rdata.user.mobile?Rdata.user.mobile:'无'}}
+                  </div>
+               </div>
+               <div v-if="Rdata.is_refund == 1 || type == '3'">
+                 <hr class="lineS">
+                <div  class="refundFlex">
+                    <div>
+                      <b>退款方式：</b>
+                    </div>
+                    <div>
+                      <b>{{Number( Rdata.refund_total_price) == Number(Rdata.total_price)?'全款':'非全款'}}</b>
+                    </div>
+                  </div>
+                  <div  class="refundFlex">
+                    <div>
+                      <b>退款人数：</b>
+                    </div>
+                    <div>
+                      <div  v-for="(item,index) in Rdata.refund_detail">
+                        <div v-if="item.type == '0'">
+                          <div class="marginTop">标准{{item.adult}}人<span class="marginLeft"></span>儿童{{item.kids}}人<span class="marginLeft"></span>¥{{item.price}}</div>
+                        </div>
+                      </div>
+                    </div>
+                   
+                  </div>
+                  <div  class="refundFlex">
+                    <div>
+                      <b>退订套餐：</b>
+                    </div>
+                    <div v-if="Rdata.refund_detail.length">
+                      <div class="marginTop" v-for="(item,index) in Rdata.refund_detail">
+                        <div v-if="item.type == '1'||item.type == '2'">
+                          {{item.type =='1'?'亲子':item.name}}<span class="marginLeft"></span>{{item.adult}}成人<span v-if="item.type == '1'">{{item.kids}}儿童</span>	<span class="marginLeft"></span>¥{{item.price}}
+                        </div>
+                      </div>
+                    </div>
+                    <div v-if="!Rdata.refund_detail.length">
+                      无
+                    </div>
+                  </div>
+                  <div  class="refundFlex">
+                    <div>
+                      <b>退订住宿：</b>
+                    </div>
+                    <div v-if="Rdata.refund_detail.length">
+                      <div class="marginTop" v-for="(item,index) in Rdata.refund_detail">
+                        <div v-if="item.type == '3'">
+                          {{item.name}}<span class="marginLeft"></span>房数X{{item.house_num}}	<span class="marginLeft"></span>总额¥{{item.price}}
+                        </div>
+                      </div>
+                    </div>
+                    <div v-if="!Rdata.refund_detail.length">
+                      无
+                    </div>
+                  </div>
+                  <div v-if="type == '3'" class="refundFlex">
+                    <div>
+                      <b>退款原因：</b>
+                    </div>
+                    <div>
+                      {{Rdata.refund_reason}}
+                    </div>
+                  </div>
+               </div>
+                
+               <hr class="lineS">
+                <div v-if="type == '1'">
+                  <p>支付状态&nbsp;&nbsp;&nbsp;<span style="color:#F73D3D">已支付</span></p>
+               </div>
+               
+               <div class=" marginT">
+                 <p>支付总额&nbsp;&nbsp;&nbsp;￥{{Rdata.total_price}}</p>
+               </div>
+               <div  v-if="type == 3 || Rdata.is_refund == 1 " class="marginT">
+                 <p>申请退款&nbsp;&nbsp;&nbsp;￥{{Rdata.refund_audit_price}}</p>
+               </div>
+               <div class=" marginT" v-if="type == 3 || Rdata.is_refund == 1 ">
+                 <p>退款总额&nbsp;&nbsp;&nbsp;<span style="color:#F73D3D">￥{{Rdata.refund_total_price}}</span></p>
+               </div>
+               <div class="marginT">
+                 <p>{{type == '3'?'申请时间':'下单时间'}}&nbsp;&nbsp;&nbsp;{{Rdata.create_time}}</p>
+               </div>
+               <div class="marginT">
+                 <p>订单编号&nbsp;&nbsp;&nbsp;{{Rdata.order_no}}</p>
+               </div>
+               <hr class="lineS">
+               <div class="flexEnd">
+                  <!-- <div v-if="type == 3">
+                    <div style="display:flex;justify-content:flex-start;margin: 5px 0;">
+                      <span><b>退款总额</b></span>
+                      <div style="width:70px;color:#008489;margin-left:10px;"><b>￥{{Rdata.total_price}}</b></div>
+                    </div>
+                    <div style="margin-bottom: 20px;color:#008489"><p>(退款原因:{{Rdata.refund_reason}})</p></div>
+                  </div> -->
+                    <div v-if="type == 3 && Rdata.status == 0 && Rdata.audit == 0">
+                        <el-button size="mini" @click="agreeOrder" style="width:120px;border:1px solid rgba(102,102,102,1);">同意</el-button>
+                        <el-button size="mini" @click="toRefuse" style="width:120px;border:1px solid rgba(102,102,102,1);">拒绝</el-button>
+                      <el-button size="mini" @click="Modify" style="width:120px;border:1px solid rgba(102,102,102,1);">退一部分</el-button>
+                    </div>
+                    <div v-if="type == 2 && Rdata.status == 0">
+                      <el-button size="mini" @click="contact"  style="width:120px;border:1px solid rgba(102,102,102,1);">私信</el-button>
+                      <el-button size="mini" @click="changeOrder" style="width:120px;border:1px solid rgba(102,102,102,1);">修改订单金额</el-button>
+                    </div>
+                  
+                  <div v-if="type == 1 && Rdata.status == 0 ">
+                    <el-button size="mini" @click="contact" style="width:120px;border:1px solid rgba(102,102,102,1);">私信</el-button>
+                    <el-button size="mini" @click="changeErollA" style="width:120px;border:1px solid rgba(102,102,102,1);">主动退款</el-button>
+                  </div>
+                  
+                  <div v-if="Rdata.status != 0" >
+                    <el-button size="mini" v-if="Rdata.audit == 1" type="primary" >已同意</el-button>
+                    <el-button size="mini" v-if="Rdata.audit == 2" type="primary" >已拒绝</el-button>
+                  </div>
+                  <div v-if="Rdata.status == 0 && Rdata.audit != 0" >
+                    <el-button size="mini" v-if="Rdata.audit == 1" type="primary" >已同意</el-button>
+                    <el-button size="mini" v-if="Rdata.audit == 2" type="primary" >已拒绝</el-button>
+                  </div>
+                  <div v-if="type == 4">
+                    <div style="display:flex;justify-content:flex-end;margin: 15px 0;">
+                      <span><b>支付总额</b></span>
+                      <div style="width:70px;color:#008489;margin-left:50px;"><b>￥{{Rdata.total_price}}</b></div>
+                    </div>
+                    <div>
+                      <el-button size="mini" @click="Rdata.isevaluate_planner == 1? toRevalution():''" style="width:120px;border:1px solid rgba(102,102,102,1);">{{Rdata.isevaluate_planner == 1? '评价他':'已评价'}}</el-button>
+                    </div>
+                  </div>
+               </div>
+               
+            <!-- <div style="margin: 20px 0;padding: 25px 15px;background-color:#FBFBFB">
                 <div class="refundFlex">
                     <div style="line-height:48px;">
                         <b>预定用户</b>
@@ -245,10 +433,10 @@
                 <el-button size="mini" @click="contact" style="width:120px;border:1px solid rgba(102,102,102,1);">私信</el-button>
                 <el-button size="mini" @click="changeErollA" style="width:120px;border:1px solid rgba(102,102,102,1);">退款</el-button>
               </div>
-                <div v-if="Rdata.status != 0" >
-                  <el-button size="mini" v-if="Rdata.audit == 1" type="primary" >已同意</el-button>
-                  <el-button size="mini" v-if="Rdata.audit == 2" type="primary" >已拒绝</el-button>
-                </div>
+              <div v-if="Rdata.status != 0" >
+                <el-button size="mini" v-if="Rdata.audit == 1" type="primary" >已同意</el-button>
+                <el-button size="mini" v-if="Rdata.audit == 2" type="primary" >已拒绝</el-button>
+              </div>
               <div v-if="Rdata.status == 0 && Rdata.audit != 0" >
                 <el-button size="mini" v-if="Rdata.audit == 1" type="primary" >已同意</el-button>
                 <el-button size="mini" v-if="Rdata.audit == 2" type="primary" >已拒绝</el-button>
@@ -262,7 +450,7 @@
                   <el-button size="mini" @click="Rdata.isevaluate_planner == 1? toRevalution():''" style="width:120px;border:1px solid rgba(102,102,102,1);">{{Rdata.isevaluate_planner == 1? '评价他':'已评价'}}</el-button>
                 </div>
               </div>
-            </div>
+            </div> -->
         </div>
         <div v-show="isPrice" style="position:fixed;top:0;left:0;right:0;bottom:0;z-index:999;background-color: rgba(0,0,0,.5);display: flex;align-items: center;justify-content: center">
           <div v-if="alerIndex == 'remake'" style="background-color: #fff;padding: 20px;width:400px;">
@@ -414,7 +602,7 @@ export default {
         }
       },
       getRefunc(){
-        this.$http.post(this.api + '/RefundD',{
+        this.$http.post(this.api + '/RefundDTwo',{
           token: localStorage.getItem('token'),
           refund_id: this.order_id
         })
@@ -572,9 +760,10 @@ export default {
         this.alerIndex = 'refused'
       },
       getOrder(){
-        this.$http.post(this.api + '/OrderD',{
+        this.$http.post(this.api + '/OrderDTwo',{
           token: localStorage.getItem('token'),
           order_id: this.order_id,
+          verson:2.0
         })
           .then(res=>{
             if(res.data.code == 1){
@@ -640,11 +829,12 @@ export default {
       }
     },
   mounted(){
-    if(this.type == 3){
-      this.getRefunc()
-    }else{
-      this.getOrder()
-    }
+      if(this.type == '3'){
+        this.getRefunc()
+      }else{
+          this.getOrder()
+      }
+ 
   },
     created(){
       if(localStorage.getItem('userImg')){
@@ -663,5 +853,13 @@ export default {
     margin: 25px 0;
     display: flex;
     justify-content: flex-start;
+}
+.marginT{
+  margin-top: 25px;
+}
+.lineS{
+  margin: 32px 0;
+	border:none;
+	border-top:1px solid #DFE1E4;
 }
 </style>

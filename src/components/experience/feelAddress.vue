@@ -63,7 +63,7 @@
 			</el-radio-group>
 		</div>-->
 		<div class="exp_btn">
-			<el-button type="primary" @click="changeRouter">{{complete?'保存':'下一步'}}</el-button>
+			<el-button type="primary" @click="changeRouter">{{complete == '1'?'保存':'下一步'}}</el-button>
 		</div>
 		<p style="margin-top: 15px;"><span class="fontweight">注意事项:</span>参与者想找的是在相关领域有特长的体验达人，了解我们对达人<span style="color: #008489;cursor: pointer;">专业知识</span>水平的介绍。</p>
 	</div>
@@ -145,7 +145,7 @@
               })
                 .then(res=>{
                   if(res.data.code == 1){
-                    if(!this.complete){
+                    if(this.complete == '0'){
                       this.$emit('changeRouter',{id:11,router:"activeTime",information: this.active_id,complete: this.complete})
                     }else{
                       this.$message({
@@ -218,7 +218,7 @@
               })
                 .then(res=>{
                   if(res.data.code == 1){
-                    if(!this.complete){
+                    if(this.complete == '0'){
                       this.$emit('changeRouter',{id:11,router:"activeTime",information:  this.active_id,complete: this.complete})
                     }else{
                       this.$message({
@@ -330,7 +330,7 @@
            }
 
            map.addEventListener("click",function(e){
-             console.log(e)
+            
              _this.point = [e.point.lng,e.point.lat]
              map.clearOverlays();
              var point = new BMap.Point(e.point.lng,e.point.lat)
@@ -458,16 +458,7 @@
         })
           .then(res=>{
             if(res.data.code == 1){
-          /*    for(let i = 0;i< this.questionList.length;i++){
-                for(let j = 0; j< res.data.data.answer.length; j++){
-                  if(this.questionList[i].question_id == res.data.data.answer[j].question_id){
-                    this.questionList[i].answer = res.data.data.answer[j].option_id
-                    this.replay.push(res.data.data.answer[j])
-                  }
-                }
-              }*/
               this.goPlace = res.data.data.go_place
-              this.aboutMe = res.data.data.set_address
               this.country.push(res.data.data.country_id,res.data.data.country)
               this.province.push(res.data.data.province_id,res.data.data.province)
               this.city.push(res.data.data.city_id,res.data.data.city)
@@ -485,7 +476,9 @@
                 this.point = [res.data.data.set_address_lng,res.data.data.set_address_lat]
               }
               this.createMap()
-              console.log(this.aboutMe)
+                this.aboutMe = res.data.data.set_address
+                 console.log(this.aboutMe)
+  
             }else if(res.data.code == 3){
               this.getActives()
             }else if(res.data.code == 0){
@@ -495,12 +488,14 @@
       }
 		},
 		created(){
-      window.scroll(0,0)
-      this.complete = this.$route.query.complete
-      this.active_id = this.$route.query.information
+    
+  
 		},
     mounted() {
-		  let _this = this
+      let _this = this
+        window.scroll(0,0)
+      this.complete = this.$route.query.complete
+      this.active_id = this.$route.query.information
   /*    _this.getQestion()*/
       if(_this.active_id){
         _this.getActives()

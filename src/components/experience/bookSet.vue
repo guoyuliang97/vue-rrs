@@ -29,7 +29,7 @@
         </el-select>
       </div>
       <div>
-        <el-button type="primary" plain style="margin-top:20px;" @click="changeRouter">{{complete?'保存':'下一步'}}</el-button>
+        <el-button type="primary" plain style="margin-top:20px;" @click="changeRouter">{{complete == '1'?'保存':'下一步'}}</el-button>
       </div>
     </div>
 </template>
@@ -90,7 +90,7 @@
               })
                 .then(res=>{
                   if(res.data.code == 1){
-                    if(!this.complete){
+                    if(this.complete == '0'){
                       this.$emit('changeRouter',{id:15,router:'makeBlock',information: this.active_id,complete: this.complete})
                     }else{
                       this.$message({

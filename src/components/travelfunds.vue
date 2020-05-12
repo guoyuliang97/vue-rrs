@@ -166,7 +166,7 @@
       getEWM(){
 		    this.$http.post(this.api + '/home/Upload/getqrcode',{
 		      token: localStorage.getItem('token'),
-          url: this.asd+'?'+'userId' +'='+this.user.user_id,
+          url: this.asd,
         })
           .then(res=>{
            if(res.data.code == 1){
@@ -183,7 +183,7 @@
         if(val == 1){
           var p = {
             //将页面地址转成短域名， 并显示在内容文字后面。(可选， 允许为空)
-            url: this.asd+'?'+'userId' +'='+this.user.user_id ,
+            url: this.asd,
             //分享时所示的文字内容， 为空则自动抓取分享页面的title值(可选， 允许为空)
             title: this.shareContent,
             //自定义图片地址， 作为微博配图(可选， 允许为空)
@@ -230,7 +230,8 @@
       },
       reload(res){
         this.user = res.data.data[0]
-        this.asd =location.host + '/share?userId='+res.data.data[0].user_id
+        this.asd =location.origin + '/share?userId='+res.data.data[0].user_id
+        this.getEWM()
       },
       handleAvatarSuccess(res, file) {
 		    console.log(res)
@@ -441,7 +442,7 @@
     },
     mounted() {
 		  this.getImg()
-      this.getEWM()
+    
     },
   }
 </script>

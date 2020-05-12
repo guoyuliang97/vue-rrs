@@ -43,6 +43,9 @@
         <p id="lookRecent" class="title">您最近浏览</p>
         <div class="recently_search">
           <div v-for="(item,index) in recentlyList" :key="index" v-show="index<2" style="width:330px;height:200px;margin-right:50px;overflow: hidden">
+            <detail type= 'active' :data="item" ></detail>
+          </div>
+          <!-- <div v-for="(item,index) in recentlyList" :key="index" v-show="index<2" style="width:330px;height:200px;margin-right:50px;overflow: hidden">
             <a :href="pubLish + item.activity_id" onclick="return false" style="color:#000;text-decoration: none"  target="_blank">
               <div class="detail_img"  @click="toPublish(item,index)" style="position: relative">
                 <loadingImg type="3" :src="item.img" style="width:330px;height:200px;overflow: hidden"></loadingImg>
@@ -59,7 +62,7 @@
                 </div>
               </div>
             </a>
-          </div>
+          </div> -->
         </div>
       </div>
 			<!--搜索人人游-->
@@ -426,35 +429,16 @@ export default {
    getVist(){
      this.islookRecent = true
       if(localStorage.getItem('isLogin')){
-        this.$http.post(this.api + '/home/Index/visit_lately',{
+        this.$http.post(this.api + '/VisitListTwo',{
           token: localStorage.getItem('token'),
           page: 1
         })
           .then(res=>{
             if(res.data.code == 1){
               let data = res.data.data.data
-              for(let i =0;i<data.length;i++){
-                if(data[i].flag == 1){
-                  let kind = ''
-                  for(let j = 0;j<data[i].kind.length;j++){
-                    if(j == data[i].kind.length-1){
-                      kind += data[i].kind[j].kind_name
-                    }else{
-                      kind += data[i].kind[j].kind_name + '/'
-                    }
-                  }
-                  if(!data[i].status){
-                    this.recentlyList.push({
-                      img:data[i].domain + data[i].image_url,
-                      title:data[i].title,
-                      activity_id:data[i].table_id,
-                      kind: kind,
-                      create_time: data[i].create_time,
-                      status: data[i].status
-                    })
-                  }
-                }
-              }
+              console.log(data)
+             
+              this.recentlyList = data
               this.islookRecent = false
             }else if(res.data.code == 3){
               this.getVist()
@@ -470,7 +454,7 @@ export default {
     },
     getActive(val){
       this.LoadingState = true
-      this.$http.post(this.api + '/home/Activity/activ_list',{
+      this.$http.post(this.api + '/ActivityListTwo',{
         token: localStorage.getItem('token'),
         sort: 1,
         page:1,

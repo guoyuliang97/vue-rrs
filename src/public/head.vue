@@ -321,43 +321,40 @@
           if(localStorage.getItem('isLogin')){
             this.getMesage()
             this.isLogin = localStorage.getItem('isLogin')
-            this.$emit('reload')
-            this.getNoReadAll()
-            this.userImg = localStorage.getItem('userImg')
-            // this.$http.post(this.api + '/home/User/get_user',{
-            //   token: localStorage.getItem('token')
-            // })
-            //   .then(res=>{
-            //     if(res.data.code == 1){
-            //       if(res.data.data.length > 0){
-            //         if(res.data.data[0].headimage){
-            //           this.userImg = res.data.data[0].headimage.domain + res.data.data[0].headimage.image_url
-            //         }else{
-            //           this.userImg = '../../static/img/static/user.png'
-            //         }
-            //         if(res.data.data[0].isplanner == 1 && res.data.data[0].audit_face == 2 ){
-            //           this.someThing = true
-            //         }
-            //         if(res.data.data[0].isvolunteer == 1 && res.data.data[0].audit_idcard == 1){
-            //           this.volunteer = true
-            //         }
-            //         this.$emit('reload',res)
-            //         this.getNoReadAll()
-            //       }
-            //     }else if(res.data.code == 3){
-            //       this.$http.post(this.api + '/home/Index/token')
-            //         .then(res=>{
-            //           localStorage.setItem('token',res.data.data)
-            //           this.$emit('reload')
-            //           localStorage.removeItem('isLogin')
-            //           localStorage.removeItem('userImg')
-            //         })
-            //     }else{
-            //       this.$emit('reload')
-            //       localStorage.removeItem('isLogin')
-            //       localStorage.removeItem('userImg')
-            //     }
-            //   })
+            this.$http.post(this.api + '/home/User/get_user',{
+              token: localStorage.getItem('token')
+            })
+              .then(res=>{
+                if(res.data.code == 1){
+                  if(res.data.data.length > 0){
+                    if(res.data.data[0].headimage){
+                      this.userImg = res.data.data[0].headimage.domain + res.data.data[0].headimage.image_url
+                    }else{
+                      this.userImg = '../../static/img/static/user.png'
+                    }
+                    if(res.data.data[0].isplanner == 1 && res.data.data[0].audit_face == 2 ){
+                      this.someThing = true
+                    }
+                    if(res.data.data[0].isvolunteer == 1 && res.data.data[0].audit_idcard == 1){
+                      this.volunteer = true
+                    }
+                    this.$emit('reload',res)
+                    this.getNoReadAll()
+                  }
+                }else if(res.data.code == 3){
+                  this.$http.post(this.api + '/home/Index/token')
+                    .then(res=>{
+                      localStorage.setItem('token',res.data.data)
+                      this.$emit('reload')
+                      localStorage.removeItem('isLogin')
+                      localStorage.removeItem('userImg')
+                    })
+                }else{
+                  this.$emit('reload')
+                  localStorage.removeItem('isLogin')
+                  localStorage.removeItem('userImg')
+                }
+              })
           }else{
             this.$http.post(this.api + '/home/User/get_user',{
               token: localStorage.getItem('token')

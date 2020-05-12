@@ -1,47 +1,59 @@
 <template>
 	<div class="detail">
-    <a :href="pubLish" onclick="return false" style="color:#000;text-decoration: none"  target="_blank">
-      <div class="detail_img" v-if="type=='1'" @click="toPublish">
-        <loadingImg  type="2" :src="imgUrl" style="width:100%;height:100%"></loadingImg>
-      </div>
-      <div class="detail_top" v-if="type=='1'">
-        <p><span v-for="items in kind">{{'/'+items.kind_name}}</span><span><b>·</b>{{city}}</span></p>
-        <p style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;text-align: left;font-size:14px;margin:5px 0;"><b>{{name}}</b></p>
-        <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;"><b><span>{{language[english].label+'·'}}</span><span v-if="money">{{'每人￥'+money+'·'}}</span><span v-if="total_time">{{total_time+'·'}}</span><span>{{activ_provite}}</span></b></div>
-        <p style="margin-top:5px;display: flex;justify-content: flex-start"><el-rate
-          :value="parseFloat(score)"
-          disabled
-          show-score
-          text-color="#008489"
-          :colors="['#008489', '#008489', '#008489']"
-          score-template="{value}">
-        </el-rate>
-          <span style="margin-left:15px;">评论({{comment_num}})</span>
-        </p>
-      </div>
-    </a>
-		<div class=" wonderful_img" v-if="type=='2'"  style="overflow: hidden;cursor: pointer" @click="toStory">
-      <img :src="storyImg" width="260px" height="250px">
-			<div style="color:#000;">故事</div>
-		</div>
-    <div v-if="type=='2'" style="position:absolute; width:15px;height:15px;margin-top:-240px;margin-left:215px" @click="addZan"><i class="iconfont icon-zan" style="font-size:25px;" :style="{'color': zanIndex == 0? '#fff':'#008489'}"></i></div>
-		<div v-if="type=='2'" style="margin-top: 10px;text-align: left;display: flex;justify-content: space-between;">
-			<p class="fontweight">{{address}}</p>
-			<p style="width: 150px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;text-align: right">{{remark}}</p>
-		</div>
-		<div v-if="type=='2'" class="about_wonderful">
-			<div @click="toperson" class="wonderful_avator" :style="{backgroundImage:avator?'url('+avator+')':'url('+userImg+')',backgroundSize:'100% 100%'}">
-      </div>
-			<div style="margin-left: 15px;display: flex;justify-content: flex-start;height: 16px;margin-top: 7px;color: #008489;font-size: 12px;line-height: 16px;">
-				<p><img src="../../static/img/home/zans.png" /><p>
-				<p style="margin-top: 2px;margin-left: 3px;">{{zan}}</p>
-			</div>
-			
-			<div style="margin-left: 15px;display: flex;justify-content: flex-start;height: 16px;margin-top: 7px;color: #008489;font-size: 12px;line-height: 16px;">
-				<p><img src="../../static/img/home/talk.png" /><p>
-				<p style="margin-top: 2px;margin-left: 3px;">{{say}}</p>
+		<div>
+			<a :href="pubLish" onclick="return false" style="color:#000;text-decoration: none"  target="_blank">
+				<div class="detail_img" v-if="type=='1'" @click="toPublish">
+					<loadingImg  type="2" :src="imgUrl" style="width:100%;height:100%"></loadingImg>
+				</div>
+				<div class="detail_top" v-if="type=='1'">
+					<p><span v-for="items in kind">{{'/'+items.kind_name}}</span><span><b>·</b>{{city}}</span></p>
+					<p style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;text-align: left;font-size:14px;margin:5px 0;"><b>{{name}}</b></p>
+					<div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;"><b><span>{{language[english].label+'·'}}</span><span v-if="money">{{'每人￥'+money+'·'}}</span><span v-if="total_time">{{total_time+'·'}}</span><span>{{activ_provite}}</span></b></div>
+					<p style="margin-top:5px;display: flex;justify-content: flex-start"><el-rate
+					:value="parseFloat(score)"
+					disabled
+					show-score
+					text-color="#008489"
+					:colors="['#008489', '#008489', '#008489']"
+					score-template="{value}">
+					</el-rate>
+					<span style="margin-left:15px;">评论({{comment_num}})</span>
+					</p>
+				</div>
+			</a>
+			<div class=" wonderful_img" v-if="type=='2'"  style="overflow: hidden;cursor: pointer" @click="toStory">
+				<img :src="storyImg" width="260px" height="250px">
+				<div style="color:#000;">故事</div>
 			</div>
 		</div>
+		<div v-if="type == 'active'">
+			<a :href="pubLish" onclick="return false" style="color:#000;text-decoration: none"  target="_blank">
+				<loadingImg  class="detail_img" type="2" :src="activeData.domain+activeData.image_url" ></loadingImg>
+				<p>四川成都</p>
+				
+			</a>
+		</div>
+		<div v-if="type=='2'" style="position:absolute; width:15px;height:15px;margin-top:-240px;margin-left:215px" @click="addZan">
+			<i class="iconfont icon-zan" style="font-size:25px;" :style="{'color': zanIndex == 0? '#fff':'#008489'}"></i></div>
+			<div v-if="type=='2'" style="margin-top: 10px;text-align: left;display: flex;justify-content: space-between;">
+				<p class="fontweight">{{address}}</p>
+				<p style="width: 150px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;text-align: right">{{remark}}</p>
+			</div>
+			<div v-if="type=='2'" class="about_wonderful">
+				<div @click="toperson" class="wonderful_avator" :style="{backgroundImage:avator?'url('+avator+')':'url('+userImg+')',backgroundSize:'100% 100%'}">
+				</div>
+				<div style="margin-left: 15px;display: flex;justify-content: flex-start;height: 16px;margin-top: 7px;color: #008489;font-size: 12px;line-height: 16px;">
+					<p><img src="../../static/img/home/zans.png" /><p>
+					<p style="margin-top: 2px;margin-left: 3px;">{{zan}}</p>
+				</div>
+				
+				<div style="margin-left: 15px;display: flex;justify-content: flex-start;height: 16px;margin-top: 7px;color: #008489;font-size: 12px;line-height: 16px;">
+					<p><img src="../../static/img/home/talk.png" /><p>
+					<p style="margin-top: 2px;margin-left: 3px;">{{say}}</p>
+				</div>
+			</div>
+		</div>
+	
 	</div>
 </template>
 
@@ -50,14 +62,15 @@
   import '../../static/css/zan/iconfont.css'
   import loadingImg from './loadingImg'
 	export default {
-		props:['activity_id','imgUrl','name','score','english','total_time','money','activ_provite','comment_num','remark','type','status','avator','zan','say','address','zanIndex','status','kind','city'],
+		props:['data','activity_id','imgUrl','name','score','english','total_time','money','activ_provite','comment_num','remark','type','status','avator','zan','say','address','zanIndex','status','kind','city'],
     data(){
 		  return {
 		    language:[],
         pubLish:'/publishPage?information='+ this.activity_id,
         defutImg: '../../static/img/static/defult.png',
         userImg:'../../static/img/static/user.png',
-        storyImg:'../../static/img/static/defult.png'
+		storyImg:'../../static/img/static/defult.png',
+		activeData:''
       }
     },
     components:{
@@ -114,10 +127,12 @@
     },
     mounted(){
 		  this.change()
+		  this.activeData = this.data
     },
-		created(){
-		  this.language = test()
-		},
+	created(){
+		this.language = test()
+		
+	},
 	}
 </script>
 
@@ -126,8 +141,8 @@
 		width: 100%;
 	}
 	.detail_img{
-		width: 100%;
-		height: 200px;
+		width:330px;
+		height:200px;
 		overflow: hidden;
 		cursor: pointer;
 	}

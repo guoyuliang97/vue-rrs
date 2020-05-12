@@ -174,7 +174,6 @@
         <div class="mapStyle" id="mapStyle">
         
         </div>
-      
       </div>
       <div v-if="isLoading" style="position: fixed;top:0;left:0;bottom:0;right:0;background-color: rgba(255,255,255,0.8);z-index:999;display: flex;justify-content: center;align-items: center">
         <Loading></Loading>
@@ -246,7 +245,7 @@
           }
         },
         allperson:function(){
-          if(this.allperson < 17){
+          if(this.allperson < 17){+
             this.getall()
           }else{
             this.addClick = true
@@ -288,7 +287,7 @@
                 markerList[i].style.color = '#000'
               }
           }
-           for(var i= 0; i< arrowList.length ; i ++){
+          for(var i= 0; i< arrowList.length ; i ++){
               if(i == this.markerIndex){
                 arrowList[i].style.borderTopColor = '#008489'
               }else{
@@ -365,7 +364,6 @@
           }else{
             this.addClick = true
           }
-
         },
         rejest(){
           this.price = [0,0]
@@ -416,7 +414,7 @@
         handleCurrentChange(val){
           this.pageIndex = val
           this.getall()
-        },
+        }, 
         getVal(msg){
           this.content = msg
         },
@@ -431,7 +429,6 @@
             }
           })
         },
-
         //获取屏幕高度
         getShowHigh(){
           var height = window.innerHeight
@@ -439,7 +436,6 @@
           // var activeHeight = document.getElementsByClassName('activeList')[0]
           // mapHeight.style.height = activeHeight.style.height = height - 140 + 'px'
           mapHeight.style.height = height - 140 + 'px'
- 
         },
         addMarker(){
           var markerIndex = this.markerIndex
@@ -449,20 +445,17 @@
           this.adreeList.forEach((item,index) => {   //循环搜索的地点数组
                 takePoint(item.point,item.text,data[index],defultImg)
           })
-
           function takePoint(point,text,item,defultImg){
              let _this = this
             var ggPoint = new BMap.Point(point[0],point[1]);
             var marker = new BMap.Marker(ggPoint);
             map.addOverlay(marker);
              var sContent = new CreatContent(item,defultImg,text)
-
             var information = new BMap.InfoWindow(sContent);
           
             marker.addEventListener('click',function(){
               this.openInfoWindow(information);
             })
-            
             function CreatContent(item,defultImg,text){
               var div = document.createElement('div');
               div.style.width = '300px';
@@ -479,17 +472,13 @@
               div.appendChild(p)
               return div
             }
-
-            
             //定义自定义覆盖物
             function ComplexCustomOverlay(ggPoint,text){ //构造函数
-           
               this._point = ggPoint;
-              this._text = text; 
+              this._text  = text; 
             }
             ComplexCustomOverlay.prototype = new BMap.Overlay();
             ComplexCustomOverlay.prototype.initialize = function (map,markerIndex,doInfor) {
-          
               this._map = map;
               var div = this._div = document.createElement('div');
               div.style.position = 'absolute';
@@ -509,7 +498,6 @@
               var span = this._span = document.createElement('span');
               div.appendChild(span);
               span.appendChild(document.createTextNode(this._text?'￥'+this._text:'已过期'));
-
               var arrow = this._arrow = document.createElement('div');
               arrow.style.position = 'absolute';
               arrow.className = 'arrowStyle';
@@ -532,10 +520,7 @@
             }
             var ComplexCustomOverlay = new ComplexCustomOverlay(ggPoint,text)
             map.addOverlay(ComplexCustomOverlay)
-
-          }
-
-
+          }     
         },
         creatMap(position){
          let _this = this
@@ -557,7 +542,7 @@
             // 自定义控件必须实现自己的initialize方法,并且将控件的DOM元素返回
             // 在本方法中创建个div元素作为控件的容器,并将其添加到地图容器中
             ZoomControl.prototype.initialize = function(mp){
-                //创建DOM元素
+              //创建DOM元素
               var div = document.createElement('div')
               var div1 = document.createElement('div');
               var div2 = document.createElement('div');
@@ -585,8 +570,7 @@
                   div2.style.color = '#000'
                 }else{
                   div1.style.color = '#eee'
-                }
-                
+                }  
               }
               div2.onclick = function () {
                 if(mp.getZoom() > 5){
@@ -595,9 +579,7 @@
                 }else{
                   div2.style.color = '#eee'
                 }
-               
               }
-              
               //添加DOM到地图中
               mp.getContainer().appendChild(div);
               //返回 DOM元素
@@ -607,19 +589,16 @@
             var myZoomCtrl = new ZoomControl();
             // 添加到地图当中
             mp.addControl(myZoomCtrl);
-            
             // var west = bound.getSouthWest()  // 获取西南角经纬度
             // var east = bound.getNorthEast()  //获取东北角经纬度
             // _this.westSouth = [west.lng,west.lat];
             // _this.eastNorth = [east.lng,east.lat];
-
             mp.addEventListener('dragend',function(){
               var bounds = mp.getBounds();
               var westSouth = bounds.getSouthWest()  // 获取西南角经纬度
               var eastNorth = bounds.getNorthEast()  //获取东北角经纬度
               _this.westSouth = [westSouth.lng,westSouth.lat];
-              _this.eastNorth = [eastNorth.lng,eastNorth.lat];
-         
+              _this.eastNorth = [eastNorth.lng,eastNorth.lat]
             })
             mp.addEventListener('zoomend',function () {
                var bounds = mp.getBounds();
@@ -627,10 +606,7 @@
               var eastNorth = bounds.getNorthEast()  //获取东北角经纬度
               _this.westSouth = [westSouth.lng,westSouth.lat];
               _this.eastNorth = [eastNorth.lng,eastNorth.lat];
-           
-              
             })
-          
             _this.map = mp
         },
         // error(error){
@@ -655,14 +631,13 @@
           .then(res=>{
             if(res.data.code == 1){
               this.cityData = res.data.data
-        
             }else if(res.data.code == 3){
               this.getCityImg()
             }else if(res.data.cdoe == 0){
               alert(res.data.msg)
             }
           })
-        }
+        },
       },
       mounted(){
           window.scroll(0,0)
@@ -674,8 +649,7 @@
       created(){
           this.adress = this.$route.query.key
           document.title = this.$route.query.key
-         
-      }
+      },
     }
 </script>
 
@@ -694,7 +668,6 @@
   float:left;
   padding: 1%;
   min-width: 700px;
-
 }
 .active_child{
   width: 100%;

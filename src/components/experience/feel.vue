@@ -47,7 +47,7 @@
 			</el-radio-group>
 		</div>
 		<div class="exp_btn">
-			<el-button type="primary" @click="changeRouter">{{complete?'保存':'下一步'}}</el-button>
+			<el-button type="primary" @click="changeRouter">{{complete == '1'?'保存':'下一步'}}</el-button>
 		</div>
 		<p style="margin-top: 15px;"><span class="fontweight">注意事项:</span>参与者希望参加的是自己找不到的独特体验。 了解<span style="color: #008489;cursor: pointer;">专属体验</span>的相关标准。</p>
 	</div>
@@ -106,7 +106,7 @@
               })
                 .then(res=>{
                   if(res.data.code == 1){
-                    if(!this.complete){
+                    if(this.complete == '0'){
                       this.$emit('changeRouter',{id:5,router:"Provide",information:this.active_id,complete: this.complete})
                     }else{
                       this.$message({

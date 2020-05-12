@@ -23,19 +23,19 @@
           <el-input style="width:600px;" type="textarea" :rows="2" placeholder="请输入政策内容" v-model="content"></el-input>
         </div>
       </div>
-      <div>
+      <!-- <div>
         <p>参加活动的年龄限制：</p>
         <div style="display: flex;justify-content: flex-start;border:1px solid #dcdfe6;width:150px;">
           <input type="text" v-model="oldSix"  style="border: none;width:80px;border-right:1px solid #dcdfe6;font-size: 18px;text-align: center">
           <div style="padding: 0 10px;">岁以上</div>
         </div>
-      </div>
+      </div> -->
       <div>
         <p>活动中的注意事项：</p>
         <el-input style="width:600px;font-size: 18px;" type="textarea" :rows="2" placeholder="请输入内容" v-model="notice"></el-input>
       </div>
       <div style="margin: 20px 0;">
-        <el-button type="primary" plain @click="changeRouter">{{complete?'保存':'下一步'}}</el-button>
+        <el-button type="primary" plain @click="changeRouter">{{complete == '1'?'保存':'下一步'}}</el-button>
       </div>
     </div>
   </div>
@@ -82,7 +82,7 @@
               })
                 .then(res=>{
                   if(res.data.code == 1){
-                    if(!this.complete){
+                    if(this.complete == '0'){
                       this.$emit('changeRouter',{id:14,router:'bookSet',information: this.active_id,complete: this.complete})
                     }else{
                       this.$message({

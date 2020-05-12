@@ -20,7 +20,7 @@
       <div v-for="(item,index) in volunList" :key="index" style="border-bottom: 1px solid #E6E6E6">
         <div style="display: flex;justify-content: space-between;font-size:12px;text-align: center;">
           <div style="display: flex;justify-content:flex-start;width:150px;padding:19px 0;">
-            <img :src="item.user.head_image?item.user.headimage.domain + item.user.headimage.image_url:'../../../static/img/static/user.png'" width="32px" height="32px" style="border-radius: 50%;margin-left:40px;">
+            <loadingImg type="user" :src="item.user.head_image?item.user.headimage.domain + item.user.headimage.image_url:''" style="width:32px;height:32px;margin-left:40px;"></loadingImg>
             <div style="line-height:32px;margin-left:10px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{(item.user.family_name+item.user.middle_name+ item.user.name)?(item.user.name):'匿名用户'}}</div>
           </div>
           <div class="width">{{item.num}}</div>
@@ -37,12 +37,13 @@
             <el-button  style="border:none;padding:0;margin-top:30px;" :style="{color:item.house.length?'#008489':'#000'}" slot="reference"  plain>{{item.house.length?'已预定':'无'}}</el-button>
             <p @click="lookXq(item,index)" style="margin-top:5px;font-weight:bold;cursor:pointer;" v-if="item.house.length">查看详情&gt;</p>
           </div>
-          <div><el-popover
+          <div>
+            <el-popover
             placement="top-start"
             trigger="click"
             width="200"
             :content="item.introduce"
-          >
+            >
             <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.user.mobile}}</el-button>
           </el-popover></div>
           <div class="width" style="color:#008489">
@@ -66,197 +67,6 @@
           </div>
         </div>
       </div>
-
-     <!-- <el-tabs v-model="activeName" @tab-click="handleClick" style="margin:20px 0;position: relative ">
-        <el-tab-pane label="已付款" name="first">
-          <div style="display: flex;justify-content: space-between;background-color:#F4F6F9;color:#A8A8A8;font-size:12px;margin-top:20px;text-align: center;line-height:25px;">
-        <div class="miniwidth">预定用户</div><div class="miniwidth">参与人数</div><div class="miniwidth">预定活动时间</div><div class="miniwidth">预定住宿</div><div class="miniwidth">联系电话</div><div class="miniwidth">支付</div><div class="miniwidth">操作</div>
-      </div>
-      <div v-for="(item,index) in volunList" :key="index" style="border-bottom: 1px solid #E6E6E6">
-        <div style="display: flex;justify-content: space-between;font-size:12px;text-align: center;">
-          <div style="display: flex;justify-content:flex-start;width:150px;padding:19px 0;">
-            <img :src="item.user.head_image?item.user.headimage.domain + item.user.headimage.image_url:'../../../static/img/static/user.png'" width="32px" height="32px" style="border-radius: 50%;margin-left:40px;">
-            <div style="line-height:32px;margin-left:10px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{(item.user.family_name+item.user.middle_name+ item.user.name)?(item.user.name):'匿名用户'}}</div>
-          </div>
-          <div class="width">{{item.num}}</div>
-          <div><el-popover
-            placement="top-start"
-            trigger="click"
-            width="200"
-            @show="takeUp(item,index)"
-            :content="content"
-          >
-            <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.activ_begin_time}}-{{item.activ_end_time}}</el-button>
-          </el-popover></div>
-          <div style="width:150px;height: 70px;">
-            <el-button  style="border:none;padding:0;margin-top:30px;" :style="{color:item.house.length?'#008489':'#000'}" slot="reference"  plain>{{item.house.length?'已预定':'无'}}</el-button>
-            <p @click="lookXq(item,index)" style="margin-top:5px;font-weight:bold;cursor:pointer;" v-if="item.house.length">查看详情&gt;</p>
-          </div>
-          <div><el-popover
-            placement="top-start"
-            trigger="click"
-            width="200"
-            :content="item.introduce"
-          >
-            <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.user.mobile}}</el-button>
-          </el-popover></div>
-          <div class="width" style="color:#008489">
-          {{'￥'+item.total_price}}
-           </div>
-          <div class="width" v-if="item.status == 0" >
-            <span  style="cursor: pointer"  @click="changeErollA(item,1)" >私信</span>
-            <span  @click="toRefundDes(item,1)" style="margin: 0 10px;cursor: pointer">查看详情</span>
-            <span  style="cursor: pointer"  @click="changeErollA(item,2)" plain>退款</span>
-          </div>
-          <div class="width" v-if="item.status">
-            <el-button type="primary" size="mini" :style="{backgroundColor:item.status == 2? '#fff':'#008489',color:item.status == 2? 'red':'#fff',borderColor:item.audit==2?'red':'#008489'}">{{item.audit == 1?'申请中':'已退款'}}</el-button>
-            <span  @click="toRefundDes(item,1)" style="margin-left:10px;cursor: pointer">查看详情</span>
-          </div>
-        </div>
-      </div>
-        </el-tab-pane>
-        <el-tab-pane label="未付款" name="second">
-          <div style="display: flex;justify-content: space-between;background-color:#F4F6F9;color:#A8A8A8;font-size:12px;margin-top:20px;text-align: center;line-height:25px;">
-            <div class="miniwidth">预定用户</div><div class="miniwidth">参与人数</div><div class="miniwidth">预定活动时间</div><div class="miniwidth">预定住宿</div><div class="miniwidth">联系电话</div><div class="miniwidth">未支付</div><div class="miniwidth">操作</div>
-          </div>
-      <div v-for="(item,index) in volunList" :key="index" style="border-bottom: 1px solid #E6E6E6">
-        <div style="display: flex;justify-content: space-between;font-size:12px;text-align: center;">
-          <div style="display: flex;justify-content:flex-start;width:150px;padding:19px 0;">
-            <img :src="item.user.head_image?item.user.headimage.domain + item.user.headimage.image_url:'../../../static/img/static/user.png'" width="32px" height="32px" style="border-radius: 50%;margin-left:40px;">
-            <div style="line-height:32px;margin-left:10px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{(item.user.family_name+item.user.middle_name+ item.user.name)?(item.user.name):'匿名用户'}}</div>
-          </div>
-          <div class="width">{{item.num}}</div>
-          <div><el-popover
-            placement="top-start"
-            trigger="click"
-
-            width="200"
-            @show="takeUp(item,index)"
-            :content="content"
-          >
-            <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.activ_begin_time}}-{{item.activ_end_time}}</el-button>
-          </el-popover></div>
-          <div style="width:150px;height: 70px;">
-            <el-button  style="border:none;padding:0;margin-top:30px;" :style="{color:item.house.length?'#008489':'#000'}" slot="reference"  plain>{{item.house.length?'已选择':'无'}}</el-button>
-            <p @click="lookXq(item,index)" style="margin-top:5px;font-weight:bold;cursor:pointer;" v-if="item.house.length">查看详情&gt;</p>
-          </div>
-          <div><el-popover
-            placement="top-start"
-            trigger="click"
-            width="200"
-            :content="item.introduce"
-          >
-            <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.user.mobile}}</el-button>
-          </el-popover></div>
-          <div class="width" style="color:#008489">
-          {{'￥'+item.total_price}}
-           </div>
-          <div class="width" v-if="item.status == 0">
-            <span style="cursor: pointer"    @click="changeErollA(item,1)" >私信</span>
-            <span style="cursor: pointer"   @click="changeErollA(item,3)" plain>查看详情</span>
-          </div>
-          <div class="width" v-if="item.status">
-            <el-button type="primary" size="mini" :style="{backgroundColor:item.status == 2? '#fff':'#008489',color:item.status == 2? 'red':'#fff',borderColor:item.audit==2?'red':'#008489'}">{{item.audit == 1?'申请中':'已退款'}}</el-button>
-          </div>
-        </div>
-      </div>
-        </el-tab-pane>
-        <el-tab-pane label="已完成" name="third">
-          <div style="display: flex;justify-content: space-between;background-color:#F4F6F9;color:#A8A8A8;font-size:12px;margin-top:20px;text-align: center;line-height:25px;">
-            <div class="miniwidth">预定用户</div><div class="miniwidth">参与人数</div><div class="miniwidth">预定活动时间</div><div class="miniwidth">预定住宿</div><div class="miniwidth">联系电话</div><div class="miniwidth">未支付</div><div class="miniwidth">操作</div>
-          </div>
-          <div v-for="(item,index) in volunList" :key="index" style="border-bottom: 1px solid #E6E6E6">
-            <div style="display: flex;justify-content: space-between;font-size:12px;text-align: center;">
-              <div style="display: flex;justify-content:flex-start;width:150px;padding:19px 0;">
-                <img :src="item.user.head_image?item.user.headimage.domain + item.user.headimage.image_url:'../../../static/img/static/user.png'" width="32px" height="32px" style="border-radius: 50%;margin-left:40px;">
-                <div style="line-height:32px;margin-left:10px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{(item.user.family_name+item.user.middle_name+ item.user.name)?(item.user.name):'匿名用户'}}</div>
-              </div>
-              <div class="width">{{item.num}}</div>
-              <div><el-popover
-                placement="top-start"
-                trigger="click"
-
-                width="200"
-                @show="takeUp(item,index)"
-                :content="content"
-              >
-                <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.activ_begin_time}}-{{item.activ_end_time}}</el-button>
-              </el-popover></div>
-              <div style="width:150px;height: 70px;">
-                <el-button  style="border:none;padding:0;margin-top:30px;" :style="{color:item.house.length?'#008489':'#000'}" slot="reference"  plain>{{item.house.length?'已选择':'无'}}</el-button>
-                <p @click="lookXq(item,index)" style="margin-top:5px;font-weight:bold;cursor:pointer;" v-if="item.house.length">查看详情&gt;</p>
-              </div>
-              <div><el-popover
-                placement="top-start"
-                trigger="click"
-                width="200"
-                :content="item.introduce"
-              >
-                <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.user.mobile}}</el-button>
-              </el-popover></div>
-              <div class="width" style="color:#008489">
-                {{'￥'+item.total_price}}
-              </div>
-              <div class="width" v-if="item.status == 0">
-                <span style="cursor: pointer"    @click="changeErollA(item,1)" >私信</span>
-                <span style="cursor: pointer"   @click="changeErollA(item,3)" plain>查看详情</span>
-              </div>
-              <div class="width" v-if="item.status">
-                <el-button type="primary" size="mini" :style="{backgroundColor:item.status == 2? '#fff':'#008489',color:item.status == 2? 'red':'#fff',borderColor:item.audit==2?'red':'#008489'}">{{item.audit == 1?'申请中':'已退款'}}</el-button>
-              </div>
-            </div>
-          </div>
-        </el-tab-pane>
-        <el-tab-pane label="已退款" name="four">
-          <div style="display: flex;justify-content: space-between;background-color:#F4F6F9;color:#A8A8A8;font-size:12px;margin-top:20px;text-align: center;line-height:25px;">
-            <div class="miniwidth">预定用户</div><div class="miniwidth">参与人数</div><div class="miniwidth">预定活动时间</div><div class="miniwidth">预定住宿</div><div class="miniwidth">联系电话</div><div class="miniwidth">未支付</div><div class="miniwidth">操作</div>
-          </div>
-          <div v-for="(item,index) in volunList" :key="index" style="border-bottom: 1px solid #E6E6E6">
-            <div style="display: flex;justify-content: space-between;font-size:12px;text-align: center;">
-              <div style="display: flex;justify-content:flex-start;width:150px;padding:19px 0;">
-                <img :src="item.user.head_image?item.user.headimage.domain + item.user.headimage.image_url:'../../../static/img/static/user.png'" width="32px" height="32px" style="border-radius: 50%;margin-left:40px;">
-                <div style="line-height:32px;margin-left:10px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{(item.user.family_name+item.user.middle_name+ item.user.name)?(item.user.name):'匿名用户'}}</div>
-              </div>
-              <div class="width">{{item.num}}</div>
-              <div><el-popover
-                placement="top-start"
-                trigger="click"
-
-                width="200"
-                @show="takeUp(item,index)"
-                :content="content"
-              >
-                <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.activ_begin_time}}-{{item.activ_end_time}}</el-button>
-              </el-popover></div>
-              <div style="width:150px;height: 70px;">
-                <el-button  style="border:none;padding:0;margin-top:30px;" :style="{color:item.house.length?'#008489':'#000'}" slot="reference"  plain>{{item.house.length?'已选择':'无'}}</el-button>
-                <p @click="lookXq(item,index)" style="margin-top:5px;font-weight:bold;cursor:pointer;" v-if="item.house.length">查看详情&gt;</p>
-              </div>
-              <div><el-popover
-                placement="top-start"
-                trigger="click"
-                width="200"
-                :content="item.introduce"
-              >
-                <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.user.mobile}}</el-button>
-              </el-popover></div>
-              <div class="width" style="color:#008489">
-                {{'￥'+item.total_price}}
-              </div>
-              <div class="width" v-if="item.status == 0">
-                <span style="cursor: pointer"    @click="changeErollA(item,1)" >私信</span>
-                <span style="cursor: pointer"   @click="changeErollA(item,3)" plain>查看详情</span>
-              </div>
-              <div class="width" v-if="item.status">
-                <el-button type="primary" size="mini" :style="{backgroundColor:item.status == 2? '#fff':'#008489',color:item.status == 2? 'red':'#fff',borderColor:item.audit==2?'red':'#008489'}">{{item.audit == 1?'申请中':'已退款'}}</el-button>
-              </div>
-            </div>
-          </div>
-        </el-tab-pane>
-        <div style="position: absolute;">
-          <span>排序</span>
-        </div>
-      </el-tabs>-->
         <div v-show="!volunList.length">
          <None type='lookOrder'></None>
         </div>
@@ -407,21 +217,6 @@ import None from '../../public/noNumber'
         this.userid = data.user_id
         this.imgUrl = data.head_image?data.headimage.domain + data.headimage.image_url:'../../../static/img/static/user.png'
       },
-     /* handleClick(tab,event){
-        if(this.activeName == 'second'){
-          this.index = 1
-          this.getEroll(1,0,this.slot_id)
-        }else if(this.activeName == 'first'){
-          this.index = 1
-          this.getEroll(1,1,this.slot_id)
-        }else if(this.activeName == 'third'){
-          this.index = 1
-          this.getEroll(1,1,this.slot_id)
-        }else{
-          this.index = 1
-          this.getEroll(1,1,this.slot_id)
-        }
-      },*/
       //查看住宿详情
       lookXq(item,index){
         this.lookHouse = !this.lookHouse
@@ -432,7 +227,7 @@ import None from '../../public/noNumber'
       },
       getEroll(val,flag,slot,sort,status,iscomplete,type){
         this.isLoading = true
-        this.$http.post(this.api + '/OrderLPlanner',{
+        this.$http.post(this.api + '/OrderLPlannerTwo',{
           token: localStorage.getItem('token'),
           activity_id: this.activity_id,
           flag: flag,
@@ -449,13 +244,9 @@ import None from '../../public/noNumber'
             this.total = res.data.data.total
             this.isLoading = false
           }else if(res.data.code == 3){
-            this.$http.post(this.api + '/home/index/token')
-              .then(res=>{
-                localStorage.setItem('token',res.data.data)
-                this.getEroll(val,flag,slot)
-              })
+             this.getEroll(val,flag,slot)
         }else if(res.data.code == 0){
-          alert(res.data.msg)
+          this.$message({type:'error',message:res.data.msg})
         }
         })
       },
@@ -503,7 +294,7 @@ import None from '../../public/noNumber'
           path: '/refundDescirbe',
           query:{
             information: item.order_id,
-            type:1
+            type:this.ListIndex == '3'?'5':'1'
           }
         })
       },

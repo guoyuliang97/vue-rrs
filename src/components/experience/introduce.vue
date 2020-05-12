@@ -52,7 +52,7 @@
 			<el-input v-model="link_3" style="width: 50%;margin-top: 15px;" placeholder="请输入相关链接"></el-input>
 		</div>
 		<div class="exp_btn">
-			<el-button type="primary" @click="changeRouter">{{complete?'保存':'下一步'}}</el-button>
+			<el-button type="primary" @click="changeRouter">{{complete == '1'?'保存':'下一步'}}</el-button>
 		</div>
 		<p style="margin-top: 15px;"><span class="fontweight">注意事项:</span>参与者想找的是在相关领域有特长的体验达人，了解我们对达人<span style="color: #008489;cursor: pointer;">专业知识</span>水平的介绍</p>
 	</div>
@@ -113,7 +113,7 @@
             })
               .then(res=>{
                 if(res.data.code == 1){
-                    if(!this.complete){
+                    if(this.complete == '0'){
                       this.$emit('changeRouter',{id:4,router:"Feel",information:this.active_id,complete: this.complete})
 				  	  				}else{
                         this.$message({

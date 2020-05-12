@@ -36,7 +36,7 @@
           </div>
         </div>
       </div>
-      <el-button type="primary" plain @click="sendActive">{{this.complete == 1? '保存':'下一步'}}</el-button>
+      <el-button type="primary" plain @click="sendActive">{{complete == '1'? '保存':'下一步'}}</el-button>
     </div>
 </template>
 
@@ -71,7 +71,7 @@
               })
                 .then(res=>{
                   if(res.data.code == 1){
-                    if(this.complete == 1){
+                    if(this.complete == '1'){
                       this.$router.push('/publishList')
                     }else{
                       this.check()
@@ -113,7 +113,7 @@
               })
                 .then(res=>{
                   if(res.data.code == 1){
-                    if(this.complete == 1){
+                    if(this.complete == '1'){
                       this.$router.push('/publishList')
                     }else{
                       this.check()

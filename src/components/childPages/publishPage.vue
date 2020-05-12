@@ -2,77 +2,348 @@
     <div>
       <Head type="publishPage" v-on:onreload="reload" ></Head>
       <hr style="margin-top:82px;border: 1px solid #eee;">
-      <div style="margin:40px auto 0;width:80%;">
-        <div style="display:flex;justify-content: flex-start">
-          <div id="activePhoto" >
-            <div style="width:400px;overflow: hidden;position: relative" >
-              <el-carousel height="700px" indicator-position="none">
-                <el-carousel-item v-for="(item,index) in imgList" v-if="item.extension != 'mp4'">
-                  <loadingImg type="1" :src="item.domain+item.image_url" style="height:100%"></loadingImg>
-                </el-carousel-item>
-                <div v-if="imgList.length" @click="looKingP" style="position:absolute;bottom:50px;z-index:990;color:#fff;font-size:12px;width:200px;height:50px;left:50%;margin-left:-100px;border:1px solid #fff;line-height: 50px;border-radius: 10px;cursor: pointer">
-                  查看更多照片或视频
-                </div>
-              </el-carousel>
+
+      <!-- 第二版本活动详情 -->
+      <div class="content">
+        <div class="contentImg" >
+           <div class="top_img2" v-if="Number(photoList.length)  + Number(videoList.length)  == 2">
+              <div class="hidden" v-if="videoList.length && index < 1" v-for="(item,index) in videoList" style="width:480px;height:480px">
+                <video  controls="controls" autoplay loop muted :src="item.img"  style="width:100%;height:100%;object-fit: cover;"></video>
+              </div>
+              <div class="hidden" v-if="!videoList.length" style="width:480px;height:480px">
+                <loadingImg class="hidden" v-show="index == 0"  @toPublish="looKingP" v-for="(item,index) in photoList" type="new2" :src="item.img" style="width:100%;height:100%"></loadingImg>
+              </div>
+              <loadingImg class="hidden"  @toPublish="looKingP" v-show="!videoList.length?index >= 1:index >= 0" v-for="(item,index) in photoList" type="new2" :src="item.img" style="width:594px ;height:480px;"></loadingImg>
+          </div>
+          <div class="top_img2" v-if="Number(photoList.length)  + Number(videoList.length)  == 3">
+            <div class="hidden" v-if="videoList.length && index < 1" v-for="(item,index) in videoList" style="width:330px;height:480px">
+                <video controls="controls" autoplay loop muted :src="item.img"  style="width:100%;height:100%;object-fit: cover;"></video>
+            </div>
+            <div class="hidden" v-if="!videoList.length" style="width:330px;height:480px">
+                <loadingImg class="hidden" v-show="index == 0"  @toPublish="looKingP" v-for="(item,index) in photoList" type="new2" :src="item.img" style="width:100%;height:100%"></loadingImg>
+            </div>
+            <div v-for="(item,index) in photoList"> 
+            <loadingImg class="hidden" @toPublish="looKingP" v-show="!videoList.length?index>=1:index>=0"  type="new2" :src="item.img" style="height:480px" :style="{width:index == 1? '330px':'408px'}"></loadingImg>
             </div>
           </div>
-          <div id="activeContent" style="width:54%;padding:0 3%;text-align: left">
-            <div style="width:100%;display: flex;justify-content: space-between;border-bottom: 1px solid #eee">
-              <div>
-                <h2 style="margin-bottom: 20px;font-size:40px;">{{title}}</h2>
-                <div style="line-height:40px;font-size:18px;margin:30px 0;">
-                  <p><i class="el-icon-location"></i>&nbsp;&nbsp;{{province}}</p>
-                  <p v-if="total_time"><i class="el-icon-time"></i>&nbsp;&nbsp;{{total_time}}</p>
-                  <p><i class="el-icon-tickets"></i>免费提供:&nbsp;&nbsp;{{activ_provite}}</p>
-                  <p v-if="long_day"><i class="el-icon-tickets"></i>&nbsp;&nbsp;{{long_day == '1'?'该体验包含住宿':'该体验单独提供住宿'}}</p>
-                  <p><i class="el-icon-news"></i>&nbsp;&nbsp;{{main_language}} | <span v-for="(item,index) in other_laguage">{{language[item].label}}、</span></p>
-                <el-button  size="medium" type="primary" v-if="is_volunteen && activeList.length&& userId != isOwer||is_volunteen&&dayList.length&&userId != isOwer" plain @click="orderVolunter">志愿者报名</el-button>
-                  <p v-if="is_volunteen" style="color:#666666;font-size: 12px; ">报名需知：需要会<span v-for="(item,index) in needLanguage">{{language[item].label+ '、'}}</span>&nbsp;|&nbsp;其他要求：{{volun_require}}</p>
-                </div>
+          <div class="top_img2" v-if="Number(photoList.length)  + Number(videoList.length)  == 4">
+            <div class="top_img4_1">
+              <div class="hidden" v-if="videoList.length && index < 1" v-for="(item,index) in videoList" style="width:330px; height:480px">
+                <video controls="controls" autoplay loop muted :src="item.img"  style="width:100%;height:100%;object-fit: cover;"></video>
               </div>
-              <div style="display: flex;justify-content: flex-start">
-                <el-row ><el-button icon="el-icon-share" circle @click="share"></el-button></el-row>
-                <el-row style="margin-left:50px;" ><el-button icon="el-icon-star-off" circle @click="like" :style="{backgroundColor:is_collection? '#FF5A5F':'#fff'}"></el-button></el-row>
+              <div class="hidden" v-if="!videoList.length" style="width:330px;height:480px">
+                <loadingImg class="hidden" v-show="index == 0"  @toPublish="looKingP" v-for="(item,index) in photoList" type="new2" :src="item.img" style="width:100%;height:100%"></loadingImg>
+              </div>
+              <loadingImg v-show="!videoList.length? index==1:index<1" class="hidden"  @toPublish="looKingP" v-for="(item,index) in photoList" type="new2" :src="item.img" style="margin-left:6px;width:330px;height:480px;"></loadingImg>
+            </div>
+            <div class="top_img4_2">
+              <loadingImg class="hidden" @toPublish="looKingP" v-if="!videoList.length?index > 1:index>=1" v-for="(item,index) in photoList" type="new2" :src="item.img" style="width:408px;height:237px;"></loadingImg>
+            </div>
+          </div>
+          <div class="top_img2" v-if="Number(photoList.length)  + Number(videoList.length)  == 5">
+            <div class="top_img4_1">
+              <div class="hidden" v-if="videoList.length && index < 1" v-for="(item,index) in videoList" >
+                <video controls="controls" autoplay loop muted :src="item.img" style="width:330px;height:480px;border-radius:4px;object-fit:cover" ></video>
+              </div>
+              <div class="hidden" v-if="!videoList.length" style="width:330px;height:480px">
+                <loadingImg class="hidden" v-show="index == 0"  @toPublish="looKingP" v-for="(item,index) in photoList" type="new2" :src="item.img" style="width:100%;height:100%"></loadingImg>
+              </div>
+              <loadingImg v-show="!videoList.length? index==1:index<1" class="hidden"  @toPublish="looKingP" v-for="(item,index) in photoList" type="new2" :src="item.img" style="width:330px;height:480px;margin-left:6px;"></loadingImg>
+            </div>
+            <div class="top_img4_2">
+              <loadingImg class="hidden" @toPublish="looKingP" v-show="!videoList.length?index == 2:index == 1" v-for="(item,index) in photoList" type="new2" :src="item.img" style="width:408px;height:237px;"></loadingImg>
+              <div class="flexBetween" style="height:50%">
+                <loadingImg  class="hidden" @toPublish="looKingP" v-if="!videoList.length?index > 2:index>1" v-for="(item,index) in photoList" type="new2" :src="item.img" style="width:201px;height:237px;"></loadingImg>
               </div>
             </div>
-            <div style="border-bottom: 1px solid #eee;padding:30px 0;display: flex;justify-content: space-between">
-              <div>
-                <h3 >关于策划人介绍</h3>
-                <div style="min-width:450px;margin-top:20px;line-height:40px;word-wrap:break-word;white-space:pre-wrap;" v-html="Xss(userintroduce)"></div>
-                <span v-if="best_introduce" style="color:#008489;">最佳翻译：{{best_introduce}}！</span>
+          </div>
+          <div class="top_img2" v-if="Number(photoList.length)  + Number(videoList.length)  >= 6">
+            <div class="top_img4_1">
+              <div class="hidden" v-if="videoList.length && index < 1" v-for="(item,index) in videoList" >
+                <video controls="controls" autoplay loop muted :src="item.img" style="width:330px;height:480px;border-radius:4px;object-fit:cover" ></video>
               </div>
-              <div style="text-align: center;min-width:150px">
-                <div><img @click="toPerson(userId)" :src="userImg" width="48px" height="48px" style="border-radius:50%;margin-bottom: 10px;"></div>
-                <p>{{userName?userName:'匿名用户'}}</p>
-                <p v-if="userId != isOwer " @click="contactPlanner" style="font-size:13px;color:#008489;cursor: pointer;margin-top:15px;">联系策划人</p>
+              <div class="hidden" v-if="!videoList.length" style="width:330px;height:480px">
+                <loadingImg class="hidden" v-show="index == 0"  @toPublish="looKingP" v-for="(item,index) in photoList" type="new2" :src="item.img" style="width:100%;height:100%"></loadingImg>
               </div>
+              <loadingImg v-show="!videoList.length? index==1:index==0" class="hidden"  @toPublish="looKingP" v-for="(item,index) in photoList" type="new2" :src="item.img" style="width:330px;height:480px;margin-left:6px;"></loadingImg>
             </div>
-            <div style="border-bottom: 1px solid #eee;padding:30px 0;display: flex;justify-content: space-between">
-              <div>
-                <h3>关于体验内容</h3>
-                <div style="min-width:450px;margin-top:20px;word-wrap:break-word;white-space:pre-wrap;line-height:40px" v-html="Xss(content)"></div>
-                <span v-if="best_descripte" style="color:#008489;">最佳翻译：{{best_descripte}}！</span>
+            <div class="top_img4_2" style="width:408px;height:480px">
+              <div class="flexBetween">
+                <loadingImg class="hidden" @toPublish="looKingP" v-show="!videoList.length?index >= 2 && index <=3:index>=1&&index<=2" v-for="(item,index) in photoList" type="new2" :src="item.img" style="width:200px;height:236px;"></loadingImg>
               </div>
-              <div style="min-width:150px;text-align: center">
-                <div><i class="el-icon-edit"></i>&nbsp;&nbsp;<span  style="color:#008489;font-size:15px;cursor: pointer" @click="tiYan=true">翻译体验内容</span></div>
-                <div style="margin-top:20px;"><i class="el-icon-view"></i>&nbsp;&nbsp;<span @click="toTranslation" style="color:#008489;font-size:15px;cursor: pointer">查看体验翻译</span></div>
-              </div>
-            </div>
-            <div style="border-bottom: 1px solid #eee;padding:30px 0;">
-              <h3>其他应注意的事项</h3>
-              <div style="margin-top:20px">{{attation}}</div>
-              <div style="border-bottom: 1px solid #eee;padding:30px 0;">
-                <h3>体验所含地点</h3>
-                <div style="margin-top:20px;word-wrap:break-word;white-space:pre-wrap;line-height: 40px;">{{goPlace}}</div>
-              </div>
-              <div v-show="activ_bring" style="border-bottom: 1px solid #eee;padding:30px 0;">
-                <h3>要带些什么</h3>
-                <div style="margin-top:20px;">{{activ_bring}}</div>
+              <div class="flexBetween" >
+                <loadingImg  class="hidden" @toPublish="looKingP" v-if="!videoList.length?index >=4 && index <= 5:index>=3&&index<=4" v-for="(item,index) in photoList" type="new2" :src="item.img" style="width:200px;height:236px;"></loadingImg>
               </div>
             </div>
           </div>
         </div>
+        <div class="marginBottom" style="width:1080px;margin: 0 auto;display: flex;justify-content: flex-end">
+              <el-row  ><el-button icon="el-icon-star-off" circle @click="like" :style="{backgroundColor:is_collection? '#FF5A5F':'#fff'}"></el-button></el-row>
+              <el-row  class="marginLeft"><el-button icon="el-icon-share" circle @click="share"></el-button></el-row>
+        </div>
+        <div style="width:1080px;margin: 16px auto">
+          <div >
+            <h1  style="text-align:left">{{title}}</h1>
+            <div class="flexStart marginBottom" style="color:#2C3E50;font-weight:bold;" >
+              <div class="marginBottom firstCOntent">
+                  <div  style="margin-left:50px">{{score}}</div>
+                  <div style="">
+                    <el-rate  disabled
+                      :colors="['#000','#000','#000']"
+                      :value="parseInt(score)">
+                    </el-rate>
+                  </div>
+                  <div class="marginBottom" style="min-width:150px;">
+                    <div><span  style="cursor: pointer" @click="tiYan=true">翻译体验内容</span></div>
+                    <div style="margin-top:20px;"><span @click="toTranslation" style="cursor: pointer">查看体验翻译</span></div>
+                  </div>
+              </div>
+              <div class="flexBetween"  style="width:77%;">
+                  <div class="marginBottom" style="text-align:left;">
+                    <div>
+                      
+                      <div><img :src="arr[0].img">&nbsp;&nbsp;<span style="color:#83919E">地点</span></div>
+                      <p class="marginBottom">{{province}}</p>
+                    </div>
+                    <div class="marginBottom">
+                      <p><img :src="arr[2].img">&nbsp;&nbsp;<span style="color:#83919E">体验时长</span></p>
+                      <p class="marginBottom">{{total_time}}</p>
+                    </div>
+                </div>
+              <div class="marginBottom" style="text-align:left">
+                  <div>
+                    <p><img :src="arr[4].img">&nbsp;&nbsp;<span style="color:#83919E">语言</span></p>
+                    <p class="marginBottom">{{main_language}}(主要) , <span v-for="(item,index) in other_laguage">&nbsp;&nbsp;{{language[item].label}}</span>(其他)</p>
+                  </div>
+                  <div class="marginBottom">
+                    <p><img :src="arr[3].img">&nbsp;&nbsp;<span style="color:#83919E">提供</span></p>
+                    <p class="marginBottom">{{activ_provite}}</p>
+                  </div>
+              </div>
+              <div class="marginBottom" style="text-align:left;">
+                <div>
+                    <p><img :src="arr[3].img">&nbsp;&nbsp;<span style="color:#83919E">准备</span></p>
+                    <p class="marginBottom">{{activ_bring}}</p>
+                  </div>
+                  <div class="marginBottom" >
+                    <p><img :src="arr[1].img">&nbsp;&nbsp;<span style="color:#83919E">房源</span></p>
+                    <p class="marginBottom">{{long_day == '1'?'该体验包含住宿':'该体验单独提供住宿'}}</p>
+                  </div>
+              </div>
+              </div>
+            </div>
+              <div v-if="is_volunteen"  class="flexStart" >
+                <div class="mainFont firstCOntent">
+              
+                </div>
+                <div class="flexStart secendWidth"  style="line-height:40px;height:40px;margin-top: 49px;">
+                  <span  class="mainButton"  size="medium"  @click="orderVolunter">志愿者报名></span>
+                  <span  style="color:#666666;font-size: 14px; margin-left:19px;">报名需知：需要会<span v-for="(item,index) in needLanguage">{{language[item].label+ '、'}}</span>&nbsp;|&nbsp;其他要求：{{volun_require}}</span>
+                </div>
+              </div>
+              <hr class="line">
+              <div class="flexStart">
+                <div class=" mainFont firstWidth" >
+                  体验优惠
+                </div>
+                <div class="secendWidth">
+                  <div class="flexStart">
+                    <div style="height:24px;width:50px;background:rgba(243,247,250,1);text-align:center" class="mainColor" >折扣</div>
+                    <div  style="margin-left:15px;width:100%;">
+                      <div class="flexWrap" >
+                        <div class="marginRight marginTop" style="" v-for="(item,index) in discount" v-show="isDiscount? index < 4:true">{{item.date}} {{item.begin_time}}—{{item.end_time}}时间内标准价{{Number(item.price_discount)}}折儿童价{{Number(item.kids_price_discount)}}折</div>
+                        <div v-if="!discount.length">该活动没有折扣!</div>
+                      </div>
+                      <div class='mainButton' style="height:20px;width:80px;cursor:pointer" @click="isDiscount = !isDiscount" v-if="discount.length > 4">{{isDiscount?'查看更多':'收起查看'}}</div>
+                    </div>
+                  </div>
+                  <div class="flexStart">
+                      <div style="height:24px;background:rgba(243,247,250,1);text-align:center;width:80px;" class="mainColor" >返差价</div>
+                      <div  style="margin-left:15px;">
+                        <div class="flexWrap">
+                          时间段内体验结束时满
+                          <div class="marginTop"  v-for="(item,index) in Differ">
+                            {{item.num}}人返预付的{{Number(item.refund_rate)}}%;
+                          </div>
+                        </div>
+                        <div v-if="!Differ.length">该活动没有折扣!</div>
+                      </div>
+                    </div>
+                  <div class="flexStart">
+                    <div style="height:24px;width:48px;background:rgba(243,247,250,1);font-size:14px;text-align:center" class="mainColor">套餐</div>
+                    <div  style="margin-left:15px;">
+                      <p>{{is_combine?'该活动包含亲子套餐和综合套餐':'该活动未包含亲子和组合套餐'}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr class="line">
+              <div class="flexStart">
+                <div class=" mainFont firstWidth" >
+                  关于策划人
+                </div>
+                <div class="secendWidth">
+                  <div style="min-width:150px">
+                    <div><img @click="toPerson(userId)" :src="userImg" width="48px" height="48px" style="border-radius:50%;margin-bottom: 10px;"></div>
+                    <p style="font-size:18px;font-weight:bold;">{{userName?userName:'匿名用户'}}</p>
+                    <p v-if="userId != isOwer " @click="contactPlanner" style="font-size:14px;color:#000;cursor: pointer;margin-top:15px;">联系策划人</p>
+                  </div>
+                  <div>
+                    <div style="margin-top:20px;line-height:40px;word-wrap:break-word;white-space:pre-wrap;line-height:30px;" v-html="Xss(userintroduce)"></div>
+                    <span v-if="best_introduce" style="color:#008489;">最佳翻译：{{best_introduce}}！</span>
+                  </div>
+                </div>
+              </div>
+              <hr class="line">
+              <div class="flexStart">
+                <div class=" mainFont firstWidth" >
+                  体验内容
+                </div>
+                <div class="secendWidth">
+                  <div style="margin-top:20px;word-wrap:break-word;white-space:pre-wrap;line-height:30px" v-html="Xss(content)"></div>
+                  <span v-if="best_descripte" style="color:#008489;">最佳翻译：{{best_descripte}}！</span>
+                </div>
+              </div>
+              <hr class="line">
+              <div class="flexStart">
+                <div class=" mainFont firstWidth" >
+                  体验地点
+                </div>
+                <div class="secendWidth flexStart" style="text-align:left;">
+                  <div>
+                    <p class="fontweight marginTop">体验地点</p>
+                    <p class="marginTop">{{province}}</p>
+                    <p class="fontweight marginTop">体验路线</p>
+                    <div style="word-wrap:break-word;white-space:pre-wrap;">{{goPlace}}</div>
+                  </div>
+                  <div style="margin-left:100px;">
+                    <p class="fontweight marginTop">集合地点</p>
+                    <p class="marginTop">{{set_address}}</p>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div style="margin-top: 56px;">
+            <Map style="height:300px;"></Map>
+          </div>
+          <hr class="line">
+          <div class="flexStart">
+            <div class="firstWidth mainFont">
+              <p>评论列表</p>
+            </div>
+            <div class="secendWidth">
+              <div>
+                <Person  type="discuss" :isLogin="isLogin"  :replay="replay" :imgUrl="imgUrl" :overflow="overflow" :review="review" :height="height" v-on:textareaFocus="textareaFocus" v-on:abolish="abolish" v-on:discuss="discuss"></Person>
+                <div v-if="personList.length == 0" style="text-align:center;margin:20px 0;border:1px solid #eee;padding:10px;">
+                  暂无评论！期待您的参与！
+                </div>
+                <div style="margin:20px 0;" v-show="pager==1? index<4:true" v-for="(item,index) in personList">
+                  <Person style="margin-bottom: 35px;" type='2' v-on:toPerson="toPersonA(item,index)" v-on:lookImage="clickImage" :is_report="item.is_report" :image="item.image" :isLogin="isLogin" :isOwer="item.user_id == isOwer? delet:isdelet" :imgUrl="item.user.head_image? item.user.headimage.domain + item.user.headimage.image_url: '../../../static/img/static/user.png'" :name="item.user.name?item.user.name:'匿名用户'" :time="item.create_time" :mess="item.content" :parseNum="item.praise_num" :is_praise="item.is_praise" v-on:parise="parise(item,1)" v-on:talk="talk(item,index)" v-on:openInform="openInform(item,1)"></Person>
+                  <div v-if="item.leavemsg.length" style="background-color:rgba(0,0,0,.05);padding:10px" >
+                    <div v-for="(items,indexs) in item.leavemsg" style="border-bottom: 1px solid #000;">
+                      <Person type="replay" :isLogin="isLogin" :is_report="items.is_report" :replayChoose="replayChoose" v-on:openInform="openInform(items,2)" v-on:talk="leaveTalk(items,index)"  :name="items.user.name?items.user.name:'匿名用户'" :isOwer="items.user_id == isOwer?delet:isdelet" :otherName="items.topuser.name" :mess="items.content"  :parseNum="items.praise_num"  v-on:parise="parise(items,2)" ></Person>
+                    </div>
+                    <p  style="text-align: left;font-size:14px;color:#008489;padding:10px 0;"><span @click="toAllLeave(item)" style="cursor: pointer">共{{item.leaving_num}}条回复</span></p>
+                  </div>
+                </div>
+              </div>
+              <div v-if="(pager*10) < total" >
+                  <span class="mainButton" @click="handleCurrentChange">查看更多评论</span>
+              </div>
+            </div>
+            <el-dialog v-if="videoIMg" :visible.sync="viedio">
+              <img style="width:50%;"   :src="videoIMg" alt="" />
+            </el-dialog>
+          </div>
+          <hr class="line">
+          <div class="flexStart">
+              <div class=" mainFont firstWidth" >
+                房源图片
+              </div>
+              <div class="secendWidth">
+                <div style="display: flex;flex-wrap: wrap;">
+                  <div v-for="(item,index) in houseImage"  style="position: relative;margin: 20px 0;">
+                    <div v-if="isflag">
+                      <loadingImg :src="item.domain+item.image_url" type="3" style="width:250px;height:200px;margin-right:10px;"></loadingImg>
+                      <span style="position: absolute;bottom:0;left:0;padding:1px 10px ;background-color: rgba(0,0,0,.5);color:#fff;">{{item.flag == 1?'露营':item.flag == 2?'民宿':'酒店'}}</span>
+                      <span @click="lookHouseImg(item,index)" style="cursor:pointer;position: absolute;left:50%;top:50%;padding:1px 10px ;background-color: rgba(0,0,0,.5);color:#fff;margin-left:-42px;margin-top:-10px;border-radius: 5px;">查看更多</span>
+                    </div>
+                    <div v-if="!isflag && index <1">
+                      <loadingImg :src="item.domain+item.image_url" type="3" style="width:250px;height:200px;margin-right:10px;"></loadingImg>
+                      <span @click="lookHouseImg(item,index)" style="cursor:pointer;position: absolute;left:50%;top:50%;padding:1px 10px ;background-color: rgba(0,0,0,.5);color:#fff;margin-left:-42px;margin-top:-10px;border-radius: 5px;">查看更多</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <hr class="line">
+          <div class="flexStart">
+              <div class=" mainFont firstWidth" >
+                注意事项
+              </div>
+              <div class="secendWidth">
+                <div class="secendWidth flexStart" style="text-align:left;">
+                  <div>
+                    <p class="fontweight marginTop">退订政策</p>
+                    <p class="marginTop">
+                      <span v-if="return_DL == 1||return_DL == 2">活动开始</span>{{return_policy}} 
+                      <span v-if="return_DL == 1||return_DL == 2">取消可全额退款</span>
+                    </p>
+                    <p class="marginTop">{{return_content}}</p>
+                    <p class="fontweight marginTop">年龄要求</p>
+                    <p class="marginTop">{{age_limit}}岁以上</p>
+                  </div>
+                  <div style="margin-left:100px;">
+                    <p class="fontweight marginTop">团体人数</p>
+                    <p class="marginTop" v-if="orderNum">这个体验最近举办时间活动有<span style="color:#008489">{{orderNum}}</span>个名额。</p>
+                    <p class="marginTop" v-if="!orderNum">这个体验最近没有举办时间。</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr class="line">
+            <div v-show="listA.length">
+              <div  class="flexStart">
+                <div class="firstWidth mainFont">
+                  类似体验
+                </div>
+                <div  style="width:860px;height:300px;overflow:hidden;position:relative;">
+                  <div id="b" :style="{width:listA.length * 300 + 'px'}" style="height:300px;position:absolute;left:0px;transition: all .3s linear">
+                    <div v-for="item in listA" style="width:280px;margin:0 10px;float:left" >
+                      <Detail type="1" :activity_id="item.activity_id" :imgUrl="item.domain + item.image_url" :city="item.city" :total_time="item.total_time" :activ_provite="item.activ_provite" :comment_num="item.comment_num" :name="item.title" :score="item.score" :english="item.main_laguage" :money="item.money" :kind="item.kind" v-on:toPublish="toPublish(item)" v-on:consult="consult(index)"></Detail>
+                    </div>
+                  </div>
+                  <div class="prev">
+                    <el-button type="warning" icon="el-icon-arrow-left" circle v-show="prevOver" @click="prevIndex"></el-button>
+                  </div>
+                  <div class="next">
+                    <el-button type="warning" icon="el-icon-arrow-right" circle v-show="listA.length>3?nextOver:false" @click="nextIndex"></el-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+      
+        </div>
       </div>
+      <div style="position: fixed;bottom:0;background:rgba(245,247,250,1);height:98px;width:100%;z-index:99">
+        <div class="flexBetween" style="margin:6px 18% 30px;">
+          <div class="flexStart">
+            <div><img :src="userImg" width="62" height="62" style="border-radius:50%;margin-top: 6px;"></div>
+          
+              <div style="margin-left:24px;line-height:40px;margin-top: 28px;">
+               <el-rate void-color="#000"  :colors="['#000', '#000', '#000']" :value="parseInt(score)" disabled></el-rate>
+              </div>
+           
+          </div>
+          <div style="display: flex;align-items: center;font-size:18px;">
+            <span v-if="price" style="margin-right:20px;font-weight: bold;color:##14C5CA"><span>￥</span>{{price}}+/人</span>
+            <span class="mainClick" @click="toDate" v-if="orderNum&&userId != isOwer">查看日期</span>
+            <el-button v-if="!orderNum&&userId != isOwer" style="border:1px solid red;color:red" plain >已过期/已满</el-button>
+          </div>
+        </div>
+      </div>
+
+
       <!--翻译弹窗-->
       <div v-show="tiYan" style="position: fixed;top:0;left:0;right:0;bottom: 0;background-color: rgba(0,0,0,.5);z-index:999;font-size:13px;">
         <div class="transition-tiyan">
@@ -96,101 +367,8 @@
         </div>
       </div>
       <!--翻译弹窗结束-->
-      <hr style="margin: 80px 0;">
-      <div style="margin:0 5%;display:flex;justify-content: flex-start;">
-        <div style="text-align:left;width:30%;margin-right:20px;">
-          <h1>评论列表</h1>
-          <div style="display:flex;justify-content: flex-start;text-align:center;margin-top:50px;font-size:30px;">
-            <div>{{score}}</div>
-            <div style="margin-left: 20px;">
-              <el-rate style="font-size:30px;" disabled
-                :colors="['#008489', '#008489', '#008489']"
-                :value="parseInt(score)">
-              </el-rate>
-            </div>
-          </div>
-        </div>
-        <div style="width:60%;">
-          <div>
-            <Person  type="discuss" :isLogin="isLogin"  :replay="replay" :imgUrl="imgUrl" :overflow="overflow" :review="review" :height="height" v-on:textareaFocus="textareaFocus" v-on:abolish="abolish" v-on:discuss="discuss"></Person>
-            <div v-if="personList.length == 0" style="margin:20px 0;border:1px solid #eee;padding:10px;">
-              暂无评论！期待您的参与！
-            </div>
-            <div style="margin:20px 0;" v-for="(item,index) in personList">
-              <Person type='2' v-on:toPerson="toPersonA(item,index)" v-on:lookImage="clickImage" :is_report="item.is_report" :image="item.image" :isLogin="isLogin" :isOwer="item.user_id == isOwer? delet:isdelet" :imgUrl="item.user.head_image? item.user.headimage.domain + item.user.headimage.image_url: '../../../static/img/static/user.png'" :name="item.user.name?item.user.name:'匿名用户'" :time="item.create_time" :mess="item.content" :parseNum="item.praise_num" :is_praise="item.is_praise" v-on:parise="parise(item,1)" v-on:talk="talk(item,index)" v-on:openInform="openInform(item,1)"></Person>
-              <div v-if="item.leavemsg.length" style="background-color:rgba(0,0,0,.05);padding:10px" >
-                <div v-for="(items,indexs) in item.leavemsg" style="border-bottom: 1px solid #000;">
-                  <Person type="replay" :isLogin="isLogin" :is_report="items.is_report" :replayChoose="replayChoose" v-on:openInform="openInform(items,2)" v-on:talk="leaveTalk(items,index)"  :name="items.user.name?items.user.name:'匿名用户'" :isOwer="items.user_id == isOwer?delet:isdelet" :otherName="items.topuser.name" :mess="items.content"  :parseNum="items.praise_num"  v-on:parise="parise(items,2)" ></Person>
-                </div>
-                <p  style="text-align: left;font-size:13px;color:#008489;padding:10px 0;"><span @click="toAllLeave(item)" style="cursor: pointer">共{{item.leaving_num}}条回复</span></p>
-              </div>
-              <hr style="margin:10px 0;border-bottom:1px solid #eee">
-            </div>
-          </div>
-          <div style="margin:20px 0;">
-            <el-pagination  @current-change="handleCurrentChange"  :page-size="10" layout="total, prev, pager, next" :total="total"></el-pagination>
-          </div>
-        </div>
-        <el-dialog v-if="videoIMg" :visible.sync="viedio">
-          <img style="width:50%;"   :src="videoIMg" alt="" />
-        </el-dialog>
-      </div>
-      <!--地图-->
-      <Map style="height:600px;"></Map>
-      <div  style="position:absolute;margin-top:-520px;margin-left:130px;padding:200px 20px;background-color:#fff;width:350px;">
-        <h2 >集合地点</h2>
-        <p>{{set_address}}</p>
-      </div>
-      <div v-if="activeList.length||dayList.length" style="overflow:hidden;width:1080px;margin: 0 auto ">
-        <div style="padding-top:80px;float:left">
-          <h2>活动预定</h2>
-        </div>
-        <div v-show="activeList.length && index <1" style="width:70%;margin:50px 0 0 100px;float:left;padding:10px; border-top:2px solid #eee; border-bottom:2px solid #eee;display:flex;flex-wrap: wrap" v-for=" (item,index) in activeList" >
-         <div style="width:80%;text-align:left;line-height:30px;">
-           <p> {{item.beginTime}}&nbsp;至&nbsp;{{item.endTime}}</p>
-           <p><span>￥</span>&nbsp;{{item.price}}</p>
-           <p style="font-size:14px">{{item.max_person_num}}个名额中<span style="color:#008489;">·还剩{{item.max_person_num - item.order_person_num}}人可预订</span></p>
-         </div>
-          <div style="width:20%">
-            <el-button :disabled="userId == isOwer?true:false"  type="primary" plain @click="toChoose(item,index)">选择</el-button>
-            <p  style="margin:10px 0;font-size:14px;color:#008489;cursor: pointer;" v-if="userId != isOwer"  @click="toDate"><i class="el-icon-date"></i>显示所有日期</p>
-          </div>
-        </div>
-        <div v-show="dayList.length && index < 1" style="width:70%;margin:50px 0 0 100px;float:left;padding:10px; border-top:2px solid #eee; border-bottom:2px solid #eee;display:flex;flex-wrap: wrap" v-for=" (item,index) in dayList">
-          <div style="width:80%;text-align:left;line-height:30px;">
-            <div v-for="(items,indexs) in item.list" v-show="indexs < 1">
-              <p>{{item.day}}&nbsp;&nbsp;|&nbsp;&nbsp;{{weekDay}}&nbsp;&nbsp;|&nbsp;&nbsp;{{items.time[0]}}&nbsp;—&nbsp;{{items.time[1]}}</p>
-              <p>每人&nbsp;<span>￥</span>{{items.price}}&nbsp;&nbsp;&nbsp;</p>
-              <p style="font-size:14px">{{items.personNum}}个名额中<span style="color:#008489;">·还剩{{items.personNum - items.order_person_num}}人可预订</span></p>
-            </div>
-          </div>
-          <div style="width:20%">
-            <el-button v-if="userId != isOwer" type="primary" plain @click="toChoose(item,index)">选择</el-button>
-            <p  style="margin:10px 0;font-size:14px;color:#008489;cursor: pointer;" v-if="userId != isOwer" @click="toDate"><i class="el-icon-date"></i>显示所有日期</p>
-          </div>
-        </div>
-      </div>
-      <div v-if="houseImage.length">
-        <hr style="color:#eee;border:1px solid #eee;margin:50px 0;">
-        <div  style="display: flex;justify-content: flex-start;width:1080px;margin: 0 auto;text-align: left">
-          <div style="width:200px;margin-top:100px;">
-            <h2>房源照片</h2>
-          </div>
-          <div style="display: flex;flex-wrap: wrap;justify-content: space-between">
-            <div v-for="(item,index) in houseImage"  style="position: relative;margin: 20px 0;">
-              <div v-if="isflag">
-                <loadingImg :src="item.img[0].domain+item.img[0].image_url" type="3" style="width:250px;height:200px;margin-right:10px;"></loadingImg>
-                <span style="position: absolute;bottom:0;left:0;padding:1px 10px ;background-color: rgba(0,0,0,.5);color:#fff;">{{item.flag == 1?'露营':item.flag == 2?'民宿':'酒店'}}</span>
-                <span @click="lookHouseImg(item,index)" style="cursor:pointer;position: absolute;left:50%;top:50%;padding:1px 10px ;background-color: rgba(0,0,0,.5);color:#fff;margin-left:-42px;margin-top:-10px;border-radius: 5px;">查看更多</span>
-              </div>
-              <div v-if="!isflag && index <1">
-                <loadingImg :src="item.domain+item.image_url" type="3" style="width:250px;height:200px;margin-right:10px;"></loadingImg>
-                <span @click="lookHouseImg(item,index)" style="cursor:pointer;position: absolute;left:50%;top:50%;padding:1px 10px ;background-color: rgba(0,0,0,.5);color:#fff;margin-left:-42px;margin-top:-10px;border-radius: 5px;">查看更多</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+     
+
       <div v-if="looKing" style="position: fixed;top:0;left:0;bottom:0;right:0;background-color: rgba(0,0,0,.8);z-index:999">
           <div style="position: absolute;right:20%;top:10%;width:30px;height:30px;border:1px solid #fff;border-radius: 50%;font-size:30px;cursor: pointer;color:#fff;" @click="closeLook"><i class="el-icon-close"></i></div>
           <div style="position:fixed;width:60%;left:20%;top:15%;height:70%;">
@@ -214,78 +392,16 @@
                 </div>
               </div>
           </div>
-      </div>
-      <hr style="color:#eee;border:1px solid #eee;margin:50px 0;">
-      <div style="width:1080px;margin:0 auto;overflow: hidden;text-align: left">
-        <div style="width:200px;margin-top:50px;float:left">
-          <h2>注意事项</h2>
-        </div>
-        <div style="float:left;display:flex;flex-wrap: wrap;line-height:30px;width:850px;">
-          <div style="width:415px;border-bottom:1px solid #eee;" >
-            <h4>退订政策</h4>
-            <p><span v-if="return_DL == 1||return_DL == 2">活动开始</span>{{return_policy}} <span v-if="return_DL == 1||return_DL == 2">取消可全额退款</span></p>
-            <p>{{return_content}}</p>
-          </div>
-          <div style="width:415px;margin-left:20px;border-bottom:1px solid #eee;">
-            <h4>团体人数</h4>
-            <p v-if="orderNum">这个体验最近举办时间活动有<span style="color:#008489">{{orderNum}}</span>个名额。</p>
-            <p v-if="!orderNum">这个体验最近没有举办时间。</p>
-          </div>
-          <div style="width:415px;margin:20px 0;padding-top:20px;">
-            <h4>年龄要求</h4>
-            <p>{{age_limit}}岁以上</p>
-          </div>
-        </div>
-      </div>
-
-      <div v-show="listA.length">
-        <hr style="border:1px solid #eee;margin:50px 0;">
-        <div  style="text-align:left;width:1080px;margin:50px auto;display:flex;justify-content: flex-start">
-          <div style="width:200px;margin-top:90px;">
-            <h2>类似体验</h2>
-          </div>
-          <div  style="width:860px;height:300px;overflow:hidden;position:relative;">
-            <div id="b" :style="{width:listA.length * 300 + 'px'}" style="height:300px;position:absolute;left:0px;transition: all .3s linear">
-              <div v-for="item in listA" style="width:280px;margin:0 10px;float:left" >
-                <Detail type="1" :activity_id="item.activity_id" :imgUrl="item.domain + item.image_url" :city="item.city" :total_time="item.total_time" :activ_provite="item.activ_provite" :comment_num="item.comment_num" :name="item.title" :score="item.score" :english="item.main_laguage" :money="item.money" :kind="item.kind" v-on:toPublish="toPublish(item)" v-on:consult="consult(index)"></Detail>
-              </div>
-            </div>
-            <div class="prev">
-              <el-button type="warning" icon="el-icon-arrow-left" circle v-show="prevOver" @click="prevIndex"></el-button>
-            </div>
-            <div class="next">
-              <el-button type="warning" icon="el-icon-arrow-right" circle v-show="listA.length>3?nextOver:false" @click="nextIndex"></el-button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div style="position: fixed;bottom:0;background-color:#fff;height:80px;width:100%;z-index:99">
-        <div style="display: flex;justify-content:space-between ;margin:10px 5%;">
-          <div style="display: flex;justify-content: flex-start">
-            <div><img :src="userImg" width="48" height="48" style="border-radius:50%"></div>
-            <div style="text-align:left;margin-left:10px">
-              <span>{{title}}</span>
-              <div style="width:400px">
-              <el-rate   :colors="['#008489', '#008489', '#008489']" :value="parseInt(score)" disabled></el-rate>
-                <span>{{total}}条评论</span>
-              </div>
-            </div>
-          </div>
-          <div style="display: flex;align-items: center">
-            <span v-if="price" style="margin-right:20px;font-weight: bold;color:#008489"><span>￥</span>{{price}}+/人</span>
-            <el-button  type="primary" plain @click="toDate" v-if="activeList.length&&userId != isOwer||dayList.length&&userId != isOwer">查看日期</el-button>
-            <el-button v-if="!activeList.length&&!dayList.length&&userId != isOwer" style="border:1px solid red;color:red" plain >已过期/已满</el-button>
-          </div>
-        </div>
-      </div>
+      </div>   
+      
       <div v-if="NowChat" style="z-index:990;position:fixed;top:0;left:0;right:0;bottom:0;display: flex;justify-content: center;align-items: center;background-color: rgba(0,0,0,.8)">
         <div style="width:500px;padding: 30px;background-color: #fff;border-radius: 10px;">
           <Person type="discuss" :isLogin="isLogin" :replay="replay" :imgUrl="imgUrl" :review="review"  v-on:abolish="abolish" v-on:discuss="discuss"></Person>
         </div>
       </div>
-      <div style="width: 1080px;margin: 80px auto;">
+      <!-- <div style="width: 1080px;margin: 80px auto;">
         <Foot></Foot>
-      </div>
+      </div> -->
       <div v-if="isLoading" style="z-index:990;position:fixed;top:0;left:0;right:0;bottom:0;display: flex;justify-content: center;align-items: center;background-color: rgba(255,255,255,.8)">
         <Loading></Loading>
       </div>
@@ -411,7 +527,7 @@
           isOwer:'',
           delet:true,
           isdelet: false,
-          pager:'',
+          pager:1,
           saveLeave:'',
           saveInfor:'',
           replayChoose:false,
@@ -456,7 +572,20 @@
           isEmail:false,
           reacetWho:'',
           emailCenter:'',
-          return_DL:''
+          return_DL:'',
+          max_height:'',
+          discount:[],
+          isDiscount:true,
+          Differ:[],
+          is_combine:'',
+          arr:[
+            {img:"../../../static/img/publish/icon_1(1).png"},
+            {img:"../../../static/img/publish/icon_1(2).png"},
+            {img:"../../../static/img/publish/icon_1(3).png"},
+            {img:"../../../static/img/publish/icon_1(4).png"},
+            {img:"../../../static/img/publish/icon_1(5).png"},
+
+          ]
         }
       },
       components: {
@@ -476,18 +605,18 @@
         if(localStorage.getItem('isLogin')){
           _this.getOwers()
         }
+         _this.ScrollContent()
         _this.sendBuidu()
         _this.getComment(1)
         _this.getActls()
         _this.imgUrl = localStorage.getItem('userImg')
-        window.addEventListener('scroll',_this.slider)
+       
       },
       created:function(){
         this.language = test()
         this.policy = policy()
         this.getParams()
         window.scroll( 0 ,0)
-        window.addEventListener('scroll',this.ScrollContent)
         let flag = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
         if(flag){
           this.$router.push({
@@ -545,54 +674,7 @@
               })
           }
         },
-       /* getData(){
-          var url =window.location.href + '&'+ 'userId' +'='+this.isOwer
-          this.$http.post(this.api + '/WechaShare',{
-            token: localStorage.getItem('token'),
-            url:url
-          })
-            .then(res=>{
-              if(res.data.code == 1){
-                wx.config({
-                  debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                  appId: res.data.data.appId, // 必填，公众号的唯一标识
-                  timestamp: res.data.data.timestamp, // 必填，生成签名的时间戳
-                  nonceStr: res.data.data.nonceStr, // 必填，生成签名的随机串
-                  signature: res.data.data.signature,// 必填，签名
-                  jsApiList: [
-                    "updateAppMessageShareData"//自定义“分享给朋友”及“分享到QQ”按钮的分享内容
-                    //自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容
-                  ]//获取“分享到腾讯微博”按钮点击状态及自定义分享内容接口] // 必填，需要使用的JS接口列表 这里填写需要用到的微信api openlocation为使用微信内置地图查看位置接口
-                });
-                wx.ready(function(){
-                  wx.updateAppMessageShareData({
-                    title:'...ihuiugiu', // 分享标题
-                    link: url, // 分享链接
-                    imgUrl:'https://www.allptp.cn/image/uploads/20190918/01128a82cd3930913efd8e27b12df1d0.png', // 分享图标
-                    desc: 'ihihiuhi', // 分享描述
-                    success:function(){
-                      alert(6666)
-                    },
-                    cancel:function(){
-                      alert('false')
-                    },
-                    fail:function(){
-                      alert('失败')
-                    }
-                  })
-                })
-              }else if(res.data.code == 3){
-                this.getData()
-              }else if(res.data.code == 0){
-                alert(res.data.msg)
-              }
-            })
-
-          wx.error(function(res){
-            alert('false')
-//config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
-          });
-        },*/
+     
         //联系策划人
         chat(){
           this.isChat = false
@@ -643,14 +725,10 @@
         },
         //滚动
         ScrollContent(){
-          let a =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-          var div = document.getElementById('activeContent').clientHeight
-          if(a>=37 && a + 700 <= div){
-            this.topH = a - 37
-          }
-          if(a<37){
-            this.topH = 0
-          }
+          let a = window.screen.availHeight
+    
+          this.max_height = a*0.6
+        
         },
         looKingP(){
           this.isLooking = true
@@ -664,11 +742,9 @@
         lookHouseImg(item,index){
           this.looKing = !this.looKing
           if(this.isflag){
-            this.lookImage =item.img
             this.flag = item.flag
-          }else{
-            this.lookImage = this.houseImage
           }
+           this.lookImage = this.houseImage
         },
         //查看照片
         lookIng(item,index){
@@ -690,7 +766,7 @@
                 this.isShare = false
                 this.isWeixin = true
                 this.weixin = res.data.data.src
-                console.log(res)
+               
               }
             })
         },
@@ -848,7 +924,8 @@
             this.$router.push({
               path: '/order',
               query:{
-                information: this.routerParams
+                information: this.routerParams,
+                isflag: this.isflag
               }
             })
           }else{
@@ -943,9 +1020,10 @@
           }
 
         },
-        handleCurrentChange(val){
-          this.getComment(val)
-          this.pager = val
+        handleCurrentChange(){
+          this.pager += 1 
+          this.getComment(this.pager)
+          
         },
 
         textareaFocus(){
@@ -1058,20 +1136,96 @@
             }
           }
           this.getActive(this.translate_id )
+          this.getDiscount()
+          this.getDiffer()
+          this.getHouseImg()
+          this.getSlot()
+        },
+        getSlot(){
+          this.$http.post(this.api + '/ActivitySlotUserTwo',{
+            token: localStorage.getItem('token'),
+            verson: 2.0,
+            activity_id: this.routerParams
+          })
+          .then(res=>{
+            if(res.data.code == 1){
+              let data  = res.data.data
+              if(data.length){
+                this.orderNum = data[0].max_person_num
+              }
+              
+            }else if(res.data.code == 3){
+              this.getSlot()
+            }else if(res.data.code == 0){
+              this.$message({type: 'error',message:res.data.msg})
+            }
+          })
+        },
+        getHouseImg(){
+          this.$http.post(this.api + '/ActivityHouseImageTwo',{
+            token: localStorage.getItem('token'),
+            verson: 2.0,
+            activity_id: this.routerParams,
+          })
+          .then(res=>{
+            if(res.data.code == 1){
+              let data = res.data.data
+              this.houseImage = data
+            }else if(res.data.code == 3){
+              this.getHouseImg()
+            }else if(res.data.code == 0){
+              this.$message({type: 'error',message:res.data.msg})
+            }
+          })
+        },
+        getDiffer(){
+          this.$http.post(this.api + '/DifferListTwo',{
+            token: localStorage.getItem('token'),
+            verson: 2.0,
+            activity_id: this.routerParams
+          })
+          .then(res=>{
+            if(res.data.code == 1){
+             
+              this.Differ = res.data.data
+            }else if(res.data.code == 3){
+              this.getDiffer()
+            }else if(res.data.code == 0){
+              this.$message({type: 'error',message:res.data.msg})
+            }
+          })
+        },
+        getDiscount(){
+          this.$http.post(this.api + '/ActivityDiscountTwo',{
+            token: localStorage.getItem('token'),
+            verson: 2.0,
+            activity_id: this.routerParams
+          })
+          .then(res=>{
+            if(res.data.code == 1){
+              this.discount = res.data.data
+            }else if(res.data.code == 3){
+              this.getDiscount()
+            }else if(res.data.code == 0){
+              this.$message({type: 'error',message:res.data.msg})
+            }
+          })
         },
         getActive(val){
           this.isLoading = true
-          this.$http.post(this.api + '/home/Activity/get_activity',{
+          this.$http.post(this.api + '/ActivityDetailTwo',{
             token: localStorage.getItem('token'),
             activity_id: this.routerParams,
             translate_id:val,
             language:this.languageID,
-            visit: 1
+            visit: 1,
+            verson:2.0
           })
             .then(res=>{
               if(res.data.code == 1){
                 let data = res.data.data
                 this.imgList.push(data.cover)
+            
                 for(let i =0;i<data.image.length;i++){
                     this.imgList.push(data.image[i])
                 }
@@ -1088,7 +1242,7 @@
                 this.goPlace = data.go_place
                 this.is_volunteen = data.is_volunteen
                 this.activ_bring = data.activ_bring
-                this.province = data.province +data.city+ data.region
+                this.province = data.province+' ' +data.city+' '+ data.region
                 this.jionDress = [data.set_address_lng,data.set_address_lat]
                 this.total_time = data.total_time
                 this.userName =data.user.name
@@ -1104,6 +1258,7 @@
                 this.best_descripte = data.best_descripte
                 this.best_introduce = data.best_introduce
                 this.price = data.price
+                this.is_combine = data.is_combine
                 if(data.volun_laguage){
                   var a = []
                   for(let m = 0;m<data.volun_laguage.split(',').length;m++){
@@ -1121,61 +1276,61 @@
                 this.volun_require =  data.volun_require
                 if(data.issatay == 2){
                   this.long_day = '1'
-                  this.houseImage = data.houseimage
+                  // this.houseImage = data.houseimage
                   this.isflag = false
                 }else if(data.issatay == 1){
                   this.isflag = true
                   this.long_day = '2'
-                  var a = []
-                  for(let i=0;i<data.house.length;i++){
-                    a.push({img:data.house[i].image,flag:data.house[i].flag})
-                  }
-                  this.houseImage = a
+                  // var a = []
+                  // for(let i=0;i<data.house.length;i++){
+                  //   a.push({img:data.house[i].image,flag:data.house[i].flag})
+                  // }
+                  // this.houseImage = a
                 }else{
                   this.long_day = ''
                 }
-                if(data.long_day == 1){
-                  if(data.slot.length){
-                    let a = []
-                    for(let i= 0;i<data.slot.length;i++ ){
-                      var b = []
-                      for(let j =0;j<data.slot[i].list.length;j++){
-                        if(data.slot[i].list[j].personNum > data.slot[i].list[j].order_person_num && data.slot[i].list[j].status == 0){
-                          b.push(data.slot[i].list[j])
-                        }
-                      }
-                      if(b.length){
-                        a.push({day:data.slot[i].day,list:b})
-                      }
-                    }
-                    this.dayList = a
-                    if(this.dayList.length){
-                      this.orderNum =this.dayList[0].list[0].personNum
-                    }
-                    this.weekDay = this.getWeekDay(data.slot[0].day)
-                  }
-                }else{
-                  if(data.slot.length){
-                    for(let i =0;i<data.slot.length;i++){
-                      if(data.slot[i].status == 0 && data.slot[i].max_person_num> data.slot[i].order_person_num){
-                        this.activeList.push({
-                          beginTime:data.slot[i].begin_date,
-                          endTime: data.slot[i].end_date,
-                          begin_time: data.slot[i].begin_time,
-                          end_time: data.slot[i].end_time,
-                          active_id: data.slot[i].activity_id,
-                          max_person_num: data.slot[i].max_person_num,
-                          order_person_num: data.slot[i].order_person_num,
-                          price: data.slot[i].price,
-                          slot_id: data.slot[i].slot_id,
-                        })
-                      }
-                    }
-                    if(this.activeList.length){
-                      this.orderNum = this.activeList[0].max_person_num
-                    }
-                  }
-                }
+                // if(data.long_day == 1){
+                //   if(data.slot.length){
+                //     let a = []
+                //     for(let i= 0;i<data.slot.length;i++ ){
+                //       var b = []
+                //       for(let j =0;j<data.slot[i].list.length;j++){
+                //         if(data.slot[i].list[j].personNum > data.slot[i].list[j].order_person_num && data.slot[i].list[j].status == 0){
+                //           b.push(data.slot[i].list[j])
+                //         }
+                //       }
+                //       if(b.length){
+                //         a.push({day:data.slot[i].day,list:b})
+                //       }
+                //     }
+                //     this.dayList = a
+                //     if(this.dayList.length){
+                //       this.orderNum =this.dayList[0].list[0].personNum
+                //     }
+                //     this.weekDay = this.getWeekDay(data.slot[0].day)
+                //   }
+                // }else{
+                //   if(data.slot.length){
+                //     for(let i =0;i<data.slot.length;i++){
+                //       if(data.slot[i].status == 0 && data.slot[i].max_person_num> data.slot[i].order_person_num){
+                //         this.activeList.push({
+                //           beginTime:data.slot[i].begin_date,
+                //           endTime: data.slot[i].end_date,
+                //           begin_time: data.slot[i].begin_time,
+                //           end_time: data.slot[i].end_time,
+                //           active_id: data.slot[i].activity_id,
+                //           max_person_num: data.slot[i].max_person_num,
+                //           order_person_num: data.slot[i].order_person_num,
+                //           price: data.slot[i].price,
+                //           slot_id: data.slot[i].slot_id,
+                //         })
+                //       }
+                //     }
+                //     if(this.activeList.length){
+                //       this.orderNum = this.activeList[0].max_person_num
+                //     }
+                //   }
+                // }
                 this.is_collection = data.is_collection
                 if(localStorage.getItem('isLogin')){
                   if(data.is_order || this.userId == this.isOwer){
@@ -1187,6 +1342,7 @@
                   this.isLogin = false
                 }
                 this.isLoading = false
+               
               }else if(res.data.code == 3 || res.data.code == 4){
                 this.getParams()
               }else if(res.data.code == 0 ){
@@ -1468,7 +1624,10 @@
             .then(res=>{
               if(res.data.code == 1){
                 let data = res.data.data.data
-                this.personList = data
+                data.forEach((item,index)=>{
+                  this.personList.push(item)
+                })
+                
                 this.total =  res.data.data.total
               }else if(res.data.code == 3 || res.data.code == 4){
                 this.getComment(val)
@@ -1592,9 +1751,9 @@
           })
         }
       },
-      destroyed() {
-        window.removeEventListener('scroll',this.ScrollContent)
-      },
+      // destroyed() {
+      //   window.removeEventListener('scroll',this.ScrollContent)
+      // },
     }
 </script>
 
@@ -1633,6 +1792,50 @@
   right:0;
   top:100px;
 }
-
-
+.content{
+  margin: 40px auto 110px;
+  width: 80%;
+  font-size: 16px !important
+}
+.hidden{
+  overflow:hidden;
+  border-radius:10px;
+}
+.contentImg{
+  width:1080px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+.top_img2{
+  display: flex;
+  justify-content: space-between;
+}
+.top_img4_1{
+  display: flex;
+  justify-content: space-between;
+}
+.top_img4_2{
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  margin-left:6px
+}
+.firstCOntent{
+  width:248px;
+  text-align: left;
+}
+.firstWidth{
+  
+  padding-right: 144px;
+  padding-top: 87px;
+}
+.secendWidth{
+  width:75%;
+  text-align: left;
+}
+.line{
+margin: 52px 0;
+border:none;
+border-top:1px solid #F3F5FA;
+}
 </style>

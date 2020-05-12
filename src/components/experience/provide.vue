@@ -45,7 +45,7 @@
 		</div>-->
 		<p style="font-size: 12px;margin-top: 50px;">如果您使用独立的商家或其他的第三方供应商为体验提供交通服务或装备器材，您应该写明商家的名称以及其他可能对参与者有帮助的信息。 仅适用于交通服务和装备器材，您无需列出饮食供应商等其他信息（如果您愿意，当然也可以列明！）。</p>
 		<div class="exp_btn">
-			<el-button type="primary" @click="changeRouter">{{complete?'保存':'下一步'}}</el-button>
+			<el-button type="primary" @click="changeRouter">{{complete == '1'?'保存':'下一步'}}</el-button>
 		</div>
 
 		<!--<el-dialog
@@ -122,7 +122,7 @@
             })
               .then(res=>{
                 if(res.data.code == 1){
-                  if(!this.complete){
+                  if(this.complete == '0'){
                   this.$emit('changeRouter',{id:6,router:"Bring",information:this.active_id,complete: this.complete})
                   }else{
                     this.$message({

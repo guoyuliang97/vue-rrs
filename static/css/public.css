@@ -1,6 +1,182 @@
+.mainButton{
+	width:113px;
+	height:23px;
+	background:rgba(20,197,202,1);
+	border-radius:2px;
+	line-height: 23px;
+	text-align: center;
+	color:#fff;
+	cursor: pointer;
+}
+
+.mainClick{
+	width:140px;
+	height:48px;
+	background:rgba(236,254,255,1);
+	border:1px solid rgba(20,197,202,1);
+	border-radius:8px;
+	font-size:18px;
+	font-family:Source Han Sans CN;
+	font-weight:400;
+	color:rgba(20,197,202,1);
+	text-align: center;
+	line-height: 48px;
+	cursor: pointer;;
+}
+.marginTop{
+	margin-bottom: 15px;
+}
+.marginBottom{
+	margin-top: 15px;
+}
+.mainPadding{
+	padding: 10px 20px;
+}
+.marginRight{
+	margin-right: 20px;
+}
+.marginLeft{
+	margin-left: 20px;
+}
+.mainCenter{
+	text-align: center;
+	cursor: pointer;
+}
+.inputStyle{
+	width:100px !important;
+	font-size: 13px !important;
+	margin-left: 10px !important;
+}
+.positionFixed{
+	position: fixed;
+	background-color: rgba(255,255,255,.6);
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index:1
+}
+
+.zhuShi{
+	color: #666666;
+	font-size:12px;
+}
+.inputBorder{
+	border:1px solid #eee;
+	border-radius: 5px;
+	font-size: 15px;
+}
+.flexWrap{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+}
+.flexStart{
+	display: flex;
+	justify-content: flex-start;
+	margin-bottom: 10px;
+}
+.flexEnd{
+	display: flex;
+	justify-content: flex-end;
+}
+.flexBetween{
+	display: flex;
+	justify-content: space-between;
+}
 .fontweight{
 	font-weight: bold;
+	
 }
+.mainFont{
+	font-weight: bold;
+	font-size:26px;
+}
+.contentTitle{
+	font-size:14px;
+}
+.mainColor{
+	color:#14c5ca;
+	cursor: pointer;
+}
+.line{
+	margin: 17px 0;
+	border:none;
+	border-top:1px solid #DFE1E4;
+  }
+
+.flexColumn{
+	display: flex;
+	flex-flow: column;
+	justify-content: space-between;
+}
+.mainBackColor{
+	color:#fff;
+	background-color: #14c5ca;
+}
+.defultColor{
+	color:#A8A8A8;
+	background-color: #F4F6F9;
+}
+.el-checkbox__input.is-checked+.el-checkbox__label{
+	color: #000 !important
+}
+.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner{
+	background-color: #14c5ca !important;
+
+}
+.el-radio__input.is-checked .el-radio__inner{
+	/* background-color: #14c5ca !important; */
+
+}
+.el-button:focus, .el-button:hover ,.el-button--primary.is-plain:focus, .el-button--primary.is-plain:hover{
+	/* background-color: #14c5ca !important;  */
+	 /* color: #fff  !important */
+}
+.el-input__inner:focus{
+
+}
+.el-range-editor.is-active, .el-range-editor.is-active:hover{
+	/* border-color: #14c5ca !important; */
+}
+.el-button--primary.is-plain{
+	color:#14C5CA !important;
+	/* background-color: #F2FFFF !important; */
+	/* border-color: #14C5CA !important; */
+}
+.positionTop{
+	position: absolute;
+	top: 30px;
+	line-height: 20px;
+}
+.circle{
+	width: 16px;
+	height: 16px;
+	font-size: 12px;
+	border-radius: 50%;
+	border: 1px solid #E7E8EA;
+	background-color: #E7E8EA;
+	color: #B4B4B4;
+	text-align: center;
+	line-height: 16px;
+	cursor: pointer;
+	margin-left: 10px;
+	margin-top: 10px;
+}
+.el-button--primary{
+	/* background-color: #14c5ca !important; */
+	/* border-color: #14c5ca !important; */
+}
+
+.el-button{
+	/* color:#14C5CA !important; */
+	/* background-color: #F2FFFF !important; */
+	/* border-color: #14C5CA !important; */
+}
+/* 第一版本 */
 .title{
 	font-size: 24px;
 	font-weight: bold;
@@ -8,10 +184,16 @@
 	margin-top: 50px;
 }
 input:focus{
-	border: 1px solid #008489;
+	border: 1px solid #14c5ca;
 	outline: none;
 }
 .exp_con{
+	width: 90%;
+	margin-left: 25px;
+	text-align: left;
+	padding-bottom: 50px;
+}
+.newZxp{
 	width: 90%;
 	margin: 0 auto;
 	text-align: left;
@@ -28,7 +210,7 @@ input:focus{
 }
 .language_title{
 	margin-top: 40px;
-	color: #008489;
+	color: #14c5ca;
 }
 .title_con{
 	width: 60%;
@@ -142,7 +324,7 @@ input:focus{
 	width: 30%;
 	height: 40px;
 	color: white;
-	background-color: #008489;
+	background-color: #14c5ca;
 	line-height: 40px;
 	border-radius:5px;
 	cursor: pointer;
@@ -162,12 +344,12 @@ input:focus{
 	cursor: pointer;
 }
 .policy_txt:hover{
-	color: #008489;
+	color: #14c5ca;
 }
 .policy_point{
 	margin-top: 15px;
 	cursor: pointer;
-	color: #008489;
+	color: #14c5ca;
 }
 .policy_remark{
 	margin-top: 15px;

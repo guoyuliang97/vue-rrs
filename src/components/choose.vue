@@ -5,18 +5,39 @@
           <div  style="width:50%;min-width:500px;text-align:left">
             <div @click="toBack" style="width:50px;cursor: pointer"><i class="el-icon-arrow-left"></i>返回</div>
             <div style="padding: 20px 50px">
-              <h1>确认并支付</h1>
-              <p>您可以将更多好友添加为此体验的参与者，然后确认预订。</p>
-              <p>可接待年满{{age_limit}}周岁及以上的参与者。</p>
-              <h1>还有谁一起参加？</h1>
-              <h3>参与者人数</h3>
+              <div v-if="activeList.combine.length && closeIndex != 1">
+                 <h1>可能您需要的套餐</h1>
+                <p class="contentTitle fontweight">套餐可叠加购买，套餐人数不计入选择参与的购买人数</p>
+                <div>
+                    <el-checkbox-group style="text-color: #14c5ce !important" @change="chooseCombine"   v-model="combineL">
+                        <div class="flexWrap">
+                              <div v-for="(item,index) in activeList.combine"  :style="{borderColor:isChoose(item,index)?'rgba(20,197,202,1)':'rgba(202,202,202,1)'}"  class="combine marginRight marginTop" >
+                                <el-checkbox  :label='item.combine_id'><b>{{item.type == 1? '亲子':item.name}}	{{item.adult}}成人<span v-if="item.type == 1">{{item.kids}}儿童</span> <span >￥{{item.price}}</span></b></el-checkbox>
+                              </div>
+                        </div>
+                    </el-checkbox-group>
+                </div>
+              </div>
+             
+
+
+              <!-- 第一版本提交订单 -->
+              <h1>选择参与人数</h1>
+              <p class="contentTitle">除套餐外人数，您可以将更多好友添加为此体验的参与者，然后确认预订，
+                可接待年满{{age_limit}}周岁及以上的参与者，儿童价标准儿童年纪3岁至12岁
+              </p>
+           
+  
               <!--人数预定-->
-              <el-button style="width:300px" @click="pick(1)">
+              <!-- <el-button style="width:300px" @click="pick(1)">
                 <div style="display: flex;justify-content: space-between"><span style="padding: 5px" :style="{'background-color': personNumber == 1? 'none':'#008489','color':personNumber == 1? 'none':'#fff'}">{{personNumber}}位游客</span><span style="padding:5px"><i :class="classa"></i></span></div>
-              </el-button>
-              <div style="width:280px;background-color:#fff;padding: 10px" v-show="isAdd" class="animated fadeInDown">
-                <div style="display: flex;justify-content: space-between;margin:10px 0 ;" v-for="(item,index) in otherList">
-                  <div><b>{{item.person}}</b></div>
+              </el-button> -->
+              <div style="width:100%;background-color:#fff;padding: 10px;">
+                <div class="personL flexBetween" v-show="activeList.kids_price? true:index<1" v-for="(item,index) in otherList">
+                  <div>
+                    <b>{{item.person}}</b>
+                    <span class="marginLeft fontweight">￥{{index == 1?activeList.kids_price :activeList.price}}/人</span>
+                  </div>
                   <div>
                     <el-button icon="el-icon-minus" size="mini" circle @click="reduce(item,index)" :disabled="index ==0?  item.adult ==1? true:false:item.adult ==0? true:false"></el-button>
                     <span style="margin:0 10px">{{item.adult}}</span>
@@ -37,15 +58,17 @@
                     <img :src="userImg? userImg: '../../../static/img/static/user.png'" width="48px" height="48px" style="border-radius: 50%">
                   </div>
                 </div>
-                <div v-for="(item,index) in form.person" style="display: flex;justify-content: space-between;margin:20px 0;font-size:14px;">
+              </div>
+              <div style="border-top:1px solid #eee;border-bottom: 1px solid #eee;padding:10px 0;">
+                <div v-for="(item,index) in newPerson" style="display: flex;justify-content: space-between;margin:10px 0;font-size:14px;">
                   <div style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;max-width:90px;min-width: 50px;">
                     <span>{{item.name}}</span>
                   </div>
                   <div v-show="item.mobile">
-                    <span>电话：<span >{{item.mobile}}</span></span>
+                    <span>联系电话：<span >{{item.mobile}}</span></span>
                   </div>
                   <div v-show="item.idcard">
-                    <span>身份证：{{item.idcard}}</span>
+                    <span>身份证：{{item.idcard.slice(0,4)}}*********{{item.idcard.slice(14,18)}}</span>
                   </div>
                   <div>
                     <i @click="deletPerson(item,index)" style="color:red;cursor: pointer" class="el-icon-remove"> </i>
@@ -53,6 +76,21 @@
                 </div>
               </div>
               <p @click="addperson = true" style="color:#008489;cursor: pointer;font-size:15px;"><i class="el-icon-plus"></i>添加新旅客</p>
+              <div v-show="house.length">
+                <h1>预定的住宿</h1>
+                <div v-for="(item,index) in house" v-show="index < house.length -1 " :key="index" style="display: flex;justify-content: space-between;margin-top: 1px solid #eee;border-bottom: 1px solid #eee;">
+                  <p style="font-size:15px;">
+                    <span>{{item.houseType}}</span>
+                    <span class="marginLeft"><i style="font-size:15px;" class="el-icon-close"></i>{{item.number}}</span>
+                    <span class="marginLeft"><span>￥</span>{{(item.price * item.number).toFixed(2)}}</span>
+                  </p>
+                  <p  style="font-size:15px;cursor:pointer">
+                    <span  @click="toBack">修改</span>
+                    <!-- <span class="marginLeft" @click="delteHouse(item,index)">删除</span> -->
+                  </p>
+                </div>
+                <hr style="margin:20px 0;border:none;border-bottom: 1px solid #eee">
+              </div>
               <h1>付款方式</h1>
               <p><b>付款方式：</b></p>
               <div  style="width:100%;border:1px solid #008489;position:relative;overflow: hidden;transition:height 1s;" :style="{'height':height}">
@@ -77,16 +115,21 @@
               </div>
               <div v-if="payIndex == 1" style="width:500px;margin-top:50px">
                 <p>通过安全链接前往支付宝完成添加</p>
-                <form :model="form" id="form" :action="api + '/orderadd'" @submit=" check" method="get">
+                <form :model="form" id="form" :action="api + '/OrderAddTwo'"  method="get">
                   <input name="token" type="hidden" v-model="form.token">
+                  <input name="verson" type="hidden" value="2.0">
                   <input name="activity_id" type="hidden" v-model="form.activity_id">
                   <input name='num' type="hidden" v-model="form.num">
+                  <input name='kids_num' type="hidden" v-model="form.kids_num">
                   <input name="slot_id" type="hidden" v-model="form.slot_id">
                   <input name="pay_type" type="hidden" v-model="form.pay_type">
                   <input name="isstay" type="hidden" v-model="form.isstay">
+                  <input name="house" type="hidden" v-model=" form.house">
                   <input name="is_book_whole" type="hidden" v-model="form.is_book_whole">
                   <input name="balance" type="hidden" v-model="form.balance">
-                  <button type="submit"  style="width:168px;padding:10px 20px;background-color:#008489;color:#fff;border:1px solid #008489;text-align:center;border-radius:5px;cursor: pointer">确认并支付</button>
+                  <div id= 'combine'>
+                  </div>
+                  <button type="button"  @click="check()"  style="width:168px;padding:10px 20px;background-color:#008489;color:#fff;border:1px solid #008489;text-align:center;border-radius:5px;cursor: pointer">确认并支付</button>
                 </form>
               </div>
               <div v-if="payIndex == 2" style="width:500px;margin-top:50px">
@@ -158,37 +201,34 @@
               </div>
             </div>
             <hr style="margin:20px 0;border:none;border-bottom: 1px solid #eee">
-            <div v-if="activeList.day">
+            <div v-if="activeList.long_day">
               <div>
-                <p>{{activeList.day}}&nbsp;&nbsp;| {{weekDay}}</p>
-                <p>{{activeList.list.time[0]}} − {{activeList.list.time[1]}}</p>
+                <p>{{activeList.date}}&nbsp;&nbsp;| {{weekDay}}</p>
+                <p>{{activeList.begin_time}} − {{activeList.end_time}}</p>
               </div>
               <hr style="margin:20px 0;border:none;border-bottom: 1px solid #eee">
-              <div>
-                <span>￥{{activeList.list.price}}</span><span><i class="el-icon-close"></i>{{personNumber}}位参与者</span>
-                <span style="float:right">￥{{(activeList.list.price * personNumber).toFixed(2)}}</span>
+             <div>
+                <span>{{personNumber}}位参与者</span>
+                <span style="float:right">￥{{jionPrice}}</span>
               </div>
             </div>
-            <div v-if="activeList.beginTime">
+            <div v-if="!activeList.long_day">
               <div>
-                <p>{{activeList.beginTime}}—{{activeList.endTime}}&nbsp;&nbsp;</p>
+                <p>{{activeList.begin_date}}—{{activeList.end_date}}&nbsp;&nbsp;</p>
                 <p>{{activeList.begin_time}} − {{activeList.end_time}}</p>
               </div>
               <hr style="margin:20px 0;border:none;border-bottom: 1px solid #eee">
               <div>
-                <span>￥{{activeList.price}}</span><span><i class="el-icon-close"></i>{{personNumber}}位参与者</span>
-                <span style="float:right">￥{{(activeList.price * personNumber).toFixed(2)}}</span>
+                <span>{{personNumber}}位参与者</span>
+                <span style="float:right">￥{{jionPrice}}</span>
               </div>
             </div>
             <hr style="margin:20px 0;border:none;border-bottom: 1px solid #eee">
-            <div v-show="house.length">
-              <div v-for="(item,index) in house" v-show="index < house.length -1 " :key="index" style="display: flex;justify-content: space-between;">
-                <p style="font-size:15px;">住宿 &nbsp;&nbsp; <span>{{item.houseType}}&nbsp;|&nbsp;<span>￥</span>{{item.price}}</span>/晚</p>
-                <p style="font-size:15px;"><i style="font-size:15px;" class="el-icon-close"></i>{{item.number}}</p>
-                <p style="font-size:15px;"><span>￥</span>{{(item.price * item.number).toFixed(2)}}</p>
+             <div>
+                <span>住宿费</span>
+                <span style="float:right">￥{{housePrice}}</span>
               </div>
-              <hr style="margin:20px 0;border:none;border-bottom: 1px solid #eee">
-            </div>
+            <hr style="margin:20px 0;border:none;border-bottom: 1px solid #eee">
             <div v-if="book_whole">
               <div  style="display: flex;justify-content: space-between">
                 <div>是否包场</div>
@@ -403,9 +443,8 @@
             giftVoucher:'',
             Voucher:false,
             otherList:[
-              {person:'成人',adult:1},
+              {person:'标准',adult:1},
               {person:'儿童',adult:0},
-              {person:'婴儿',adult:0},
             ],
             paymentList:[
               {styleHead:'',mess:'选择付款方式:',check:''},
@@ -419,15 +458,16 @@
               {value:2,label:'美国'},
             ],
             form:{
-              token:'',
-              person:[],
-              house:[],
-              num:'',
-              slot_id:'',
-              pay_type:'',
-              isstay:'',
-              is_book_whole:'',
-              balance:''
+              // token:'',
+              // person:[],
+              // house:[],
+              // num:'',
+              // slot_id:'',
+              // pay_type:'',
+              // isstay:'',
+              // is_book_whole:'',
+              // balance:'',
+              // kids_num:'0'
             },
             formPerson:{
               name:'',
@@ -452,12 +492,48 @@
             aindex:0,
             isLoading:false,
             is_setpwd:'',
-            isWithdrawal:false
+            isWithdrawal:false,
+            combineL:[],
+            adultNum:'1',
+            kidsNum:'0',
+            sendCombine:[],
+            newPerson:[],
+            chooseNum:0,
+            choosePice:0,
+            kidsPrice:0,
+            adultPrice:0
           }
       },
       components:{
           Head,
         Loading
+      },
+      computed:{
+        jionPrice(){
+          var price = this.adultPrice? this.choosePice + this.kidsPrice + this.adultPrice:this.choosePice + Number(this.activeList.price)  + this.kidsPrice
+          console.log(price)
+          if(price){
+            return price.toFixed(2)
+          }else{
+            return this.activeList.price
+          }
+        },
+        isChoose(item,index){
+          return function(item,index){
+            if(this.combineL.indexOf(item.combine_id) != -1){
+                return true
+            }else{
+              return false
+            }
+          }
+        },
+        housePrice(){
+          var price = 0
+          for(var i = 0; i <  this.house.length -1 ; i++){
+           price = Number(price) + Number((this.house[i].price * this.house[i].number).toFixed(2))
+          }
+          return price
+        }
       },
       watch:{
         aindex:function(){
@@ -470,24 +546,11 @@
            this.fundSend()
          }
         },
-    /*    jiJin:function(){
-           if(parseFloat(this.jiJin) > 0 && parseFloat(this.jiJin) <= this.allPrice){
-             this.form.balance = this.jiJin
-             this.getCalculate(this.closeIndex)
-           }else{
-             this.$message({
-               type: 'info',
-               message: '基金抵扣不能大于总价或者基金大于零'
-             })
-             this.jiJin = ''
-             this.getCalculate(this.closeIndex)
-           }
-
-        },*/
         personNumber:function(){
           if(!this.closeIndex){
             this.getCalculate(this.closeIndex)
-            this.form.num = this.personNumber
+            this.form.num = this.adultNum
+            this.form.kids_num = this.kidsNum
           }
         },
         closeIndex:function(){
@@ -510,8 +573,61 @@
 
       },
       methods:{
+          // 第二版新增函数
+          chooseCombine(val){
+            var combine =document.getElementById('combine')
+            combine.innerHTML = ''
+            if( val.length){
+                  var input1 = document.createElement('input')
+                  input1.setAttribute("type",'hidden')
+                  input1.setAttribute('name', 'combine');
+                  input1.setAttribute("value", JSON.stringify(val));
+                  combine.append(input1);
+            }
+            this.checkPerson(val)
+            this.getCalculate(this.closeIndex)
+          },
+          checkPerson(val){
+            var arr = this.activeList.combine
+            var num = 0,
+                price = 0;
+            arr.forEach((item,index) =>{
+                for(var i = 0; i < val.length; i++){
+                  if(item.combine_id == val[i]){
+                      num += Number(item.kids) + Number(item.adult)
+                      price  += Number(item.price)
+                    }
+                }
+            })
+            this.choosePice = price
+            this.chooseNum = num
+            this.personNumber = num + Number(this.kidsNum) + Number(this.adultNum)
+          },
+          delteHouse(item,index){
+            this.$confirm('是否删除已选择的房源?','提示',{
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
+            })
+            .then(()=>{
+              this.$message({type: 'success',message:'删除成功!'})
+              this.house.splice(index,1)
+            })
+            .catch(()=>{
+              this.$message({type: 'info',message:'已取消!'})
+            })
+          },
+          //第一版本函数
           check(){
-           console.log(this.form)
+            // this.form= (this.form)
+             this.form.person = JSON.stringify(this.newPerson)
+              var input1 = document.createElement('input')
+                input1.setAttribute("type",'hidden')
+                input1.setAttribute('name', 'person');
+                input1.setAttribute("value", this.form.person);
+                document.getElementById('form').append(input1);
+           
+            document.getElementById('form').submit()
           },
         checkPass(){
           document.getElementById('passW').focus()
@@ -519,23 +635,23 @@
           //用基金提交订单
          fundSend(){
            let slot_id = ''
-           if( this.activeList.beginTime){
-             slot_id =  this.activeList.slot_id
-           }else{
-             slot_id =  this.activeList.list.slot_id
-           }
-           this.$http.post(this.api + '/orderadd',{
+     
+            slot_id =  this.activeList.slot_id
+           this.$http.post(this.api + '/OrderAddTwo',{
              token: localStorage.getItem('token'),
+             verson: 2.0,
              activity_id: this.activeId,
-             num: this.personNumber,
+             num: this.adultNum,
              slot_id: slot_id,
-             person: this.form.person,
+             person: this.newPerson.length?JSON.stringify(this.newPerson):'',
              pay_type: 4,
              isstay: this.isstay,
              is_book_whole: this.closeIndex,
              balance: this.jiJin,
-             house: this.chooseHouse,
-             password: this.password
+             house: JSON.stringify(this.chooseHouse),
+             password: this.password,
+             kids_num: this.kidsNum,
+             combine:this.combineL.length? JSON.stringify(this.combineL):''
            })
              .then(res=>{
                if(res.data.code == 1){
@@ -546,17 +662,13 @@
                    message: '支付成功！'
                  })
                }else if(res.data.code == 3){
-                 this.$http.post(this.api + '/home/index/token')
-                   .then(res=>{
-                     localStorage.setItem('token',res.data.data)
-                     this.fundSend()
-                   })
+                  this.fundSend()
                }else if(res.data.code == 0){
                  this.isPassword = false
                  this.password = ''
                  this.aindex = 0
                  this.jiJin = 0
-                 alert(res.data.msg)
+                 this.$message({type:'error',message:res.data.msg})
                }
              })
          },
@@ -650,20 +762,20 @@
           }
         },
         getCalculate(val){
+  
           let slot_id = ''
-          if( this.activeList.beginTime){
-            slot_id =  this.activeList.slot_id
-          }else{
-            slot_id =  this.activeList.list.slot_id
-          }
-          this.$http.post(this.api + '/Calculate',{
+          slot_id =  this.activeList.slot_id
+          this.$http.post(this.api + '/CalculateTwo',{
             token: localStorage.getItem('token'),
+            version: 2.0,
             slot_id: slot_id,
-            num: this.personNumber,
+            num: this.adultNum,
             isstay: this.isstay,
             is_book_whole: val,
             balance: this.jiJin,
-            house: this.chooseHouse
+            kids_num: this.kidsNum,
+            combine:  JSON.stringify(this.combineL),
+            house:JSON.stringify(this.chooseHouse) 
           })
             .then(res=>{
               if(res.data.code == 1){
@@ -681,50 +793,50 @@
             })
         },
         reduce(item,index){
-          if(index == 0){
-            if(item.adult > 1 &&  this.personNumber > this.form.person.length + 1){
-              this.addClick = false
-              item.adult = item.adult -1
-              let b =0
-              for(let i = 0;i<this.otherList.length;i++){
-                b = b + this.otherList[i].adult
-              }
-              this.personNumber = b
-            }else{
-              this.$message({
-                type: 'info',
-                message: '您添加了用户信息，不能少于您添加的用户信息人数！'
-              })
-            }
-          }else{
-            if(item.adult !=0 &&  this.personNumber > this.form.person.length + 1){
+          
+          if(item.adult !=0 &&  this.personNumber > this.form.person.length + 1){
               this.addClick = false
               item.adult=item.adult -1
+            
               let b =0
               for(let i = 0;i<this.otherList.length;i++){
                 b = b + this.otherList[i].adult
               }
-              this.personNumber = b
+              this.personNumber = b + this.chooseNum
             }else{
               this.$message({
                 type: 'info',
                 message: '您添加了用户信息，不能少于您添加的用户信息人数！'
               })
             }
+          if(index == 0){
+              this.adultNum = item.adult
+              this.adultPrice = Number(item.adult) * Number(this.activeList.price)
+          }else{
+              this.kidsNum = item.adult
+              this.kidsPrice = Number(item.adult) * Number(this.activeList.kids_price)
           }
         },
         add(item,index){
           if(this.personNumber < this.numlast){
-            this.addClick = false
-            item.adult = item.adult + 1
-            let b =0
-            for(let i = 0;i<this.otherList.length;i++){
-              b = b + this.otherList[i].adult
+              this.addClick = false
+              item.adult = item.adult + 1
+              let b =0
+              for(let i = 0;i<this.otherList.length;i++){
+                b = b + this.otherList[i].adult
+              }
+              this.personNumber = b + this.chooseNum
+            }else{
+              this.addClick = true
             }
-            this.personNumber = b
+          if(index == 0){
+             this.adultNum = item.adult
+             this.adultPrice = (Number(item.adult) * Number(this.activeList.price))
           }else{
-            this.addClick = true
+             this.kidsNum = item.adult
+             this.kidsPrice = Number(item.adult) * Number(this.activeList.kids_price)
           }
+          
 
         },
         pick(el){
@@ -773,22 +885,21 @@
             })
           }
           let slot_id = ''
-          if( this.activeList.beginTime){
-            slot_id =  this.activeList.slot_id
-          }else{
-            slot_id =  this.activeList.list.slot_id
-          }
-          this.$http.post(this.api + '/orderadd',{
+          slot_id =  this.activeList.slot_id
+          this.$http.post(this.api + '/OrderAddTwo',{
             token: localStorage.getItem('token'),
+            version: 2.0,
             activity_id: this.activeId,
-            num: this.personNumber,
+            num: this.adultNum,
+            kids_num: this.kidsNum,
             slot_id: slot_id,
-            person: this.form.person,
+            person: this.newPerson.length? JSON.stringify(this.newPerson):'',
             pay_type: payIndex,
             isstay: this.isstay,
             is_book_whole: this.closeIndex,
             balance: this.jiJin,
-            house: this.chooseHouse
+            house: JSON.stringify(this.chooseHouse),
+            combine:this.combineL.length? JSON.stringify(this.combineL):''
           })
             .then(res=> {
               if(res.data.code == 1){
@@ -797,8 +908,10 @@
                 document.getElementById('weixin').innerHTML = res.data.data.url
                 this.orderId = res.data.data.order_id
                 this.setTime()
-              }else {
-                alert(res.data.msg)
+              }else if(res.data.code == 3) {
+                this.alipay(payIndex)
+              }else if(res.data.code == 0){
+                this.$message({type: 'error',message:res.data.msg})
               }
             })
         },
@@ -808,13 +921,13 @@
         getParams(){
           this.isLoading = true
           this.activeId = this.$route.query.activeId
-          this.activeList = (JSON.parse(this.$route.query.chooseTime))[0]
-          if( this.activeList.beginTime){
-            this.numlast =  this.activeList.max_person_num- this.activeList.order_person_num
-          }else{
-            this.weekDay = this.getWeekDay( this.activeList.day)
-            this.numlast =  this.activeList.list.personNum -  this.activeList.list.order_person_num
+          this.activeList = (JSON.parse(this.$route.query.chooseTime))
+          this.house =  this.$route.query.chooseHouse?JSON.parse(this.$route.query.chooseHouse):''
+
+          if( this.activeList.long_day == 1){
+            this.weekDay = this.getWeekDay( this.activeList.date)
           }
+          this.numlast =  this.activeList.max_person_num- this.activeList.order_person_num
           this.$http.post(this.api + '/home/Activity/get_activity',{
             token: localStorage.getItem('token'),
             activity_id: this.activeId,
@@ -832,13 +945,10 @@
                 this.checkNUm()
                 this.getCalculate(this.closeIndex)
               }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.getParams()
-                  })
+                this.getParams()
+          
               }else if(res.data.code == 0){
-                alert(res.data.msg)
+                   this.$message({type: 'error',message:res.data.msg})
               }
             })
         },
@@ -866,11 +976,10 @@
                   this.$router.push('/transaction')
                 }
               }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.getOrderTime()
-                  })
+                this.getOrderTime()
+              
+              }else if(res.data.code == 0){
+                this.$message({type: 'error',message:res.data.msg})
               }
             })
         },
@@ -894,18 +1003,18 @@
                 type:'info',
                 message: '请添加名字'
               })
-            }else if(!this.formPerson.mobile ||  !(/^[1-9]\d*$/).test(this.formPerson.mobile)){
+            }else if(!this.formPerson.mobile ||  !(/^1[3456789]\d{9}$/).test(this.formPerson.mobile)){
               this.$message({
                 type:'info',
                 message: '请添加正确电话号码'
               })
-            }else if(!this.formPerson.idcard ||  !(/^[1-9]\d*$/).test(this.formPerson.idcard)){
+            }else if(!this.formPerson.idcard ||  !(/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/).test(this.formPerson.idcard)){
               this.$message({
                 type:'info',
                 message: '请添加正确身份号码'
               })
             }else{
-              this.form.person.push(
+              this.newPerson.push(
                 {name:this.formPerson.name,mobile:this.formPerson.mobile,idcard:this.formPerson.idcard}
               )
               this.formPerson = {
@@ -913,7 +1022,18 @@
                 mobile:'',
                 idcard:''
               }
-              this.addperson = false
+                 this.addperson = false
+             
+              //  for(let i = 0;i <this.form.person.length;i++) {
+              //     let a = this.form.person[i]
+              //     for(let item in a){
+              //       var input1 = document.createElement('input')
+              //       input1.setAttribute("type",'hidden')
+              //       input1.setAttribute('name', 'person'+'['+[i]+']'+'['+[item]+']');
+              //       input1.setAttribute("value", a[item]);
+              //       document.getElementById('form').append(input1);
+              //     }
+              //   }
               this.$message({
                 type: 'success',
                 message: '保存成功'
@@ -952,63 +1072,42 @@
             })
         },
         reload(res){
+        
             this.user = res.data.data[0].family_name + res.data.data[0].middle_name + res.data.data[0].name
             this.userImg = res.data.data[0].head_image? res.data.data[0].headimage.domain + res.data.data[0].headimage.image_url : ''
-          this.is_setpwd = res.data.data[0].is_setpwd
-          for(let i = 0;i <this.form.person.length;i++) {
-            let a = this.form.person[i]
-            for(let item in a){
-              var input1 = document.createElement('input')
-              input1.setAttribute("type",'hidden')
-              input1.setAttribute('name', 'person'+'['+[i]+']'+'['+[item]+']');
-              input1.setAttribute("value", a[item]);
-              document.getElementById('form').append(input1);
-            }
-          }
+            this.is_setpwd = res.data.data[0].is_setpwd
+           
+           
 
         },
         checkNUm(){
           let slot = ''
-          if(this.$route.query.chooseHouse){
-            this.house =  JSON.parse(this.$route.query.chooseHouse)
+          if(this.house){
             this.isstay = 1
+            var arr = []
             for(let i =0;i<this.house.length - 1;i++){
-              this.form.house.push({house_id:this.house[i].house_id,num:this.house[i].number})
-              this.chooseHouse.push({house_id:this.house[i].house_id,num:this.house[i].number})
+              arr.push({house_id:this.house[i].house_id,num:this.house[i].number})
             }
-            for(let i = 0;i < this.form.house.length;i++) {
-              let a =  this.form.house[i]
-              for(let item in a){
-                var input2 = document.createElement('input')
-                var form = document.getElementById('form')
-                input2.setAttribute("type",'hidden')
-                input2.setAttribute('name', 'house'+'['+[i]+']'+'['+[item]+']');
-                input2.setAttribute("value", a[item]);
-                form.appendChild(input2);
-              }
-            }
+            this.chooseHouse = arr
           }
-          if( this.activeList.beginTime){
-            slot =  this.activeList.slot_id
-          }else{
-            slot =  this.activeList.list.slot_id
-          }
+          slot =  this.activeList.slot_id
           this.form = {
             token: localStorage.getItem('token'),
             activity_id: this.activeId,
-            num: this.personNumber,
+            num: this.adultNum,
+            kids_num: this.kidsNum,
             slot_id:slot,
             person:[],
             pay_type:2,
             isstay:this.isstay,
             is_book_whole:this.closeIndex,
             balance:this.jiJin,
-            house: this.chooseHouse
+            house: JSON.stringify(this.chooseHouse) 
           }
         }
       },
       mounted() {
-
+  
       },
       created() {
         this.getParams()
@@ -1024,9 +1123,7 @@
 h1{
   font-size:30px
 }
-p{
-  font-size:18px
-}
+
   h1,h3,p{
     margin: 20px 0;
   }
@@ -1075,5 +1172,15 @@ input[type="number"]{
   height:50px;
   line-height:50px;
   font-weight: bold;
+}
+.combine{
+  border:1px solid rgba(202,202,202,1);
+  padding: 10px 20px;
+
+}
+.personL{
+  padding: 10px 0;
+  border-top: 1px solid rgba(223,225,228,1);
+  border-bottom: 1px solid rgba(223,225,228,1);
 }
 </style>

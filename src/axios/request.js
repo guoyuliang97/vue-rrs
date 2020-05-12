@@ -2,6 +2,7 @@
 import axios from 'axios'
 import globalVariable from '../api/global_variable.js'
 import {Message} from 'element-ui'
+import router from '../router'
 // 超时时间
 axios.defaults.timeout = 20000
 // http请求拦截器
@@ -24,10 +25,11 @@ axios.interceptors.response.use(res => {// 响应成功关闭loading
         })
           break;
     case 4:
-      axios.post(globalVariable.baseURL + '/home/index/token')
-        .then(msg=>{
-          localStorage.setItem('token',msg.data.data)
-        })
+      // axios.post(globalVariable.baseURL + '/home/index/token')
+      //   .then(msg=>{
+      //     localStorage.setItem('token',msg.data.data)
+      //   })
+      router.push('/logion')
           break;
     case 5:
       Message.info({message:res.data.msg})

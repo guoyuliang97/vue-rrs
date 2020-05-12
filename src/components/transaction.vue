@@ -4,13 +4,13 @@
         <div style="background-color:#eee;width:100%;padding:100px 0;">
           <div style="width:1080px;margin: 0 auto;display: flex;justify-content: flex-start">
             <div style="width:250px;">
-              <div style="width:250px;height:220px;border-radius: 10px;background-color:#fff;">
-                <div>
-                  <img :src="imgUrl" width="72px" height="72px" style="border-radius: 50%;margin-top:50px;">
-                </div>
-                <p style="margin:10px 0;font-size:14px;">总额：{{ parseFloat(due_balance,2)+parseFloat(unpaid_amount,2)?(parseFloat(due_balance,2)+parseFloat(unpaid_amount,2)).toFixed(2):0}}</p>
-                <p><span style="font-size:12px;color:#008489">（可用余额：{{due_balance}} &nbsp;&nbsp;未到账：￥{{unpaid_amount?unpaid_amount:0}}）</span></p>
-                <p style="margin:10px 0;font-size:14px;color:#008489;cursor: pointer"><i @click="withdrawal"  class="iconfont icon-tixian">   提现</i></p>
+              <div style="width:250px;height:220px;border-radius: 10px;background-color:#fff;color:#666666">
+               
+                <LoadingImg type="user" :src="imgUrl"  style="width:72px;height:72px;margin: 0 auto;padding-top:17px;"></LoadingImg>
+               
+                <p style="margin:10px 0;font-size:14px;">总额&nbsp;￥{{ parseFloat(due_balance,2)+parseFloat(unpaid_amount,2)?(parseFloat(due_balance,2)+parseFloat(unpaid_amount,2)).toFixed(2):0}}</p>
+                <p><span style="font-size:12px;color">可用余额：{{due_balance}} &nbsp;&nbsp;|&nbsp;&nbsp;未到账：￥{{unpaid_amount?unpaid_amount:0}}</span></p>
+                <div style="margin:10px auto;width:37px;padding:1px 2px;font-size:12px;color:#14C5CA;cursor: pointer;border:1px solid rgba(20,197,202,1);" ><span @click="withdrawal" >提现</span></div>
               </div>
               <div style="margin-top:20px;width:230px;background-color:#fff;border-radius:10px;padding:10px 10px;font-size:14px;">
                   <ul>
@@ -89,8 +89,10 @@
 </template>
 
 <script>
+
   import '../../static/css/monney/iconfont.css'
   import Head from '../public/head'
+  import LoadingImg from '../public/loadingImg'
     export default {
         name: "transaction",
       data(){
@@ -124,6 +126,7 @@
       },
       components:{
           Head,
+          LoadingImg
       },
       watch:{
         password:function(){

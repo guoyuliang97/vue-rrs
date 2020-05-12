@@ -1,125 +1,90 @@
 <template>
   <div style="text-align: left">
     <Head type='refundDescirbe'></Head>
-    <div v-if="house"  style="background-color: #fff;padding:20px;width:960px;font-size:12px;margin: 106px auto">
-      <div style="display: flex;justify-content: space-between">
-        <div style="line-height:40px;font-size:14px;">
-          <h4>查看预定>退款</h4>
+    <div v-if="house" class="fontweight " style="background-color: #fff;font-size:16px;padding:20px;width:1080px;margin: 85px auto">
+      <p class="contentTitle">我的活动  > 查看预订>主动退款</p>
+      <p class="marginT" style="font-size:18px;">我退款给</p>
+      <div class="flexStart marginT">
+        <LoadingImg type="user" :src="house.user.head_image?house.user.headimage.domain + house.user.headimage.image_url:''" style="width:92.04px;height:92.04px;" ></LoadingImg>
+        <div style="margin-left:10px;line-height:92px;font-size:29px;">
+            <b>{{house.user.family_name+house.user.middle_name+house.user.name?house.user.family_name+house.user.middle_name+house.user.name:'匿名用户'}}</b>
         </div>
-        <el-button icon="el-icon-arrow-left" @click="goBack" circle></el-button>
       </div>
-      <div style="display: flex;justify-content: space-between;margin-top:15px;">
-        <div :style="{backgroundColor:index == 1? '#008489':'#F4F6F9',color:index == 1?'#fff':'#A8A8A8'}" style="height:25px;width:50%;text-align: center;line-height:25px;font-size:12px;" >退款申请</div>
-        <div :style="{backgroundColor:index == 2? '#008489':'#F4F6F9',color:index == 2?'#fff':'#A8A8A8'}" style="text-align: center;width:50%;line-height:25px;font-size:12px;">退款成功</div>
+      <div style="margin-top: 25px;">
+        <p>参与人数：{{house.num}}人</p>
+        <p class="marginT">预定时间：{{house.activ_begin_time}}—{{house.activ_end_time}}</p>
       </div>
-      <div v-if="index == 1">
-        <div   style="margin-top:15px;">
-          <div style="display: flex;justify-content: flex-start;height:90px;">
-            <div style="height:90px;line-height: 90px;">
-              <b>退款活动</b>
+      <hr class="lineS">
+      <div class="flexStart">
+        <div>价格详情：</div>
+        <div v-if="house.detail.length">
+          <div class="marginTop" v-for="(item,index) in house.detail">
+            <div v-if="item.type == '1'||item.type == '2'">
+              {{item.type =='1'?'亲子':item.name}}<span class="marginLeft"></span>{{item.adult}}成人<span v-if="item.type == '1'">{{item.kids}}儿童</span>	<span class="marginLeft"></span>¥{{item.price}}
             </div>
-            <div style="display: flex;justify-content: flex-start;margin-left:15px;margin-top:10px;">
-              <img :src="house.user.head_image?house.user.headimage.domain+house.user.headimage.image_url:'../../../static/img/static/user.png'" width="70px" height="70px" style="border-radius: 50%;">
-              <div style="line-height: 25px;margin-left:12px;height:70px;">
-                <p><b>{{house.user.family_name + house.user.middle_name+house.user.name?house.user.family_name +'·'+ house.user.middle_name+'·'+house.user.name:'匿名用户'}}</b></p>
-                <p><span>参与人数:{{house.num - house.refund_num}}人</span></p>
-                <p v-if="house.refund_total_price">已支付：￥{{parseInt(house.total_price) - parseInt(house.refund_total_price)}}</p>
-                <p >已支付：￥{{parseInt(house.total_price)}}</p>
-              </div>
+            <div v-if="item.type == '0'">
+              <div class="marginTop">标准<span class="marginLeft"></span>{{item.adult}}人<span class="marginLeft"></span>¥{{item.adult_price}}</div>
+              <div >儿童<span class="marginLeft"></span>{{item.kids}}人<span class="marginLeft"></span>¥{{item.kids_price}}</div>	
             </div>
           </div>
         </div>
-        <div v-if="house.house.length" style="margin-top:25px;display: flex;justify-content: flex-start">
-          <div style="line-height:40px;">
-            <b>预定住宿</b>
-          </div>
-          <div style="margin-left:15px;display:flex;justify-content:flex-start">
-            <div v-for="(item,index) in house.house" style="display:flex;justify-content:flex-start;margin-right:15px;">
-              <div>
-                <img :src="item.image[0].domain + item.image[0].image_url" width="100px" height="70px">
-              </div>
-              <div style="margin-left:10px;">
-                <p>{{item.title}}</p>
-                <p style="margin: 10px 0;">标准间({{item.max_person}})</p>
-                <p><span>房数:{{item.num - item.refund_num}}</span><span style="margin-left:10px;">单价:<b>￥{{item.union_price}}</b></span></p>
-              </div>
-            </div>
-          </div>
+        <div v-if="!house.detail.length">
+          无
         </div>
-          <div style="margin-top:25px;display: flex;justify-content: flex-start">
-            <div style="line-height:40px;"><b>退款方式&nbsp;<span style="color:#F73737;">*</span></b></div>
-            <div style="margin-left:9px;">
-              <el-select v-model="value"  style="width:410px;" placeholder="请选择退款方式">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
-            </div>
-          </div>
-          <div style="margin-top:25px;display: flex;justify-content: flex-start">
-            <div style="line-height:40px;"><b>退款人数&nbsp;<span style="color:#F73737;">*</span></b></div>
-            <div style="margin-left:9px;line-height:40px;">
-             <b>{{house.num - house.refund_num}}人</b>
-            </div>
-          </div>
-          <div v-if="house.house.length" style="margin-top:25px;display: flex;justify-content: flex-start">
-            <div style="line-height:40px;"><b>退款住宿&nbsp;<span style="color:#F73737;">*</span></b></div>
-            <div style="display:flex;flex-direction:column;margin-left:9px;">
-                <div v-for="item in house.house" style="display:flex;justify-content:flex-start;margin-bottom:15px;">
-                  <div>
-                      <img :src="item.image[0].domain+ item.image[0].image_url" width="100px" height="70px">
-                  </div>
-                  <div style="margin-left:10px;">
-                    <p>{{item.title}}</p>
-                    <p style="margin: 10px 0;">标准间({{item.max_person}})</p>
-                    <p><span>房数:{{item.num - item.refund_num}}</span><span style="margin-left:10px;">单价:<b>￥{{item.union_price}}</b></span></p>
-                  </div>
-                </div>
-            </div>
-          </div>
-          <div style="margin-top:25px;display: flex;justify-content: flex-start">
-            <div style="line-height:40px;"><b>退款原因&nbsp;<span style="color:#F73737;">*</span></b></div>
-            <div style="margin-left:9px;">
-              <el-input type="textarea" style="width:410px;" :rows="4" v-model="reson"></el-input>
-            </div>
-          </div>
-          <div style="margin-top:25px;display: flex;justify-content: flex-start">
-            <div style="line-height:40px;"><b>退款金额&nbsp;<span style="color:#F73737;">*</span></b></div>
-            <div style="margin-left:9px;">
-              <div style="color:#F73737;width:390px;height:40px;line-height:40px;border:1px solid #eee;padding:0 10px " v-if="house.is_refund">￥{{parseInt(house.total_price) - parseInt(house.refund_total_price)}}</div>
-              <div style="color:#F73737;width:390px;height:40px;line-height:40px;border:1px solid #eee;padding:0 10px " v-if="!house.is_refund">￥{{parseInt(house.total_price)}}</div>
-            </div>
-          </div>
-          <div>
-            <el-button @click="sendRefund" type="primary" size="mini" style="margin-left:65px;margin-top:25px;">提交申请</el-button>
-          </div>
+      </div>
+      <div class="flexStart marginT">
+        <div>预订住宿：</div>
+        <div v-if="house.house.length">
+          <p class="marginTop" v-for="(item,index) in house.house"> 
+            <span>{{item.title}}</span>
+            <span class="marginLeft"></span>
+            <span>房数<i class="el-icon-close"></i>{{item.num}}</span>
+            <span class="marginLeft"></span>
+            <span>总额￥&nbsp;{{item.price}}</span>
+          </p>
         </div>
-        <div v-if="index == 2" style="margin-top:50px;">
-          <div style="display: flex;justify-content: space-around">
-            <div style="display: flex;justify-content: flex-start;color:#008489">
-              <div>
-                <i style="font-size:24px" class="el-icon-circle-check"></i>
-              </div>
-              <div style="font-size:12px;margin-left:11px;line-height:24px;">
-                退款成功
-              </div>
-            </div>
-          </div>
-          <div style="margin-top:16px;color:#999999;text-align: center;font-size:8px;">
-            <p>您的金额已退回用户钱包中</p>
-          </div>
+        <div v-if="!house.house.length">无</div>
+      </div>
+      <hr class="lineS">
+
+      <div class="flexStart marginT">
+        <p>退款方式：<span>全款退</span></p>
+      </div>
+      <div class="flexStart marginT">
+        <div style="line-height:40px;">退款原因：</div>
+        <div style="margin-left:9px;">
+          <el-input type="textarea" style="width:410px;" :rows="4" v-model="reson"></el-input>
         </div>
+      </div>
+      <hr class="lineS">
+      <div class=" marginT">
+        <p>支付总额&nbsp;&nbsp;&nbsp;￥{{house.total_price}}</p>
+      </div>
+      <div class=" marginT"  >
+        <p>退款总额&nbsp;&nbsp;&nbsp;<span style="color:#F73D3D">￥{{house.total_price}}</span></p>
+      </div>
+      <div class="marginT">
+        <p>退款时间'&nbsp;&nbsp;&nbsp;{{house.create_time}}</p>
+      </div>
+      <div class="marginT">
+        <p>订单编号&nbsp;&nbsp;&nbsp;{{house.order_no}}</p>
+      </div>
+      <hr class="lineS">
+      <div class="flexEnd">
+        <div @click="goBack" style="color:#999;font-size:13px;line-height:28px;cursor:pointer;">取消退款</div>
+        <el-button size="mini" @click="sendRefund" style="margin-left:20px;border:1px solid rgba(102,102,102,1);">提交申请</el-button>
+      </div>
+    </div>
       <div v-if="isLoading" style="position: fixed;top:0;left:0;right:0;bottom:0;z-index:999;background-color: rgba(255,255,255,.8);display: flex;justify-content: center;align-items: center">
         <Loading></Loading>
       </div>
       </div>
+   
     </div>
 </template>
 
 <script>
+  import LoadingImg from '../../public/loadingImg' 
   import Loading from '../../public/Loading'
   import Head from '../../public/head'
   export default {
@@ -141,7 +106,8 @@
     },
     components:{
       Head,
-      Loading
+      Loading,
+      LoadingImg
     },
     methods:{
       goBack(){
@@ -155,7 +121,7 @@
           for(let i =0;i< this.house.house.length;i++){
             a.push({oh_id:this.house.house[i].oh_id,num:this.house.house[i].num - this.house.house[i].refund_num})
           }
-          this.$http.post(this.api + '/RefundS',{
+          this.$http.post(this.api + '/RefundSTwo',{
             token: localStorage.getItem('token'),
             order_id: this.house.order_id,
             person_num: this.house.num - this.house.refund_num,
@@ -206,14 +172,17 @@
       },
       getOrder(){
         this.isLoading = true
-        this.$http.post(this.api + '/OrderD',{
+        this.$http.post(this.api + '/OrderDTwo',{
           token: localStorage.getItem('token'),
           order_id: this.order_id,
+          verson:2.0
         })
           .then(res=>{
             if(res.data.code == 1){
+              console.log(res)
               this.house = res.data.data
               this.isLoading = false
+          
             }else if(res.data.code == 3){
               this.$http.post(this.api + '/home/index/token')
                 .then(res=>{
@@ -237,4 +206,12 @@
 </script>
 
 <style scoped>
+.marginT{
+  margin-top: 32px;
+}
+.lineS{
+  margin: 32px 0;
+	border:none;
+	border-top:1px solid #DFE1E4;
+}
 </style>

@@ -1,21 +1,25 @@
 <template>
   <div >
     <!-- 故事页面评论-->
-    <div v-if="type=='2'" style="display:flex;justify-content: space-between;">
-      <div style="display:flex;justify-content:flex-start">
+    <div v-if="type=='2'" >
+      <div class="flexStart" style="font-size:12px;">
         <img @click="toPerson" :src="imgUrl" width="48" height="48" style="border-radius:50%">
-        <div  style="text-align:left;line-height:25px;margin-left:20px;color:#008489"><span >{{name}}</span><br><span>{{time}}</span>
-        </div>
-      </div>
-      <div  style="margin: 10px 0;font-size:14px;"><span style="cursor: pointer" :style="{color:is_report?'#008489':'#000'}" v-show="!isOwer"  @click="openInform">{{is_report? '已举报':'举报'}}·</span><span style="margin: 0 0;cursor: pointer"  @click="talk" v-if="isLogin == true">{{isOwer? '删除':'回复'}}·</span><i class="iconfont icon-zan" style="width:16px;height:16px;" @click="parise" :style="{'color':is_praise?'#008489':'#000'}"></i>{{parseNum}}</div>
-    </div>
-    <div v-if="type=='2'" style="text-align:left;margin:10px 0;">
-      <span>{{mess}}</span>
-      <div v-if="image.length" style="display: flex;flex-wrap: wrap;margin-top:20px;">
-        <div v-for="(item,index) in image" @mouseover="lookImg(item,index)" @mouseleave="leaveImg(item,index)"  style="width:200px;height:150px;margin-right:10px;position: relative;margin-bottom:10px;">
-          <LoadingImage type="3" :src="item.domain + item.image_url" style="width:200px;height:150px;"></LoadingImage>
-          <div v-if="imgIndex == index" style="position: absolute;top:0;left:0;right:0;bottom:0;display: flex;justify-content: center;align-items: center;background-color: rgba(0,0,0,.5);z-index:999;color:#fff;font-size:20px;">
-            <i style="cursor: pointer" class="el-icon-search" @click="lookImage(item,index)"></i>
+        <div style="width:100%;margin-left:20px;">
+          <div class="flexBetween">
+            <div  style="text-align:left;line-height:25px;color:#000"><span >{{name}}</span><br><span>{{time}}</span>
+            </div>
+            <div  style="margin: 10px 0;font-size:12px;color:#8A8F95"><span class="marginRight" style="cursor: pointer" :style="{color:is_report?'#14c5ca':'#8A8F95'}" v-show="!isOwer"  @click="openInform">{{is_report? '已举报':'举报'}}</span><span class="marginRight" style="cursor: pointer"  @click="talk" v-if="isLogin == true">{{isOwer? '删除':'回复'}}</span> <span @click="parise" style="cursor:pointer" :style="{'color':is_praise?'#14c5ca':'#8A8F95'}">赞{{parseNum}}<i class="el-icon-caret-top"></i></span></div>
+          </div>
+          <div class="marginBottom">
+            <span>{{mess}}</span>
+            <div v-if="image.length" style="display: flex;flex-wrap: wrap;margin-top:20px;">
+              <div v-for="(item,index) in image" @mouseover="lookImg(item,index)" @mouseleave="leaveImg(item,index)"  style="width:200px;height:150px;margin-right:10px;position: relative;margin-bottom:10px;">
+                <LoadingImage type="3" :src="item.domain + item.image_url" style="width:200px;height:150px;"></LoadingImage>
+                <div v-if="imgIndex == index" style="position: absolute;top:0;left:0;right:0;bottom:0;display: flex;justify-content: center;align-items: center;background-color: rgba(0,0,0,.5);z-index:999;color:#fff;font-size:20px;">
+                  <i style="cursor: pointer" class="el-icon-search" @click="lookImage(item,index)"></i>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -93,7 +97,7 @@
 
     <!--评论-->
     <div v-if="type=='discuss'" v-show="isLogin"  style="margin:20px 0;" :style="{height:height,overflow:overflow}">
-      <div style="text-align:left;display: flex;justify-content: flex-start;padding-left:20px">
+      <div style="text-align:left;display: flex;justify-content: flex-start">
         <div style="padding-top:10px;">
           <img :src="imgUrl?imgUrl:'../../static/img/static/user.png'" height="48px" width="48px" style="border-radius: 50%;">
         </div>
@@ -202,7 +206,6 @@
         totalk(){
           this.$emit('totalk')
         },
-
       }
     }
 </script>

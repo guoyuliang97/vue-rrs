@@ -88,16 +88,16 @@
           this.$router.go(-1)
           Bus.$emit('onLogin',res)
         },
-        getUser(){
-          this.$http.post(this.api + '/home/User/get_user',{
-            token: localStorage.getItem('token')
-          })
-            .then(res=>{
-              if(res.data.code == 1){
-                this.$router.push('/')
-              }
-            })
-        },
+        // getUser(){
+        //   this.$http.post(this.api + '/home/User/get_user',{
+        //     token: localStorage.getItem('token')
+        //   })
+        //     .then(res=>{
+        //       if(res.data.code == 1){
+        //         this.$router.push('/')
+        //       }
+        //     })
+        // },
       },
       created(){
           if(this.$route.query.information == '2'){
@@ -109,7 +109,7 @@
           }
       },
       mounted(){
-          this.getUser()
+          // this.getUser()
       },
     }
 </script>

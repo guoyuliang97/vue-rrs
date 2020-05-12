@@ -1,79 +1,111 @@
 <template>
-    <div v-if="orderInformation" style="text-align: left">
-      <div style="background-color: #fff;padding:20px;">
+    <div v-if="orderInformation" style="text-align: left;font-weight:bold;">
+      <div style="background-color: #fff;padding:20px;font-size:14px;">
         <div>
           <el-button icon="el-icon-arrow-left" @click="goBack" circle></el-button>
         </div>
-        <div style="text-align: center;padding:30px 0">
+        <div style="text-align: center;padding:30px 0;font-size:16px;">
           <div v-if="orderInformation.type == 0">
-            <p v-if="orderInformation.audit == 0">您的订单正在退款申请中</p>
-            <p v-if="orderInformation.audit == 1">您的订单已退款成功</p>
-            <p v-if="orderInformation.audit == 1" style="color:red">(退款原因：{{orderInformation.reason}})</p>
-            <p v-if="orderInformation.audit == 2">您的订单已被拒绝退款</p>
-            <p v-if="orderInformation.audit == 2" style="color:red">(拒绝原因:{{orderInformation.refuse_reason}})</p>
+            <p v-if="orderInformation.audit == 0" class="fontweight">您的订单正在退款申请中</p>
+            <p v-if="orderInformation.audit == 1" class="fontweight"><span><i class="el-icon-success" style="color:#14C5CA;font-size:20px;"></i>&nbsp;</span>您的订单已退款成功</p>
+            <!-- <p v-if="orderInformation.audit == 1"  style="color:red;font-size:14px;margin-top:10px;">(退款原因：{{orderInformation.refund_reason}})</p> -->
+            <p v-if="orderInformation.audit == 2" class="fontweight" ><span><i class="el-icon-warning" style="color:#DC4242;font-size:20px;"></i>&nbsp;</span>您的订单已被拒绝退款</p>
+            <p v-if="orderInformation.audit == 2" style="color:red;font-size:14px;margin-top: 10px;">(拒绝原因:{{orderInformation.refund_reason}})</p>
+            <p v-if="orderInformation.audit == 1" class="mainColor contentTitle" style="background-color: #fff;text-align:center;margin-top:10px">（退款金额已原路退回，请注意查收）</p>
+
           </div>
           <div v-if="orderInformation.type == 1">
             <p>您的订单已被策划人退款</p>
-            <p  style="color:red">(退款原因：{{orderInformation.reason}})</p>
+            <p  style="color:red">(退款原因：{{orderInformation.refund_reason}})</p>
           </div>
         </div>
-      </div>
-      <div v-if="orderInformation.person" style="margin:10px 0;background-color: #fff;padding:0 10px;font-size:14px;">
-        <p style="border-bottom:1px solid #eee;padding:10px 0;">退款游客</p>
-        <div v-for="(item,index) in orderInformation.person" :key="index" style="line-height:30px;font-size:14px;border-bottom:1px solid #eee;display: flex;justify-content: flex-start">
-          <div style="width:50%"><i class="iconfont icon-wo"></i><span style="margin-left:20px;font-size:13px;">{{item.name}}&nbsp;&nbsp;{{item.mobile}}</span></div>
-          <div><i class="iconfont icon-credentials_icon"></i><span style="margin-left:20px;font-size:13px;">{{item.idcard}}</span></div>
-        </div>
-      </div>
-      <div style="background-color: #fff;padding:0 10px;font-size:14px;">
-        <p style="border-bottom:1px solid #eee;padding:10px 0;">体验信息</p>
-        <div style="display: flex;justify-content: flex-start;margin:10px 0;">
-          <div>
-            <LoadingImg type="3" :src="orderInformation.cover_image?orderInformation.cover.domain+ orderInformation.cover.image_url:''" style="width:300px"></LoadingImg>
+        <p class="contentTitle fontweight">订单详情<span v-if="orderInformation.is_refund == 1" style="color:red">(有退款)</span></p>
+        <div >
+          <div class="flexStart marginBottom">
+            <LoadingImg type="3" :src="orderInformation.cover.domain+ orderInformation.cover.image_url" style="width:100px;height:70px;overflow: hidden"></LoadingImg>
+             <p class="elips"><b>{{orderInformation.title}}</b></p>
           </div>
-          <div style="margin-left:20px;line-height:25px;">
-            <p class="elips"><b>{{orderInformation.title}}</b></p>
-            <p>类型：<span v-for="item in orderInformation.kind"><span>{{item.kind_name}}/</span></span></p>
-            <p>时长：{{orderInformation.total_time}}</p>
-            <p>开始：{{orderInformation.activ_begin_time}}</p>
-            <p>结束：{{orderInformation.activ_end_time}}</p>
-            <p>地点：{{orderInformation.country}}&nbsp;&nbsp;{{orderInformation.city}}</p>
-            <p>退款人数：{{orderInformation.person_num}}</p>
+          <div style="line-height:30px;">
+           <p>参与人数：{{orderInformation.num}} &nbsp;人</p>
+            <p>体验地点：{{orderInformation.place}}</p>
+            <p>体验时长：{{orderInformation.total_time}}</p>
+            <p>体验时间：{{orderInformation.activ_begin_time}}—{{orderInformation.activ_end_time}}</p>
           </div>
         </div>
-      </div>
-      <div v-if="orderInformation.house.length" style="margin:10px 0;padding:0 10px;font-size:14px;background-color: #fff;">
-        <p style="border-bottom:1px solid #eee;padding:10px 0;display: flex;justify-content: space-between"><span>退款住宿</span><span>退款数量</span><span>住宿单价</span><span>退款总价</span></p>
-        <div v-for="(item,index) in orderInformation.house">
-          <p style="padding:10px 0;display: flex;justify-content: space-between">
-            <span>{{item.flag == 1? '露营':item.flag == 2? '民宿':'酒店'}}</span>
-            <span><i class="el-icon-close"></i>{{item.house_num}}</span>
-            <span>￥&nbsp;{{item.union_price}}</span>
-            <span>￥&nbsp;{{item.house_price}}</span>
-          </p>
-        </div>
-      </div>
-      <div style="margin:10px 0;padding:0 10px;font-size:14px;background-color: #fff;">
-        <p style="border-bottom:1px solid #eee;padding:10px 0;">价格信息</p>
-        <div style="display: flex;justify-content: space-between;padding:10px 0;border-bottom:1px solid #eee;">
-          <span>活动价格：</span><span><span>￥</span>&nbsp;&nbsp;{{orderInformation.act_union_price}}</span>
-        </div>
-        <div style="display: flex;justify-content: space-between;padding:10px 0;border-bottom:1px solid #eee;">
-          <span>支付总额：</span><span><span>￥</span>&nbsp;&nbsp;{{orderInformation.order_total_price}}</span>
-        </div>
-        <div style="display: flex;justify-content: space-between;padding:10px 0;border-bottom:1px solid #eee;">
-          <span>退款总额：</span><span><span>￥</span>&nbsp;+&nbsp;{{orderInformation.total_price}}</span>
-        </div>
-        <div style="display: flex;justify-content: space-between;padding:10px 0;border-bottom:1px solid #eee;">
-          <span>退款基金：</span><span><span>APY</span>&nbsp;+&nbsp;{{orderInformation.balance}}</span>
-        </div>
-      </div>
-      <div style="margin:10px 0;padding:0 10px;font-size:14px;background-color: #fff;">
-        <p style="border-bottom:1px solid #eee;padding:10px 0;">订单信息</p>
-        <div style="padding:20px 10px;text-align: right">
-       <!--   <el-button type="primary"  plain>取消退款</el-button>-->
-          <el-button type="primary" plain>联系客服</el-button>
-        </div>
+         <hr class="line">
+         <div class="flexStart">
+           <div>价格详情：</div>
+           <div>
+             <div class="marginTop" v-for="(item,index) in orderInformation.detail">
+               <div v-if="item.type == '1'||item.type == '2'">
+                {{item.type =='1'?'亲子':item.name}}<span class="marginLeft"></span>{{item.adult}}成人<span v-if="item.type == '1'">{{item.kids}}儿童</span>	<span class="marginLeft"></span>¥{{item.price}}
+               </div>
+               <div v-if="item.type == '0'">
+                <div class="marginTop">标准<span class="marginLeft"></span>{{item.adult}}人<span class="marginLeft"></span>¥{{item.adult_price}}</div>
+                <div >儿童<span class="marginLeft"></span>{{item.kids}}人<span class="marginLeft"></span>¥{{item.kids_price}}</div>	
+               </div>
+              </div>
+           </div>
+         </div>
+         <div class="flexStart">
+           <div>住宿信息：</div>
+           <div>
+             <p class="marginTop" v-for="(item,index) in orderInformation.house"> 
+              <span>{{item.title}}</span>
+              <span class="marginLeft"></span>
+              <span>房数<i class="el-icon-close"></i>{{item.num}}</span>
+              <span class="marginLeft"></span>
+              <span>总额￥&nbsp;{{item.price}}</span>
+            </p>
+           </div>
+         </div>
+         <hr class="line">
+          <div style="line-height:30px;">
+            <p>退款方式：{{orderInformation.flag?'全款':'非全款'}}</p>
+            <div class="flexStart">
+              <div>退款人数：</div>
+              <div>
+                <div  v-for="(item,index) in orderInformation.refund_detail">
+                  <div v-if="item.type == '0'">
+                    <span >标准{{item.adult}}人</span><span class="marginLeft"></span>
+                    <span >儿童{{item.kids}}人<span class="marginLeft"></span>
+                    ¥{{item.price}}</span>	
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flexStart">
+              <div>退订套餐：</div>
+              <div>
+                <div  v-for="(item,index) in orderInformation.refund_detail">
+                  <div v-if="item.type == '1'||item.type == '2'">
+                    {{item.type =='1'?'亲子':item.name}}<span class="marginLeft"></span>{{item.adult}}成人<span v-if="item.type == '1'">{{item.kids}}儿童</span>	<span class="marginLeft"></span>¥{{item.price}}
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            <div class="flexStart">
+              <div>退订住宿：</div>
+              <div>
+                <div  v-for="(item,index) in orderInformation.refund_detail">
+                  <div v-if="item.type == '3'">
+                    {{item.name}}<span class="marginLeft"></span>房数X{{item.house_num}}<span class="marginLeft"></span>¥{{item.price}}
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+         <hr class="line">
+         <div style="line-height:30px;">
+           <p>订单编号：{{orderInformation.order_no}}</p>
+           <p>退款总额：<span style="color:red">￥{{orderInformation.refund_total_price}}</span></p>
+         </div>
+          <hr class="line">
+          <div class="flexEnd">
+            <div class="mainButton" @click="sendDis">提交纠纷</div>
+          </div>
       </div>
     </div>
 </template>
@@ -86,28 +118,37 @@ export default {
           api: this.GLOBAL.baseURL,
           refundId:'',
           orderInformation:'',
+          order_id:''
         }
     },
   components:{
     LoadingImg
   },
   methods:{
-      getRefund(){2
-        this.$http.post(this.api + '/RefundD',{
+      sendDis(){
+      this.$router.push({
+            path:'/dispute',
+            query:{
+              information: this.order_id
+            }
+          })
+      },
+      getRefund(){
+        this.$http.post(this.api + '/RefundDTwo',{
           token: localStorage.getItem('token'),
-          refund_id: this.refundId
+          refund_id: this.refundId,
+          verson:2.0
         })
           .then(res=>{
             if(res.data.code == 1){
               this.orderInformation = res.data.data
+              this.order_id = res.data.data.order_id
               console.log(this.orderInformation)
             }else if(res.data.code == 3){
-              this.$http.post(this.api + '/home/index/token')
-                .then(res=>{
-                  localStorage.setItem('token',res.data.data)
-                  this.getRefund()
-                })
-            }else{
+            
+                this.getRefund()
+             
+            }else if(res.data.code == 0){
               alert(res.data.msg)
             }
           })
@@ -126,5 +167,11 @@ export default {
 }
 </script>
 <style scoped>
-
+.elips{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 70px;
+  margin-left:15px;
+}
 </style>

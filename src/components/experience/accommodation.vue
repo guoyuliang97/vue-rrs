@@ -126,7 +126,7 @@
         </div>
       </div>
       <div>
-        <el-button type="primary" style="margin:20px 0;" plain @click="changeRouter">{{complete? '保存':'下一步'}}</el-button>
+        <el-button type="primary" style="margin:20px 0;" plain @click="changeRouter">{{complete == '1'? '保存':'下一步'}}</el-button>
       </div>
       <div v-if="isLoading" style="position: fixed;top:0;left:0;right:0;bottom:0;z-index:990;background-color: rgba(255,255,255,.8);display: flex;justify-content: center;align-items: center">
         <div>
@@ -712,7 +712,7 @@
             })
               .then(res=>{
                 if(res.data.code == 1){
-                  if(!this.complete){
+                  if(this.complete == '0'){
                     this.$emit('changeRouter',{id:13,router:'attation',information: this.active_id,complete: this.complete})
                   }else{
                     this.$message({

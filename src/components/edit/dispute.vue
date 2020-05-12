@@ -3,7 +3,7 @@
     <div  style="background-color: #fff;padding:20px;">
       <div style="display: flex;justify-content: space-between">
         <div style="line-height:40px;font-size:14px;">
-          <h4>已支付订单>退款申请</h4>
+          <h4>已支付订单>纠纷申请</h4>
         </div>
         <el-button icon="el-icon-arrow-left" @click="goBack" circle></el-button>
       </div>
@@ -79,7 +79,9 @@
         value:'',
         reason:'',
         reasonList:[],
-        oterresen:''
+        oterresen:'',
+        order_id:'',
+        api: this.GLOBAL.baseURL
       }
     },
     methods:{
@@ -94,7 +96,19 @@
           order_id: this.order_id,
           content: this.oterresen
         })
+        .then(res=>{
+            if(res.data.code == 1){
+              this.index = 2
+            }else if(res.data.code == 3){
+              this.sendDispte()
+            }else if(res.data.code == 0){
+              this.$message({type:'error',messages:res.data.msg})
+            }
+          })
       },
+    },
+    created(){
+      this.order_id = this.$route.query.information
     }
   }
 </script>

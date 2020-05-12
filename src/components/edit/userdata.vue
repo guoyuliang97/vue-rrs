@@ -62,8 +62,8 @@
               </div>
               <el-button v-if="who" type="text" @click="openInform">举报此用户</el-button>
               <el-button v-if="!who" type="text" @click="userData = true">点此编辑</el-button>
-              <el-button type="text" @click=""><span style="background-color:#ffb400;color:#fff;padding:5px;border-radius:5px;"><b>{{playTotal + comAll}}</b></span>&nbsp;&nbsp;条评价</el-button>
-              <el-button type="text" @click="" v-show="dataForm.idcard_f || dataForm.idcard_z"><img src="../../../static/img/story/ok.jpg" width="32" height="32" style="position:absolute;margin-top:-10px;"><span style="margin-left:40px;">已验证</span></el-button>
+              <span class="marginLeft"> <span style="background-color:#ffb400;color:#fff;padding:5px;border-radius:5px;"><b>{{playTotal + comAll}}</b></span>&nbsp;&nbsp;条评价</span> 
+              <span  v-show="dataForm.idcard_f || dataForm.idcard_z"><img src="../../../static/img/story/ok.jpg" width="32" height="32" style="position:absolute;margin-top:-10px;"><span style="margin-left:40px;">已验证</span></span>
             </div>
             <div v-show="wishList.length">
               <h2>{{userId?'Ta':'我'}}的心愿单<span style="font-weight:normal;font-size:15px;">{{'('+ wishList.length+')'}}</span></h2>
