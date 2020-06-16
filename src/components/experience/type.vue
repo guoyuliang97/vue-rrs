@@ -40,10 +40,10 @@
 		},
 		methods:{
 			changeRouter(){
-       /* if(!this.replay.length >= this.questionList.length){
-          this.$message({type:'info',message:'问答请填写完整'})
-        }else{*/
-          if(this.active_id){
+       if(!this.typeVal.length){
+          this.$message({type:'info',message:'请选择类别'})
+        }else{
+      
             this.$http.post(this.api + '/home/Activity/save_activity',{
               token: localStorage.getItem('token'),
               activity_id: this.active_id,
@@ -53,7 +53,7 @@
             })
               .then(res=>{
                 if(res.data.code == 1){
-                  if(this.complete == '0'){
+                  if(!this.complete){
                      this.$emit('changeRouter',{id:3,router:"Introduce",information: this.active_id,complete:this.complete})
                   }else{
                     this.$message({
@@ -67,25 +67,8 @@
                   this.$alert(res.data.msg)
                 }
               })
-          }else{
-            this.$http.post(this.api + '/home/Activity/save_activity',{
-              token: localStorage.getItem('token'),
-              question: this.replay,
-              kind_id: this.typeVal[this.typeVal.length-1],
-              step:1
-            })
-              .then(res=>{
-                if(res.data.code == 1){
-                  this.$emit('saveId',  res.data.data)
-                  this.$emit('changeRouter',{id:3,router:"Introduce",information:  res.data.data})
-                }else if(res.data.code == 3){
-                  this.changeRouter()
-                }else if(res.data.code == 0){
-                  this.$alert(res.data.msg)
-                }
-              })
-          }
-  /*      }*/
+       
+        }
 			},
       answerAdd(item,index){
 			  if(!this.replay[index]){
@@ -160,6 +143,7 @@
     mounted() {
 		  let _this = this
       _this.complete = this.$route.query.complete
+      console.log(_this.complete)
       _this.getKind()
       _this.getQuestion()
       if(this.active_id){

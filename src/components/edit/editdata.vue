@@ -38,7 +38,7 @@
           </el-form-item>
 				   <el-form-item label="电子邮件:" style="margin-top: -5px;"> 
 				   <el-input  v-model="dataForm.email" placeholder="绑定电子邮件" :disabled="notEmail == 0? true:false"></el-input><span class="alter" @click="toReturn" style="color:red"><i class="el-icon-edit"></i></span>
-					<p class="data_smalltxt">我们不会向其他人人游用户透露您的个人邮箱地址。<span style="cursor: pointer;color: #008489;" @click="openTerms">了解更多</span>。</p>
+					<p class="data_smalltxt">我们不会向其他人人游用户透露您的个人邮箱地址。<span style="cursor: pointer;color: #14C5CA;" @click="openTerms">了解更多</span>。</p>
 				   </el-form-item>
 				   <el-form-item label="电话号码:" style="margin-top: -5px;"> 
 				   <el-input v-model="dataForm.mobile" placeholder="绑定电话号码" :disabled="notPhone == 0? true:false"></el-input><span class="alter" @click="toReturn" style="color:red"><i class="el-icon-edit"></i></span>
@@ -123,7 +123,7 @@
             <div style="text-align: right" v-if="contactForm.contact != ''">
               <el-button type="primary" @click="deleteContact">删除</el-button>
             </div>
-						<p v-if="dataForm.contact==''" style="color: #008489;margin-top: -5px;text-align: left;"><span style="cursor: pointer;" @click="isContact=true"><i class="el-icon-plus"></i> 添加紧急联系人</span></p>
+						<p v-if="dataForm.contact==''" style="color: #14C5CA;margin-top: -5px;text-align: left;"><span style="cursor: pointer;" @click="isContact=true"><i class="el-icon-plus"></i> 添加紧急联系人</span></p>
 						<p class="data_smalltxt">请提供一个您信任的联系人，如果出现紧急情况，我们的客户体验团队可以通知该联系人。</p>
 					</el-form-item>
 
@@ -134,7 +134,7 @@
             <div style="text-align: right" v-if="addressForm.deeladress.length">
               <el-button type="primary" @click="deleteSome">删除</el-button>
             </div>
-						<p v-if="dataForm.buyAddress==''" style="color: #008489;margin-top: -5px;text-align: left;"><span style="cursor: pointer;" @click="isAddress=true"><i class="el-icon-plus"></i> 添加收货地址</span></p>
+						<p v-if="dataForm.buyAddress==''" style="color: #14C5CA;margin-top: -5px;text-align: left;"><span style="cursor: pointer;" @click="isAddress=true"><i class="el-icon-plus"></i> 添加收货地址</span></p>
 					</el-form-item>
 				</el-form>
 			</div>

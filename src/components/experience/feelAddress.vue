@@ -124,7 +124,7 @@
           }else if(!this.goPlace){
             this.$message({type:'info',message:'请完善体验前往哪些地方'})
           }else{
-            if( this.active_id){
+        
               this.$http.post(this.api + '/home/Activity/save_activity',{
                 token: localStorage.getItem('token'),
                 activity_id: this.active_id,
@@ -145,7 +145,7 @@
               })
                 .then(res=>{
                   if(res.data.code == 1){
-                    if(this.complete == '0'){
+                    if(!this.complete){
                       this.$emit('changeRouter',{id:11,router:"activeTime",information: this.active_id,complete: this.complete})
                     }else{
                       this.$message({
@@ -159,35 +159,7 @@
                     alert(res.data.msg)
                   }
                 })
-            }else{
-              this.$http.post(this.api + '/home/Activity/save_activity',{
-                token: localStorage.getItem('token'),
-                country_id: this.country[0],
-                country: this.country[1],
-                province_id: this.province[0],
-                province: this.province[1],
-                city_id: this.city[0],
-                city: this.city[1],
-                region_id: this.xian[0],
-                region: this.xian[1],
-                set_address: this.aboutMe,
-                go_place: this.goPlace,
-            /*    question: this.replay,*/
-                set_address_lng:this.point[0],
-                set_address_lat:this.point[1],
-                step: 10
-              })
-                .then(res=>{
-                  if(res.data.code == 1){
-                    this.$emit('saveId',res.data.data)
-                    this.$emit('changeRouter',{id:11,router:"activeTime",information: res.data.data})
-                  }else if(res.data.code == 3){
-                    this.changeRouter()
-                  }else if(res.data.code == 0){
-                    alert(res.data.msg)
-                  }
-                })
-            }
+        
           }
         }else{
           if(!this.city[1]){
@@ -197,7 +169,7 @@
           }else if(!this.goPlace){
             this.$message({type:'info',message:'请完善体验前往哪些地方'})
           }else{
-            if( this.active_id){
+        
               this.$http.post(this.api + '/home/Activity/save_activity',{
                 token: localStorage.getItem('token'),
                 activity_id:  this.active_id,
@@ -232,35 +204,7 @@
                     alert(res.data.msg)
                   }
                 })
-            }else{
-              this.$http.post(this.api + '/home/Activity/save_activity',{
-                token: localStorage.getItem('token'),
-                country_id: this.country[0],
-                country: this.country[1],
-                province_id: this.province[0],
-                province: this.province[1],
-                city_id: this.city[0],
-                city: this.city[1],
-                region_id: this.xian[0],
-                region: this.xian[1],
-                set_address: this.aboutMe,
-                go_place: this.goPlace,
-           /*     question: this.replay,*/
-                set_address_lng:this.point[0],
-                set_address_lat:this.point[1],
-                step: 10
-              })
-                .then(res=>{
-                  if(res.data.code == 1){
-                    this.$emit('saveId',res.data.data)
-                    this.$emit('changeRouter',{id:11,router:"activeTime",information: res.data.data})
-                  }else if(res.data.code == 3){
-                    this.changeRouter()
-                  }else if(res.data.code == 0){
-                    alert(res.data.msg)
-                  }
-                })
-            }
+        
           }
         }
 

@@ -2,7 +2,7 @@
     <div>
       <img v-if="type == '1'" :src="imgUrl"  class="img2" >
       <img v-if="type == '2'" :src="imgUrl" @click="toPublish" class="img2">
-      <img v-if="type == '3'" :src="imgUrl" @click="toPublish" class="img2">
+      <img v-if="type == '3'" :src="imgUrl" @click="toPublish" class="img3">
       <img v-if="type == '4'" :src="imgUrl" @click="toPublish" style="height:100%;width:100%;border-radius: 10px">
       <div v-if="type == '5'" :style="{background: 'url('+imgUrl+')'}" ></div>
       <img v-if="type == '6'" :src="imgUrl" @click="toPublish" class="user">
@@ -81,5 +81,8 @@
   height:100%;
   border-radius: 50%;
   object-fit: cover;
+}
+.img3{
+  height: 100%;
 }
 </style>

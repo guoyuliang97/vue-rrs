@@ -4,15 +4,15 @@
 		<div class="dialog_con animated fadeIn" :style="{width:width+'px',height:height+'px',marginTop:-height/2+'px',marginLeft:-width/2+'px'}">
 			<div class="dialog_container">
 				<div class="login_top">
-					<p v-show="model!='4'&&model!='5'&&model!='6'" class="fontweight login_title">{{model=='0'||model=='7'||model == '8'?"登录":"注册"}}人人游</p>
-					<p v-show="model=='4'||model=='5'||model=='6'" class="fontweight login_title">重置密码</p>
+					<p v-show="model!='4'&&model!='5'&&model!='6'" class="fontweight login_title">{{model=='0'||model=='7'||model == '8'?allText.login[0][Lan]:allText.click[3][Lan]}}</p>
+					<p v-show="model=='4'||model=='5'||model=='6'" class="fontweight login_title">{{allText.login[1][Lan]}}</p>
 					<p></p>
 					<p class="login_del" @click="delDialog"><i class="el-icon-circle-close-outline"></i></p>
 				</div>
 				<!--注册-->
-				<p class="login_txt" v-show="model!='0'&&model!='7'&&model!='8'">{{model=='4'||model=='5'||model=='6'?'想起密码?':model=="1"||model=="2"||model=="3"?'已有账号？':""}} <span class="fontweight" @click="loginView">登录</span></p>
-				<div class="register_btns" v-show="model=='1'" style="margin-top: 30px;" @click="telRegister">手机号注册</div>
-				<div class="register_btns" v-show="model=='1'" @click="toEmail" style="background-color: #008489;">邮箱注册</div>
+				<p class="login_txt" v-show="model!='0'&&model!='7'&&model!='8'">{{model=='4'||model=='5'||model=='6'?allText.login[9][Lan]:model=="1"||model=="2"||model=="3"?allText.login[8][Lan]:""}} <span class="fontweight" @click="loginView">{{allText.click[0][Lan]}}</span></p>
+				<div class="register_btns" v-show="model=='1'" style="margin-top: 30px;" @click="telRegister">{{allText.login[6][Lan]}}</div>
+				<div class="register_btns" v-show="model=='1'" @click="toEmail" style="background-color: #008489;">{{allText.login[7][Lan]}}</div>
 				<!--手机号注册-->
 				<form class="tel_register" v-show="model=='2'" :model="tel_register">
           <div style="display:flex;justify-content: flex-start">
@@ -20,23 +20,23 @@
               <el-option  v-for="item in countryNumber" :key="item.value" :label="item.label" :value="item.label">
               </el-option>
             </el-select>
-            <input class="login_input" style="margin-left:10px"  placeholder="手机号" v-model="tel_register.mobile" @blur="verifyPhone"></input>
+            <input class="login_input" style="margin-left:10px"  :placeholder="allText.login[2][Lan]" v-model="tel_register.mobile" @blur="verifyPhone"></input>
           </div>
 					<div class="tel_check">
-						<p><input type="text" placeholder="验证码" v-model="tel_register.sms_code" /></p>
+						<p><input type="text" :placeholder="allText.login[5][Lan]" v-model="tel_register.sms_code" /></p>
 						<el-button type="primary" style="margin-left:10px;font-size:12px;" :disabled="tel_register.fobid == 1? true:false" @click="sendSms">{{tel_register.sms}}</el-button>
 					</div>
           <div style="display: flex;justify-content: space-between">
-            <input class="login_input" placeholder="设置密码" type="password" v-model="tel_register.password"></input>
-            <input style="margin-left:10px" class="login_input" type="password"  placeholder="重复密码" @keydown="listenSend" v-model="tel_register.repassword"></input>
+            <input class="login_input" :placeholder="allText.login[3][Lan]" type="password" v-model="tel_register.password"></input>
+            <input style="margin-left:10px" class="login_input" type="password"  :placeholder="allText.login[4][Lan]" @keydown="listenSend" v-model="tel_register.repassword"></input>
           </div>
       <el-select  @change="v = true" style="width:321.6px;margin-top: 15px;" v-model="tel_register.flag" clearable placeholder="请选择类型">
         <el-option   v-for="item in options"  :key="item.value" :label="item.label" :value="item.value"></el-option></el-select>
-					<el-button  type="primary" style="width:100%;margin-top:20px;" @click="telSend">确定</el-button>
+					<el-button  type="primary" style="width:100%;margin-top:20px;" @click="telSend">{{allText.click[3][Lan]}}</el-button>
 				</form>
 				<!--忘记密码首页-->
-				<div class="register_btns" style="margin-top: 30px;" v-show="model=='4'" @click="telReset">手机号重置密码</div>
-				<div class="register_btns" style="background-color: #008489;" v-show="model=='4'" @click="emailReset">邮箱重置密码</div>
+				<div class="register_btns" style="margin-top: 30px;" v-show="model=='4'" @click="telReset">{{allText.click[7][Lan]}}</div>
+				<div class="register_btns" style="background-color: #008489;" v-show="model=='4'" @click="emailReset">{{allText.click[8][Lan]}}</div>
 				<!--手机号重置-->
 				<form v-show="model=='5'" :model="resetPhone" >
           <div style="display: flex;justify-content: flex-start" >
@@ -44,42 +44,42 @@
               <el-option  v-for="item in countryNumber" :key="item.value" :label="item.label" :value="item.label">
               </el-option>
             </el-select>
-            <input class="login_input" style="margin-top:30px;"  placeholder="手机号码" v-model="resetPhone.lmobile"></input>
+            <input class="login_input" style="margin-top:30px;"  :placeholder="allText.login[2][Lan]" v-model="resetPhone.lmobile"></input>
           </div>
 					<div class="tel_check">
-						<p><input type="text" placeholder="验证码" v-model="resetPhone.sms_code" /></p>
+						<p><input type="text" :placeholder="allText.login[5][Lan]" v-model="resetPhone.sms_code" /></p>
 						<el-button type="primary" style="margin-left:10px;" @click="resetSendSmS" :disabled="resetPhone.fobid == 1? true:false">{{resetPhone.sms}}</el-button>
 					</div>
-					<input class="login_input" type="password" v-model="resetPhone.password" placeholder="新密码"></input>
-					<div class="register_btns" style="background-color: #008489;" @click="resetPhone_login">确定</div>
-					<div class="register_btns" style="background-color: #008489;" @click="emailReset">邮箱重置密码</div>
+					<input class="login_input" type="password" v-model="resetPhone.password" :placeholder="allText.login[3][Lan]"></input>
+					<div class="register_btns" style="background-color: #008489;" @click="resetPhone_login">{{allText.click[0][Lan]}}</div>
+					<div class="register_btns" style="background-color: #008489;" @click="emailReset">{{allText.click[8][Lan]}}</div>
 				</form>
 				<!--邮箱重置-->
 				<form v-show="model=='6'" :model="emailForm">
-          <el-input v-model="emailForm.email" @blur="checkEmailA" placeholder="邮箱地址" style="margin-top:15px;" ></el-input>
+          <el-input v-model="emailForm.email" @blur="checkEmailA" :placeholder="allText.login[10][Lan]" style="margin-top:15px;" ></el-input>
           <div style="display: flex;justify-content: space-between;margin-top:15px;" >
-            <el-input v-model="emailForm.smsEmail"   placeholder="邮箱验证码" ></el-input>
+            <el-input v-model="emailForm.smsEmail"   :placeholder="allText.login[11][Lan]" ></el-input>
             <el-button @click="sendEmail" :disabled="emailForm.forbid?true:false" style="font-size:12px;margin-left:10px;background-color: #008489;color:#fff;width:200px">{{emailForm.sms}}</el-button>
           </div>
-          <el-input style="margin-top:15px;" type="password" v-model="emailForm.emailPass" placeholder="新密码" ></el-input>
-          <el-input style="margin-top:15px;" type="password" v-model="emailForm.emailRePass" placeholder="重复密码" ></el-input>
-          <div class="register_btns" @click="toEmailL" style="background-color: #008489;">确定</div>
-          <div class="register_btns" @click="telReset">手机号重置密码</div>
+          <el-input style="margin-top:15px;" type="password" v-model="emailForm.emailPass" :placeholder="allText.login[3][Lan]" ></el-input>
+          <el-input style="margin-top:15px;" type="password" v-model="emailForm.emailRePass" :placeholder="allText.login[4][Lan]" ></el-input>
+          <div class="register_btns" @click="toEmailL" style="background-color: #008489;">{{allText.click[0][Lan]}}</div>
+          <div class="register_btns" @click="telReset">{{allText.click[7][Lan]}}</div>
 				</form>
 				<!--邮箱注册-->
 				<form class="email_register" :model="email_Login" v-show="model=='3'">
-          <el-input @blur="checkEmail" @keyup.enter.native="tel_email" v-model="email_Login.email_num"  style="margin-top:30px;" placeholder="邮箱地址"></el-input>
+          <el-input @blur="checkEmail" @keyup.enter.native="tel_email" v-model="email_Login.email_num"  style="margin-top:30px;" :placeholder="allText.login[10][Lan]"></el-input>
           <div style="display: flex;justify-content: flex-start;margin-top:10px;">
-            <el-input @keyup.enter.native="tel_email" v-model="email_Login.email_sms"  placeholder="输入验证码" > </el-input> <el-button size="mini" :disabled="email_Login.fobid == 1? true:false" @click="login" style="margin-left:10px;">{{email_Login.sms}}</el-button>
+            <el-input @keyup.enter.native="tel_email" v-model="email_Login.email_sms"  :placeholder="allText.login[11][Lan]" > </el-input> <el-button size="mini" :disabled="email_Login.fobid == 1? true:false" @click="login" style="margin-left:10px;">{{email_Login.sms}}</el-button>
           </div>
           <div style="display: flex;justify-content: flex-start">
-            <el-input type="password" @keyup.enter.native="tel_email" style="margin-top:10px;" v-model="email_Login.email_password" placeholder="设置密码"></el-input>
-            <el-input type="password"  @keyup.enter.native="tel_email" v-model="email_Login.email_Repassword" style="margin-left:10px;margin-top:10px;" placeholder="重复密码"></el-input>
+            <el-input type="password" @keyup.enter.native="tel_email" style="margin-top:10px;" v-model="email_Login.email_password" :placeholder="allText.login[3][Lan]"></el-input>
+            <el-input type="password"  @keyup.enter.native="tel_email" v-model="email_Login.email_Repassword" style="margin-left:10px;margin-top:10px;" :placeholder="allText.login[4][Lan]"></el-input>
           </div>
           <el-select  @change="v = true" style="width:321.6px;margin-top: 15px;" v-model="email_Login.flag" clearable placeholder="请选择类型">
             <el-option   v-for="item in options"  :key="item.value" :label="item.label" :value="item.value"></el-option></el-select>
-			<div class="register_btns" style="background-color: #008489;"> <el-button @click="tel_email" style="background-color: #008489;border:0;color:#000;width:100%;" :disabled='disabledBtn'>确定</el-button></div>
-					<div class="register_btns" @click="toPhone" >手机号注册</div>
+			<div class="register_btns" style="background-color: #008489;"> <el-button @click="tel_email" style="background-color: #008489;border:0;color:#000;width:100%;" :disabled='disabledBtn'>{{allText.click[0][Lan]}}</el-button></div>
+					<div class="register_btns" @click="toPhone" >{{allText.login[6][Lan]}}</div>
 				</form>
 				<!--登录-->
 				<form class="login_con" v-show="model=='0'||model=='7'||model == '8'" :model="tel_onlogin">
@@ -88,36 +88,36 @@
               <el-option  v-for="item in countryNumber" :key="item.value" :label="item.label" :value="item.label">
               </el-option>
             </el-select>
-            <input class="login_input" style="margin-top:30px;"  placeholder="手机号码" v-model="tel_onlogin.lmobile"></input>
+            <input class="login_input" style="margin-top:30px;"  :placeholder="allText.login[2][Lan]" v-model="tel_onlogin.lmobile"></input>
           </div>
-					<input class="login_input" v-show="model!='7'&&model !='8'" type="password" placeholder="密码" @keydown="listenLogin" v-model="tel_onlogin.password"></input>
+					<input class="login_input" v-show="model!='7'&&model !='8'" type="password" :placeholder="allText.login[3][Lan]" @keydown="listenLogin" v-model="tel_onlogin.password"></input>
           <div style="display: flex;justify-content: flex-start" v-show="model=='7'">
             <el-select style="margin-top:30px;margin-right:10px;"  v-model="tel_onlogin.m_code" placeholder="选择区号"  >
               <el-option  v-for="item in countryNumber" :key="item.value" :label="item.label" :value="item.label">
               </el-option>
             </el-select>
-            <input class="login_input" style="margin-top:30px;"  placeholder="手机号码" v-model="tel_onlogin.lmobile"></input>
+            <input class="login_input" style="margin-top:30px;"  :placeholder="allText.login[2][Lan]" v-model="tel_onlogin.lmobile"></input>
           </div>
 					<div class="tel_check" v-show="model=='7'">
-						<input type="text" placeholder="验证码" @keydown="listenLogin" v-model="tel_onlogin.sms_code" />
+						<input type="text" :placeholder="allText.login[5][Lan]" @keydown="listenLogin" v-model="tel_onlogin.sms_code" />
 						<el-button type="primary"  @click="onloginSmS" style="font-size:12px;margin-left:10px;"  :disabled="tel_onlogin.fobid == 1? true:false">{{tel_onlogin.sms}}</el-button>
 					</div>
           <div style="margin-top:15px;"  v-show="model == '8'">
-            <input class="login_input" type="text" @keydown="listenLogin" placeholder="请输入邮箱地址" v-model="tel_onlogin.email" />
-            <input class="login_input" type="password" @keydown="listenLogin" placeholder="请输入登陆密码" v-model="tel_onlogin.emailPassword" />
+            <input class="login_input" type="text" @keydown="listenLogin" :placeholder="allText.login[10][Lan]" v-model="tel_onlogin.email" />
+            <input class="login_input" type="password" @keydown="listenLogin" :placeholder="allText.login[3][Lan]" v-model="tel_onlogin.emailPassword" />
           </div>
-            <el-button class="login_input" style="margin-top:10px;" type="primary" @click="tel_login">登陆</el-button>
+            <el-button class="login_input" style="margin-top:10px;" type="primary" @click="tel_login">{{allText.click[0][Lan]}}</el-button>
 					<div class="login_moredo"> 
-						<div v-show="model!='7'" style="margin-top: 2px;">
-							<el-checkbox v-model="checked">记住我</el-checkbox>
-						</div>
+						<!-- <div v-show="model!='7'" style="margin-top: 2px;">
+							<el-checkbox v-model="checked">{{allText.click[4][Lan]}}</el-checkbox>
+						</div> -->
 						<p></p>
-						<div v-show="model!='7'"><span @click="checkLogin">验证码登录</span> | <span @click="forgetPass">忘记密码</span> | <span @click="registerView">注册</span></div>
-						<div v-show="model=='7'&&model !='8'"><span @click="passLogin">普通密码登录</span></div>
+						<div v-show="model!='7'"><span @click="checkLogin">{{allText.click[1][Lan]}}</span> | <span @click="forgetPass">{{allText.click[2][Lan]}}</span> | <span @click="registerView">{{allText.click[3][Lan]}}</span></div>
+						<div v-show="model=='7'&&model !='8'"><span @click="passLogin">{{allText.click[6][Lan]}}</span></div>
 					</div>
 				</form>
 				<!--底部-->
-        <div v-if="model=='0'||model == '7'||model == '8'" class="other_loginway fontweight">其他登录方式</div>
+        <div v-if="model=='0'||model == '7'||model == '8'" class="other_loginway fontweight">{{allText.click[5][Lan]}}</div>
         <div class="three_loginway" v-show="model=='0'||model == '7'||model == '8'">
 					<p><img @click="toWeixin" src="../../static/img/volunteers/wechat.png"/></p>
 					<a target="_blank"><img src="../../static/img/static/qq.png" width="32px" height="32px" @click="toLogin()" /></a>
@@ -200,9 +200,126 @@
           forbid:1,
           sms:'发送验证码',
         },
-        topId:''
+        topId:'',
+        allText:{
+          login:[
+            {
+              'zh':'登录人人耍',
+              'en':'login Allptp',
+              'ja':'Allptpにログイン'
+            },
+            {
+              'zh':'重置密码',
+              'en':'reset Password',
+              'ja':'パスワードを再設定する'
+            },
+            {
+              'zh':'手机号码',
+              'en':'tel',
+              'ja':'電話番号'
+            },
+            {
+              'zh':'密码',
+              'en':'password',
+              'ja':'パスワード'
+            },
+            {
+              'zh':'重复密码',
+              'en':'Repeat password',
+              'ja':'パスワードを再度入力してください'
+            },
+            {
+              'zh':'验证码',
+              'en':'SMS code',
+              'ja':'SMSコード'
+            },
+            {
+              'zh':'手机号注册',
+              'en':'Phone number registration',
+              'ja':'電話番号登録'
+            },
+            {
+              'zh':'邮箱注册',
+              'en':'email registration',
+              'ja':'メール登録'
+            },
+            {
+              'zh':'已有账号？',
+              'en':'Have an account?',
+              'ja':'アカウントを持っています？'
+            },
+            {
+              'zh':'想起密码?',
+              'en':'Remember your password?',
+              'ja':'パスワードを覚えていますか？'
+            },
+            {
+              'zh':'邮箱地址',
+              'en':'email address',
+              'ja':'電子メールアドレス'
+            },
+            {
+              'zh':'邮箱验证码',
+              'en':'E-mail code',
+              'ja':'メール確認コード'
+            }
+           
+          ],
+          click:[
+            {
+              'zh':'登录',
+              'en':'login',
+              'ja':'ログインする'
+            },
+            {
+              'zh':'验证码登录',
+              'en':'SMS login',
+              'ja':'SMSログイン'
+            },
+            {
+              'zh':'忘记密码',
+              'en':'forget password',
+              'ja':'パスワードを忘れた'
+            },
+            {
+              'zh':'注册',
+              'en':'registered',
+              'ja':'登録済み'
+            },
+            {
+              'zh':'记住我',
+              'en':'remember',
+              'ja':'私を覚えてますか'
+            },
+            {
+              'zh':'其他登录方式',
+              'en':'Other login methods',
+              'ja':'その他のログイン方法'
+            },
+             {
+              'zh':'普通密码登陆',
+              'en':'Ordinary password login',
+              'ja':'通常のパスワードによるログイン'
+            },
+            {
+              'zh':'手机号重置密码',
+              'en':'Phone number reset password',
+              'ja':'電話番号リセットパスワード'
+            },
+            {
+              'zh':'邮箱重置密码',
+              'en':'Email reset password',
+              'ja':'パスワードリセットメール'
+            }
+          ]
+        }
 			}
-		},
+    },
+    computed:{
+      Lan(){
+        return this.Store.getters.getValue
+      }
+    },
 		methods:{
 		  //邮箱重置
       sendEmail(){

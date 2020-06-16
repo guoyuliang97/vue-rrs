@@ -112,7 +112,7 @@
 				  this.$message({type:'info',message:'问答请填写完整'})
 				}*/
         else{
-          if(this.active_id){
+       
             this.$http.post(this.api + '/home/Activity/save_activity',{
               token: localStorage.getItem('token'),
               activity_id: this.active_id,
@@ -122,7 +122,7 @@
             })
               .then(res=>{
                 if(res.data.code == 1){
-                  if(this.complete == '0'){
+                  if(!this.complete){
                   this.$emit('changeRouter',{id:6,router:"Bring",information:this.active_id,complete: this.complete})
                   }else{
                     this.$message({
@@ -136,24 +136,7 @@
                   this.$alert(res.data.msg)
                 }
               })
-          }else{
-            this.$http.post(this.api + '/home/Activity/save_activity',{
-              token: localStorage.getItem('token'),
-     /*         question: this.replay,*/
-              activ_provite: this.proRemark,
-              step:5
-            })
-              .then(res=>{
-                if(res.data.code == 1){
-                  this.$emit('saveId',res.data.data)
-                  this.$emit('changeRouter',{id:6,router:"Bring",information: res.data.data})
-                }else if(res.data.code == 3){
-                  this.changeRouter()
-                }else if(res.data.code == 0){
-                  this.$alert(res.data.msg)
-                }
-              })
-          }
+   
         }
 			},
       answerAdd(item,index){

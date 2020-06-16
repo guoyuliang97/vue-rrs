@@ -1,6 +1,7 @@
 .mainButton{
 	width:113px;
 	height:23px;
+	padding: 5px;
 	background:rgba(20,197,202,1);
 	border-radius:2px;
 	line-height: 23px;
@@ -31,6 +32,15 @@
 }
 .mainPadding{
 	padding: 10px 20px;
+}
+.el-button--primary.is-plain:focus, .el-button--primary.is-plain:hover{
+	background: #14C5CA !important;
+    border-color: #14C5CA !important;
+}
+.el-button--primary {
+    color: #fff !important;
+    background-color: #14C5CA !important;
+    border-color: #14C5CA !important;
 }
 .marginRight{
 	margin-right: 20px;
@@ -64,10 +74,15 @@
 	color: #666666;
 	font-size:12px;
 }
-.inputBorder{
+.inputBorderL{
 	border:1px solid #eee;
 	border-radius: 5px;
 	font-size: 15px;
+}
+.btnColor{
+	background-color:#14C5CA !important;
+	border:none !important;
+	color:#fff !important;
 }
 .flexWrap{
 	display: flex;
@@ -82,6 +97,11 @@
 .flexEnd{
 	display: flex;
 	justify-content: flex-end;
+}
+.flexCenter{
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 .flexBetween{
 	display: flex;
@@ -113,6 +133,11 @@
 	flex-flow: column;
 	justify-content: space-between;
 }
+.hiddenText{
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
+}
 .mainBackColor{
 	color:#fff;
 	background-color: #14c5ca;
@@ -142,10 +167,46 @@
 .el-range-editor.is-active, .el-range-editor.is-active:hover{
 	/* border-color: #14c5ca !important; */
 }
-.el-button--primary.is-plain{
+/* .el-button--primary.is-plain{
 	color:#14C5CA !important;
-	/* background-color: #F2FFFF !important; */
-	/* border-color: #14C5CA !important; */
+	background-color: #F2FFFF !important; 
+	 border-color: #14C5CA !important;
+} */
+.el-tabs__item:hover {
+    color: #14c5ca !important;
+    cursor: pointer;
+}
+.el-tabs__item.is-active {
+	color: #14c5ca !important;
+}
+
+.el-select .el-input.is-focus .el-input__inner {
+    border-color: #14c5ca !important;
+}
+.el-button:focus, .el-button:hover{
+	color: #14c5ca !important;
+}
+.el-pager li.active {
+    color: #14c5ca !important;
+    cursor: default;
+}
+.el-menu--horizontal>.el-menu-item.is-active {
+    border-bottom: 2px solid #14c5ca !important;
+    color: #303133;
+}
+.el-tabs__active-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background-color:  #14c5ca !important;
+    z-index: 1;
+    -webkit-transition: -webkit-transform .3s cubic-bezier(.645,.045,.355,1);
+    transition: -webkit-transform .3s cubic-bezier(.645,.045,.355,1);
+    transition: transform .3s cubic-bezier(.645,.045,.355,1);
+    transition: transform .3s cubic-bezier(.645,.045,.355,1), -webkit-transform .3s cubic-bezier(.645,.045,.355,1);
+    transition: transform .3s cubic-bezier(.645,.045,.355,1),-webkit-transform .3s cubic-bezier(.645,.045,.355,1);
+    list-style: none;
 }
 .positionTop{
 	position: absolute;

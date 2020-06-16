@@ -79,7 +79,7 @@
       },
       methods:{
         changeRouter(){
-          if(this.active_id){
+    
               this.$http.post(this.api + '/home/Activity/save_activity',{
                 token: localStorage.getItem('token'),
                 activity_id: this.active_id,
@@ -90,7 +90,7 @@
               })
                 .then(res=>{
                   if(res.data.code == 1){
-                    if(this.complete == '0'){
+                    if(!this.complete){
                       this.$emit('changeRouter',{id:15,router:'makeBlock',information: this.active_id,complete: this.complete})
                     }else{
                       this.$message({
@@ -104,25 +104,7 @@
                     this.$alert(res.data.msg)
                   }
                 })
-          }else{
-            this.$http.post(this.api + '/home/Activity/save_activity',{
-              token: localStorage.getItem('token'),
-              end_order: this.orderTime,
-              no_order: this.order,
-              no_end_order: this.cancelOrder,
-              step:14
-            })
-              .then(res=>{
-                if(res.data.code == 1){
-                  this.$emit('saveId',res.data.data)
-                  this.$emit('changeRouter',{id:15,router:'makeBlock',information: res.data.data})
-                }else if(res.data.code == 3){
-                  this.changeRouter()
-                }else if(res.data.code == 0){
-                  this.$alert(res.data.msg)
-                }
-              })
-          }
+      
         },
         getActive(){
           this.$http.post(this.api + '/ActivityE',{

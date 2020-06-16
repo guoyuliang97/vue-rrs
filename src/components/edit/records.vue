@@ -49,7 +49,7 @@
             <div style="font-size:12px;display: flex;justify-content: flex-start">
               <div><b>资金流向</b></div>
               <div style="margin-left:20px;">
-                <el-button v-for="(item,index) in btnList" @click='changeList(item,index)' :style="{backgroundColor:index == btnIndex? '#008489':'#F1F1F1',color:index == btnIndex?'#fff':'#333333'}" size="mini">{{item.name}}</el-button>
+                <el-button v-for="(item,index) in btnList" @click='changeList(item,index)' :style="{backgroundColor:index == btnIndex? '#14c5ca':'#F1F1F1',color:index == btnIndex?'#fff':'#333333'}" size="mini">{{item.name}}</el-button>
               </div>
             </div>
             <div style="margin-top:15px;">
@@ -66,7 +66,7 @@
                   <span>{{item.create_time}}</span>
                 </div>
                 <div style="width:140px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap"><b>{{item.title}}</b></div>
-                <div style="width:140px;" :style="{color:item.flag>0?'#008489':'#E29000'}">{{item.flag?'+'+item.amount:'-'+item.amount}}</div>
+                <div style="width:140px;" :style="{color:item.flag>0?'#14c5ca':'#E29000'}">{{item.flag?'+'+item.amount:'-'+item.amount}}</div>
                 <div style="width:140px;"><b>{{item.type}}</b></div>
               </div>
               <div v-if="!recordList.length">

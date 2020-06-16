@@ -23,8 +23,8 @@
               {{item.type =='1'?'亲子':item.name}}<span class="marginLeft"></span>{{item.adult}}成人<span v-if="item.type == '1'">{{item.kids}}儿童</span>	<span class="marginLeft"></span>¥{{item.price}}
             </div>
             <div v-if="item.type == '0'">
-              <div class="marginTop">标准<span class="marginLeft"></span>{{item.adult}}人<span class="marginLeft"></span>¥{{item.adult_price}}</div>
-              <div >儿童<span class="marginLeft"></span>{{item.kids}}人<span class="marginLeft"></span>¥{{item.kids_price}}</div>	
+              <div v-if="item.adult" class="marginTop">标准<span class="marginLeft"></span>{{item.adult}}人<span class="marginLeft"></span>¥{{item.adult_price}}</div>
+              <div v-if="item.kids">儿童<span class="marginLeft"></span>{{item.kids}}人<span class="marginLeft"></span>¥{{item.kids_price}}</div>	
             </div>
           </div>
         </div>
@@ -48,7 +48,7 @@
       <hr class="lineS">
 
       <div class="flexStart marginT">
-        <p>退款方式：<span>全款退</span></p>
+        <p>退款方式：<span>{{house.is_refund?'非全款退':'全款退'}}</span></p>
       </div>
       <div class="flexStart marginT">
         <div style="line-height:40px;">退款原因：</div>
@@ -58,7 +58,7 @@
       </div>
       <hr class="lineS">
       <div class=" marginT">
-        <p>支付总额&nbsp;&nbsp;&nbsp;￥{{house.total_price}}</p>
+        <p>支付总额&nbsp;&nbsp;&nbsp;￥{{house.pay_price}}</p>
       </div>
       <div class=" marginT"  >
         <p>退款总额&nbsp;&nbsp;&nbsp;<span style="color:#F73D3D">￥{{house.total_price}}</span></p>
@@ -117,36 +117,50 @@
       sendRefund(){
         this.isLoading = true
         if(this.house.is_refund){
-          let a = []
+    
+          var a = [],
+            b = [],
+            c=0,
+            d=0;
           for(let i =0;i< this.house.house.length;i++){
-            a.push({oh_id:this.house.house[i].oh_id,num:this.house.house[i].num - this.house.house[i].refund_num})
+            a.push({oh_id:this.house.house[i].oh_id,num:this.house.house[i].num})
+          }
+          for(let i = 0 ; i< this.house.detail.length;i++){
+            if(this.house.detail[i].type == '1'|| this.house.detail[i].type == '2'){
+               b.push(this.house.detail[i].combine_id)
+            }else{
+              c += Number(this.house.detail[i].adult)
+              d += Number(this.house.detail[i].kids)
+            }
+           
           }
           this.$http.post(this.api + '/RefundSTwo',{
             token: localStorage.getItem('token'),
             order_id: this.house.order_id,
-            person_num: this.house.num - this.house.refund_num,
+            person_num: c,
             house: JSON.stringify(a),
+            combine: JSON.stringify(b),
             reason: this.reson,
             flag: 0,
-            type: 1
+            type: 1,
+            kids_num: d,
           })
             .then(res=>{
               if(res.data.code == 1){
-                this.index = 2
+                this.$message({type:'success',message:'退款成功！'})
                 this.isLoading = false
+                this.goBack()
+
               }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.sendRefund()
-                  })
+                 this.sendRefund()
               }else if(res.data.code == 0){
-                alert(res.data.msg)
+                
                 this.isLoading = false
+                this.$message({type:'error',messages:res.data.msg})
               }
             })
         }else{
-          this.$http.post(this.api + '/RefundS',{
+          this.$http.post(this.api + '/RefundSTwo',{
             token: localStorage.getItem('token'),
             order_id: this.house.order_id,
             reason: this.reson,
@@ -172,14 +186,14 @@
       },
       getOrder(){
         this.isLoading = true
-        this.$http.post(this.api + '/OrderDTwo',{
+        this.$http.post(this.api + '/OrderRefundDTwo',{
           token: localStorage.getItem('token'),
           order_id: this.order_id,
           verson:2.0
         })
           .then(res=>{
             if(res.data.code == 1){
-              console.log(res)
+     
               this.house = res.data.data
               this.isLoading = false
           

@@ -23,7 +23,7 @@
               <el-form-item label="验证码:" style="margin-top: 30px;">
                 <div style="display: flex;justify-content: space-between">
                   <el-input v-model="phoneChick.sms_code" placeholder="输入验证码" type="text"></el-input>
-                  <el-button @click="sendSms(1)" :disabled="!phoneChick.tel&&!mobile?true:phoneChick.forbid == 1?true:false" style="margin-left:20px;background-color: #008489;color:#fff;font-size: 12px;width:200px;">{{phoneChick.sms}}</el-button>
+                  <el-button @click="sendSms(1)" :disabled="!phoneChick.tel&&!mobile?true:phoneChick.forbid == 1?true:false" style="margin-left:20px;background-color: #14c5ca;color:#fff;font-size: 12px;width:200px;">{{phoneChick.sms}}</el-button>
                 </div>
               </el-form-item>
               <el-form-item v-if="mobile_link" label="新手机号:" style="margin-top: 30px;">
@@ -38,7 +38,7 @@
               <el-form-item v-if="mobile_link" label="验证码:" style="margin-top: 30px;">
                 <div style="display: flex;justify-content: space-between">
                   <el-input v-model="phoneChick.newsms_code" placeholder="输入验证码" type="text"></el-input>
-                  <el-button @click="sendSms(2)" :disabled="!phoneChick.newTel?true:phoneChick.newforbid == 1?true:false" style="margin-left:20px;background-color: #008489;color:#fff;font-size: 12px;width:200px;">{{phoneChick.newsms}}</el-button>
+                  <el-button @click="sendSms(2)" :disabled="!phoneChick.newTel?true:phoneChick.newforbid == 1?true:false" style="margin-left:20px;background-color: #14c5ca;color:#fff;font-size: 12px;width:200px;">{{phoneChick.newsms}}</el-button>
                 </div>
               </el-form-item>
               <div style="text-align: left;margin-top: 20px;">
@@ -60,7 +60,7 @@
               <el-form-item label="验证码:" style="margin-top: 30px;">
                 <div style="display: flex;justify-content: space-between">
                   <el-input v-model="emailChick.sms_code"  type="text"></el-input>
-                  <el-button @click="sendEmail"  style="margin-left:20px;background-color: #008489;color:#fff;font-size: 12px;width:200px;">{{emailChick.sms}}</el-button>
+                  <el-button @click="sendEmail"  style="margin-left:20px;background-color: #14c5ca;color:#fff;font-size: 12px;width:200px;">{{emailChick.sms}}</el-button>
                 </div>
               </el-form-item>
               <el-form-item v-if="email_link" label="新邮箱:" style="margin-top: 30px;">
@@ -69,7 +69,7 @@
               <el-form-item v-if="email_link" label="验证码:" style="margin-top: 30px;">
                  <div style="display: flex;justify-content: space-between">
                    <el-input v-model="emailChick.newSms_code"  type="text"></el-input>
-                   <el-button  @click="newSendEmail" :disabled="!emailChick.newEmail?true:emailChick.newforbid == 1? true:false" style="margin-left:20px;background-color: #008489;color:#fff;font-size: 12px;width:200px;">{{emailChick.newSms}}</el-button>
+                   <el-button  @click="newSendEmail" :disabled="!emailChick.newEmail?true:emailChick.newforbid == 1? true:false" style="margin-left:20px;background-color: #14c5ca;color:#fff;font-size: 12px;width:200px;">{{emailChick.newSms}}</el-button>
                  </div>
               </el-form-item>
               <div style="text-align: left;margin-top: 20px;">
@@ -122,7 +122,7 @@
 						<el-form-item label="验证码:" style="margin-top: 30px;">
               <div style="display: flex;justify-content: space-between">
                 <el-input v-model="mobileForm.smsCode" placeholder="输入验证码" type="password"></el-input>
-                <el-button @click="sendMobile" :disabled="mobileForm.forbid?true:false" style="background-color: #008489;color:#fff;margin-left:10px;font-size: 12px;width:200px">{{mobileForm.sms}}</el-button>
+                <el-button @click="sendMobile" :disabled="mobileForm.forbid?true:false" style="background-color: #14c5ca;color:#fff;margin-left:10px;font-size: 12px;width:200px">{{mobileForm.sms}}</el-button>
               </div>
 						</el-form-item>
 						<el-form-item label="新密码:" style="margin-top: 30px;">
@@ -144,7 +144,7 @@
               <el-form-item label="验证码:" style="margin-top: 30px;">
                 <div style="display: flex;justify-content: space-between">
                   <el-input v-model="emailForm.smsCode" placeholder="邮箱验证码" ></el-input>
-                  <el-button :disabled="emailForm.forbid?true:false"  @click="sendEmailFor" style="font-size:12px;margin-left:20px;background-color: #008489;color:#fff;width:200px">{{emailForm.sms}}</el-button>
+                  <el-button :disabled="emailForm.forbid?true:false"  @click="sendEmailFor" style="font-size:12px;margin-left:20px;background-color: #14c5ca;color:#fff;width:200px">{{emailForm.sms}}</el-button>
                 </div>
               </el-form-item>
               <el-form-item label="新密码:" style="margin-top: 30px;">
@@ -206,7 +206,7 @@
           <p style="margin-top: 10px;">已向<span> {{ mobile.substr(0,3)+'*****'+mobile.substr(8,3)}}</span>发送验证码</p>
           <div style="display: flex;justify-content: space-around;margin-top:20px;">
             <el-input placeholder="验证码" v-model="smsCode"></el-input>
-            <el-button @click="takeSave" :disabled="forbid == 1? true:false" style="font-size:12px;background-color: #008489;color:#fff;margin-left:10px;width:200px">{{sms}}</el-button>
+            <el-button @click="takeSave" :disabled="forbid == 1? true:false" style="font-size:12px;background-color: #14c5ca;color:#fff;margin-left:10px;width:200px">{{sms}}</el-button>
           </div>
           <div style="display: flex;justify-content: space-between;margin-top:20px;">
             <el-button @click="abolishSecur">取消</el-button>
@@ -218,7 +218,7 @@
           <p style="margin-top: 10px;">已向<span> {{ email.substr(0,3)+'*************'}}</span>发送验证码</p>
           <div style="display: flex;justify-content: space-around;margin-top:20px;">
             <el-input placeholder="验证码" v-model="smsCode"></el-input>
-            <el-button @click="takeSave" :disabled="forbid == 1? true:false" style="font-size:12px;background-color: #008489;color:#fff;margin-left:10px;width:200px">{{sms}}</el-button>
+            <el-button @click="takeSave" :disabled="forbid == 1? true:false" style="font-size:12px;background-color: #14c5ca;color:#fff;margin-left:10px;width:200px">{{sms}}</el-button>
           </div>
           <div style="display: flex;justify-content: space-between;margin-top:20px;">
             <el-button @click="abolishSecur">取消</el-button>

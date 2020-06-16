@@ -6,21 +6,18 @@
             <div @click="toBack" style="width:50px;cursor: pointer"><i class="el-icon-arrow-left"></i>返回</div>
             <div style="padding: 20px 50px">
               <div v-if="activeList.combine.length && closeIndex != 1">
-                 <h1>可能您需要的套餐</h1>
+                <h1>可能您需要的套餐</h1>
                 <p class="contentTitle fontweight">套餐可叠加购买，套餐人数不计入选择参与的购买人数</p>
                 <div>
-                    <el-checkbox-group style="text-color: #14c5ce !important" @change="chooseCombine"   v-model="combineL">
+                    <el-checkbox-group   style="text-color: #14c5ce !important" @change="chooseCombine"   v-model="combineL">
                         <div class="flexWrap">
                               <div v-for="(item,index) in activeList.combine"  :style="{borderColor:isChoose(item,index)?'rgba(20,197,202,1)':'rgba(202,202,202,1)'}"  class="combine marginRight marginTop" >
-                                <el-checkbox  :label='item.combine_id'><b>{{item.type == 1? '亲子':item.name}}	{{item.adult}}成人<span v-if="item.type == 1">{{item.kids}}儿童</span> <span >￥{{item.price}}</span></b></el-checkbox>
+                                <el-checkbox :disabled="isChoose(item,index)?adultNum == 0&&kidsNum == 0?combineL.length>1?false:true:false: item.adult + item.kids <= (numlast - personNumber)?false:true"  :label='item.combine_id'><b>{{item.type == 1? '亲子':item.name}}	{{item.adult}}成人<span v-if="item.type == 1">{{item.kids}}儿童</span> <span >￥{{item.price}}</span></b></el-checkbox>
                               </div>
                         </div>
                     </el-checkbox-group>
                 </div>
               </div>
-             
-
-
               <!-- 第一版本提交订单 -->
               <h1>选择参与人数</h1>
               <p class="contentTitle">除套餐外人数，您可以将更多好友添加为此体验的参与者，然后确认预订，
@@ -39,7 +36,7 @@
                     <span class="marginLeft fontweight">￥{{index == 1?activeList.kids_price :activeList.price}}/人</span>
                   </div>
                   <div>
-                    <el-button icon="el-icon-minus" size="mini" circle @click="reduce(item,index)" :disabled="index ==0?  item.adult ==1? true:false:item.adult ==0? true:false"></el-button>
+                    <el-button icon="el-icon-minus" size="mini" circle @click="reduce(item,index)" :disabled=" item.adult ==0? true:false"></el-button>
                     <span style="margin:0 10px">{{item.adult}}</span>
                     <el-button icon="el-icon-plus" size="mini" circle @click="add(item,index)"  :disabled="personNumber == numlast? true:addClick"></el-button>
                   </div>
@@ -55,7 +52,7 @@
                     <span>{{user?user:'匿名用户'}}</span><span style="margin-left:20px;">{{userF}}</span>
                   </div>
                   <div>
-                    <img :src="userImg? userImg: '../../../static/img/static/user.png'" width="48px" height="48px" style="border-radius: 50%">
+                    <LoadingImg type="user" :src="userImg? userImg: ''" style="width:48px;height:48px;"></LoadingImg>
                   </div>
                 </div>
               </div>
@@ -197,7 +194,7 @@
                 <h3>{{dataTile}}</h3>
               </div>
               <div style="margin-left:20px;">
-                <img :src="dataImg" width="200px" height="150px" style="margin-top:20px" >
+                <LoadingImg type="2" :src="dataImg"  style="width:200px;height:150px;margin-top:20px" ></LoadingImg>
               </div>
             </div>
             <hr style="margin:20px 0;border:none;border-bottom: 1px solid #eee">
@@ -381,8 +378,8 @@
         <div  style="position:fixed;top:50%;left:50%;width:340px;background-color:#fff;padding:20px;border-radius: 5px;margin-top:-140px;margin-left:-190px;">
           <p style="text-align: right"><i class="el-icon-close" style="font-size: 20px;" @click="abolish"></i></p>
           <h4>Allptop 密码设置</h4>
-          <p style="font-size:14px;color:#008489;margin:20px 0;">您还未设置安全密码！</p>
           <p>请前往【账户设置】=>【安全】=>设置安全密码，设置成功后可提现！</p>
+          <router-link @click="toSave" style="color:#14c5ca" target="_blank" :to="{path:'/security'}">前往设置</router-link>
         </div>
       </div>
       <div v-if="isLoading" style="position:fixed;top:0;left:0;right:0;bottom:0;display: flex;justify-content: center;align-items: center;background-color: rgba(255,255,255,.8)">
@@ -396,6 +393,7 @@
   import '../../static/css/pay/iconfont.css'
   import '../../static/css/weixin/iconfont.css'
   import Head from '../public/head.vue'
+  import LoadingImg from '../public/loadingImg'
     export default {
         name: "choose",
       data(){
@@ -501,22 +499,22 @@
             chooseNum:0,
             choosePice:0,
             kidsPrice:0,
-            adultPrice:0
+            adultPrice:0,
+            isAbod:false
           }
       },
       components:{
           Head,
-        Loading
+        Loading,
+        LoadingImg
       },
       computed:{
+       
         jionPrice(){
-          var price = this.adultPrice? this.choosePice + this.kidsPrice + this.adultPrice:this.choosePice + Number(this.activeList.price)  + this.kidsPrice
-          console.log(price)
-          if(price){
-            return price.toFixed(2)
-          }else{
-            return this.activeList.price
-          }
+          var price = Number(this.choosePice)  + Number(this.kidsPrice ) +Number( this.adultPrice)
+          var a = price.toFixed(2)
+          return a
+        
         },
         isChoose(item,index){
           return function(item,index){
@@ -573,19 +571,26 @@
 
       },
       methods:{
+         toSave(){
+          localStorage.setItem('rt','security')
+          localStorage.setItem('accountNav','4')
+        },
           // 第二版新增函数
           chooseCombine(val){
-            var combine =document.getElementById('combine')
-            combine.innerHTML = ''
-            if( val.length){
-                  var input1 = document.createElement('input')
-                  input1.setAttribute("type",'hidden')
-                  input1.setAttribute('name', 'combine');
-                  input1.setAttribute("value", JSON.stringify(val));
-                  combine.append(input1);
-            }
-            this.checkPerson(val)
-            this.getCalculate(this.closeIndex)
+              this.checkPerson(val)
+               var combine =document.getElementById('combine')
+              combine.innerHTML = ''
+              if( val.length){
+                    var input1 = document.createElement('input')
+                    input1.setAttribute("type",'hidden')
+                    input1.setAttribute('name', 'combine');
+                    input1.setAttribute("value", JSON.stringify(val));
+                    combine.append(input1);
+              }
+              
+              this.getCalculate(this.closeIndex)
+           
+           
           },
           checkPerson(val){
             var arr = this.activeList.combine
@@ -602,6 +607,7 @@
             this.choosePice = price
             this.chooseNum = num
             this.personNumber = num + Number(this.kidsNum) + Number(this.adultNum)
+           
           },
           delteHouse(item,index){
             this.$confirm('是否删除已选择的房源?','提示',{
@@ -762,7 +768,6 @@
           }
         },
         getCalculate(val){
-  
           let slot_id = ''
           slot_id =  this.activeList.slot_id
           this.$http.post(this.api + '/CalculateTwo',{
@@ -797,7 +802,6 @@
           if(item.adult !=0 &&  this.personNumber > this.form.person.length + 1){
               this.addClick = false
               item.adult=item.adult -1
-            
               let b =0
               for(let i = 0;i<this.otherList.length;i++){
                 b = b + this.otherList[i].adult
@@ -923,15 +927,17 @@
           this.activeId = this.$route.query.activeId
           this.activeList = (JSON.parse(this.$route.query.chooseTime))
           this.house =  this.$route.query.chooseHouse?JSON.parse(this.$route.query.chooseHouse):''
-
+       
           if( this.activeList.long_day == 1){
             this.weekDay = this.getWeekDay( this.activeList.date)
           }
+          this.adultPrice = this.activeList.price
           this.numlast =  this.activeList.max_person_num- this.activeList.order_person_num
-          this.$http.post(this.api + '/home/Activity/get_activity',{
+          this.$http.post(this.api + '/ActivityDetailTwo',{
             token: localStorage.getItem('token'),
             activity_id: this.activeId,
             visit: 0,
+            verson:2.0
           })
             .then(res=>{
               if(res.data.code == 1){
@@ -940,6 +946,7 @@
                 this.book_whole = res.data.data.book_whole
                 this.return_policy = res.data.data.return_policy
                 this.age_limit = res.data.data.age_limit
+                
                 this.getbalance()
                 this.isLoading = false
                 this.checkNUm()

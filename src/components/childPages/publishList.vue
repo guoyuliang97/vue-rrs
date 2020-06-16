@@ -9,8 +9,8 @@
                 <p style="font-size:30px;font-weight:bold">欢迎回来</p>
                 <div style="margin-left:20px;">
                   <div style="margin:10px 0;color:red;" v-if="audit_face == 0"><el-button  size="mini"  style="border:1px solid red;color:red" >未验证身份证信息</el-button><span @click="tocheck" style="border-bottom: 1px solid red;font-size: 13px;margin-left:10px;cursor: pointer">去验证</span></div>
-                  <el-button  size="mini" v-if="audit_face == 1" style="margin:10px 0;color:#008489;border:1px solid #008489" >验证身份已提交</el-button>
-                  <div style="margin:10px 0;color:#008489;" v-if="audit_face == 2" > <el-button  size="mini" style="margin:10px 0;color:#008489;border:1px solid #008489" >身份验证已通过</el-button><span @click="lookYan" style="border-bottom: 1px solid #008489;font-size: 13px;margin-left:10px;cursor: pointer">{{isLook? '收起':'查看'}}</span></div>
+                  <el-button  size="mini" v-if="audit_face == 1" style="margin:10px 0;color:#14c5ca;border:1px solid #14c5ca" >验证身份已提交</el-button>
+                  <div style="margin:10px 0;color:#14c5ca;" v-if="audit_face == 2" > <el-button  size="mini" style="margin:10px 0;color:#14c5ca;border:1px solid #14c5ca" >身份验证已通过</el-button><span @click="lookYan" style="border-bottom: 1px solid #14c5ca;font-size: 13px;margin-left:10px;cursor: pointer">{{isLook? '收起':'查看'}}</span></div>
                   <div  v-if="audit_face == 3" style="color:red;font-size: 13px;">
                     <el-button  size="mini"  style="margin:10px 0;color:red;border:1px solid red" >身份审核不通过，原因：{{ refuse_reason}}</el-button>
                     <span style="margin-left:20px;border-bottom: 1px solid red;cursor: pointer" @click="tocheck">去验证</span>

@@ -15,7 +15,7 @@
           </div>
           <div style="display: flex;justify-content: space-between">
             <div>
-              <LoadingImg type="3" v-on:toPublish="toPublish(item,index)" :src="item.act_domian + item.act_image_url" style="width:200px;height:135px;overflow: hidden;cursor: pointer"></LoadingImg>
+              <LoadingImg type="2" v-on:toPublish="toPublish(item,index)" :src="item.act_domian + item.act_image_url" style="width:200px;height:135px;overflow: hidden;cursor: pointer"></LoadingImg>
             </div>
             <div style="width:750px;font-size:12px;line-height:30px;">
               <p style="color:#999999"><span v-for="items in item.kind">{{'/'+items.kind_name}}</span></p>
@@ -27,7 +27,7 @@
                     style="margin-top:5px;"
                     disabled
                     :value="parseInt(item.score)"
-                    :colors="['#008489', '#008489', '#008489']">
+                    :colors="['#14c5ca', '#14c5ca', '#14c5ca']">
                   </el-rate>
                 </div>
                 <div style="margin-left:15px;">
@@ -36,7 +36,7 @@
               </div>
               <div style="margin-top:15px;">
                 <span>￥{{item.price}}</span>
-                <span style="color:#008489;margin-left:10px;">邀请时间：{{item.begin_time+'—'+item.end_time}}</span>
+                <span style="color:#14c5ca;margin-left:10px;">邀请时间：{{item.begin_time+'—'+item.end_time}}</span>
               </div>
             </div>
             <div >

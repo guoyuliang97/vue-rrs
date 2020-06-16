@@ -5,16 +5,17 @@
 			<div class="userdata_con title_flex">
 				<div class="userdata_left">
 					<div class="userdata_left_top">
-						<div class="userdata_left_avator" :style="{backgroundImage:'url('+imgUrl +')',backgroundSize:'100% 100%'}"></div>
-						<p class="userdata_left_username"><span>{{dataForm.family_name +dataForm.middle_name+dataForm.name?dataForm.family_name +dataForm.middle_name+dataForm.name:'匿名用户'}}</span></p>
+						<!-- <div class="userdata_left_avator" :style="{backgroundImage:'url('+imgUrl +')',backgroundSize:'100% 100%'}"></div> -->
+            <LoadingImg type="user" :src="imgUrl" class="userdata_left_avator" ></LoadingImg>
+          	<p class="userdata_left_username"><span>{{dataForm.family_name +dataForm.middle_name+dataForm.name?dataForm.family_name +dataForm.middle_name+dataForm.name:'匿名用户'}}</span></p>
             <p class="about_userdata"></p>
             <p class="about_userdata">{{sexA[parseInt(dataForm.six)].label}}&nbsp;&nbsp;<span v-if="dataForm.isplanner == 1 && dataForm.audit_face == 2" class="who">策划者</span><span v-if="dataForm.isvolunteer == 1 && dataForm.audit_idcard" class="who">志愿者</span><span v-if="dataForm.isplanner == 0&&dataForm.isvolunteer == 0" class="who">游客</span></p>
             <p class="about_userdata"></p>
             <p class="about_userdata">信誉分:{{dataForm.credit_score}}</p>
             <p class="about_userdata">
-              <span v-if="statu == 0" style="text-decoration: none;color:#008489;cursor: pointer;font-size:10px">
+              <span v-if="statu == 0" style="text-decoration: none;color:#14C5CA;cursor: pointer;font-size:10px">
                <span @click="toPlayer" v-if="dataForm.audit_face != 2 && dataForm.audit_face != 1">成为策划者 </span> <span  @click="sendVolun" v-if="dataForm.isvolunteer != 1 || dataForm.audit_idcard !=1">成为志愿者</span></span>
-              <span v-show="isFriend" @click="addFriend = true" style="text-decoration: none;color:#008489;cursor: pointer"><i class="el-icon-plus"></i>加好友</span>
+              <span v-show="isFriend" @click="addFriend = true" style="text-decoration: none;color:#14C5CA;cursor: pointer"><i class="el-icon-plus"></i>加好友</span>
             </p>
 						<ul class="userdata_lists">
 
@@ -60,16 +61,20 @@
               <div style="text-indent: 2rem">
                 {{dataForm.introduce}}
               </div>
+              <div class="flexStart">
               <el-button v-if="who" type="text" @click="openInform">举报此用户</el-button>
               <el-button v-if="!who" type="text" @click="userData = true">点此编辑</el-button>
+
               <span class="marginLeft"> <span style="background-color:#ffb400;color:#fff;padding:5px;border-radius:5px;"><b>{{playTotal + comAll}}</b></span>&nbsp;&nbsp;条评价</span> 
-              <span  v-show="dataForm.idcard_f || dataForm.idcard_z"><img src="../../../static/img/story/ok.jpg" width="32" height="32" style="position:absolute;margin-top:-10px;"><span style="margin-left:40px;">已验证</span></span>
+              <div class="flexStart"  v-show="dataForm.idcard_f || dataForm.idcard_z"><img src="../../../static/img/story/ok.jpg" width="30" height="30" style="margin-top:5px;"><span style="margin-left:10px;">已验证</span></div>
+
+              </div>
             </div>
             <div v-show="wishList.length">
               <h2>{{userId?'Ta':'我'}}的心愿单<span style="font-weight:normal;font-size:15px;">{{'('+ wishList.length+')'}}</span></h2>
               <div style="display:flex;flex-wrap: wrap;margin:20px 0;">
                 <div class="wishMargin" v-for="(item,index) in wishList" style="position:relative;width:250px;height:200px;cursor: pointer" :style="{'background-color':item.cover == ''? 'rgba(0,0,0,.8)':''}">
-                  <div @click="toList(item,index)" style="width:250px;height:200px;overflow: hidden"><LoadingImg type="3" :src="item.cover.domain + item.cover.image_url" style="width:250px;height:200px;overflow: hidden"></LoadingImg></div>
+                  <div @click="toList(item,index)" style="width:250px;height:200px;overflow: hidden"><LoadingImg type="2" :src="item.cover.domain + item.cover.image_url" style="width:250px;height:200px;overflow: hidden"></LoadingImg></div>
                   <div style="position:absolute;bottom:10px;left:10px">
                     <span style="color:#FFF;font-weight: bold">{{item.group_name}}</span><br>
                     <span style="color:#fff;font-weight:bold">{{item.count}}个心愿</span>
@@ -82,7 +87,7 @@
               <div style="display:flex;flex-wrap: wrap;margin:20px 0;line-height:20px;">
                 <div v-for="(item,index) in experienceList" style="width:250px;margin:10px 10px 10px 0;position: relative;overflow: hidden" @click="toAlter(item,index)" >
                   <div>
-                    <LoadingImg type="3" :src="item.cover?item.cover.domain + item.cover.image_url:''"   style="width:250px;height:200px;cursor: pointer;overflow: hidden"></LoadingImg>
+                    <LoadingImg type="2" :src="item.cover?item.cover.domain + item.cover.image_url:''"   style="width:250px;height:200px;cursor: pointer;overflow: hidden"></LoadingImg>
                   </div>
                   <div style="font-size:14px;position: absolute;bottom:0;color:#fff;background-color: rgba(0,0,0,.8);width:240px;padding:0 0 0 10px;">
                     <span v-for="items in item.kind"><span>/{{items.kind_name}}</span></span>
@@ -96,7 +101,7 @@
               <div style="display:flex;justify-content: flex-start;margin:20px 0;line-height:20px;flex-wrap: wrap">
                 <div v-for="(item,index) in jionList"  @click="toAlter(item,index)"  style="width:250px;margin: 10px 10px 10px 0;line-height:20px;font-size:14px;position: relative;overflow: hidden">
                   <div>
-                    <LoadingImg type="3" :src="item.cover?item.cover.domain + item.cover.image_url:''" style="width:250px;height:200px;cursor: pointer;overflow: hidden"></LoadingImg>
+                    <LoadingImg type="2" :src="item.cover?item.cover.domain + item.cover.image_url:''" style="width:250px;height:200px;cursor: pointer;overflow: hidden"></LoadingImg>
                   </div>
                   <div style="font-size:14px;position: absolute;bottom:0;color:#fff;background-color: rgba(0,0,0,.8);width:240px;padding:0 0 0 10px;">
                     <span v-for="items in item.kind"><span>/{{items.kind_name}}</span></span>
@@ -110,7 +115,7 @@
               <h2>{{userId?'Ta':'我'}}的故事<span style="font-weight:normal;font-size:15px;">{{'('+storyList.length +')'}}</span></h2>
               <div style="display:flex;flex-wrap:wrap;margin:20px 0;">
                 <div class="storyaList" v-for="(item,index) in storyList" @click="toStory(item,index)" >
-                  <LoadingImg type="3" :src="item.cover?item.cover.domain + item.cover.image_url:''" style="width:250px;height:250px;border-radius: 10px;overflow: hidden"></LoadingImg>
+                  <LoadingImg type="2" :src="item.cover?item.cover.domain + item.cover.image_url:''" style="width:250px;height:250px;border-radius: 10px;overflow: hidden"></LoadingImg>
                   <div style="position:absolute;margin-top:-40px;margin-left:197px;"><span style="padding:5px;background-color:#fff;border-radius:5px;">故事</span></div>
                   <p style="overflow:hidden;white-space: nowrap;text-overflow: ellipsis">{{item.title}}</p>
                   <div style="font-size:14px;display: flex;justify-content: space-between">
@@ -128,7 +133,7 @@
                     <div style="display: flex;justify-content: space-between">
                       <div style="display: flex;justify-content: flex-start">
                         <div>
-                          <img @click="toPerson(item,index)" :src="item.image_url?item.domain+item.image_url:'../../../static/img/static/user.png'" width="48px" height="48px" style="border-radius: 50%">
+                          <LoadingImg type="user" @click="toPerson(item,index)" :src="item.image_url?item.domain+item.image_url:''" style="width:48px;height:48px;"></LoadingImg>
                         </div>
                         <div style="margin-left:10px;line-height:24px;">
                           <p><b>{{(item.family_name+item.middle_name+item.name)?item.family_name+item.middle_name+item.name:'匿名用户'}}</b></p>
@@ -136,7 +141,7 @@
                         </div>
                       </div>
                       <div>
-                        <span style="color:#008489">赞({{item.praise_num}})</span>
+                        <span style="color:#14C5CA">赞({{item.praise_num}})</span>
                       </div>
                     </div>
                     <div style="margin-top:15px;display: flex;justify-content: space-between">
@@ -145,7 +150,7 @@
                     </div>
                     <div v-if="item.leavemsg.length" style="background-color: #F4F4F4;padding:0 10px;line-height:25px;margin-top:10px;">
                       <div v-for="items in item.leavemsg">
-                        <span style="color:#008489;font-weight: bold">{{items.user.family_name+items.user.middle_name+items.user.name?items.user.family_name+items.user.middle_name+items.user.name:'匿名用户'}}</span>回复<span style="color:#008489;font-weight: bold">{{items.topuser.family_name+items.topuser.middle_name+items.topuser.name?items.topuser.family_name+items.topuser.middle_name+items.topuser.name:'匿名用户'}}</span>：{{items.content}}
+                        <span style="color:#14C5CA;font-weight: bold">{{items.user.family_name+items.user.middle_name+items.user.name?items.user.family_name+items.user.middle_name+items.user.name:'匿名用户'}}</span>回复<span style="color:#14C5CA;font-weight: bold">{{items.topuser.family_name+items.topuser.middle_name+items.topuser.name?items.topuser.family_name+items.topuser.middle_name+items.topuser.name:'匿名用户'}}</span>：{{items.content}}
                       </div>
                     </div>
                   </div>
@@ -167,7 +172,7 @@
                         </div>
                       </div>
                       <div>
-                        <span style="color:#008489">赞({{item.praise_num}})</span>
+                        <span style="color:#14C5CA">赞({{item.praise_num}})</span>
                       </div>
                     </div>
                     <div style="margin-top:15px;display: flex;justify-content: space-between">
@@ -176,7 +181,7 @@
                     </div>
                     <div v-if="item.leavemsg.length" style="background-color: #F4F4F4;padding:0 10px;line-height:25px;margin-top:10px;">
                       <div v-for="items in item.leavemsg">
-                        <span style="color:#008489;font-weight: bold">{{items.user.family_name+items.user.middle_name+items.user.name?items.user.family_name+items.user.middle_name+items.user.name:'匿名用户'}}</span>回复<span style="color:#008489;font-weight: bold">{{items.topuser.family_name+items.topuser.middle_name+items.topuser.name?items.topuser.family_name+items.topuser.middle_name+items.topuser.name:'匿名用户'}}</span>：{{items.content}}
+                        <span style="color:#14C5CA;font-weight: bold">{{items.user.family_name+items.user.middle_name+items.user.name?items.user.family_name+items.user.middle_name+items.user.name:'匿名用户'}}</span>回复<span style="color:#14C5CA;font-weight: bold">{{items.topuser.family_name+items.topuser.middle_name+items.topuser.name?items.topuser.family_name+items.topuser.middle_name+items.topuser.name:'匿名用户'}}</span>：{{items.content}}
                       </div>
                     </div>
                   </div>
@@ -191,7 +196,7 @@
         </div>
         <div v-if="isProblem" class="userdata_right">
           <div>
-            <h3>问题反馈<span style="color:#008489;font-size: 15px;">（提交反馈后可在消息处查看回复消息）</span></h3>
+            <h3>问题反馈<span style="color:#14C5CA;font-size: 15px;">（提交反馈后可在消息处查看回复消息）</span></h3>
           </div>
           <div style="display: flex;justify-content: flex-start;margin-top:20px;">
             <div style="font-weight: bold">
@@ -1120,7 +1125,7 @@
   }
   .who{
     padding:1px 2px;
-    background-color:#008489;
+    background-color:#14C5CA;
     color:white;
     border-radius: 2px;
     margin-right:5px;

@@ -2,7 +2,7 @@
 	<div>
 		<el-tabs v-model="activeName" @tab-click="handClick">
 			<el-tab-pane label="对您的评价" name="first">
-          <div  style="width: 740px;margin: 0 auto;text-align: left;">
+          <div style="width: 740px;margin: 0 auto;text-align: left;">
             <Person  style="padding-right:20px" type="discuss" :isLogin="isLogin"  :replay="replay" :imgUrl="imgUrl" :overflow="overflow" :review="review" :height="height" v-on:textareaFocus="textareaFocus" v-on:abolish="abolish" v-on:discuss="discuss"></Person>
           </div>
 				<div class="data_title" style="margin-top: 15px;">
@@ -21,11 +21,11 @@
                   </div>
                 </div>
                 <div>
-                  <span style="color:#008489">赞({{item.praise_num}})</span>
+                  <span style="color:#14c5ca">赞({{item.praise_num}})</span>
                 </div>
               </div>
               <div style="margin-top:15px;display: flex;justify-content: space-between">
-                <div>回复我：{{item.content}}<span @click="sendReplay(item,index)" style="color:#008489;margin-left:10px;">回复</span></div>
+                <div>回复我：{{item.content}}<span @click="sendReplay(item,index)" style="color:#14c5ca;margin-left:10px;">回复</span></div>
                 <div>&laquo;{{item.title}}&raquo;</div>
               </div>
               <div v-if="item.top_content" style="background-color: #F4F4F4;padding:0 10px;line-height:25px;margin-top:10px;">
@@ -52,7 +52,7 @@
                   </div>
                 </div>
                 <div>
-                  <span style="cursor: pointer" @click="deleteCo(item,index)">删除</span><span style="margin-left:10px;color:#008489;cursor: pointer">赞({{item.leaving_num}})</span>
+                  <span style="cursor: pointer" @click="deleteCo(item,index)">删除</span><span style="margin-left:10px;color:#14c5ca;cursor: pointer">赞({{item.leaving_num}})</span>
                 </div>
               </div>
               <div style="margin-top:15px;display: flex;justify-content: space-between">
@@ -80,7 +80,7 @@
 				activeName:"first",
         replay:'说点什么...',
         overflow:'hidden',
-        height:'82px',
+        height:'78px',
         review:{
           text:''
         },
@@ -123,7 +123,7 @@
       },
       abolish(){
         this.review.text = ''
-        this.height = '82px'
+        this.height = '78px'
         this.overflow= 'hidden'
         this.replay = '说点什么...'
       },

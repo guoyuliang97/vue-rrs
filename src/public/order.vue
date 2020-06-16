@@ -58,7 +58,7 @@
                         <p style="background-color:#999999;height:1px;position:absolute;width:40px;transform: rotate(-45deg);top:20px;"></p>
                       </div>
                     </div>
-                    <div v-if="item != ' '&& color[index].index == '0'" style="cursor:pointer;width:100%;height:100%;display: flex;justify-content: center;align-items: center" :style="{backgroundColor:colorIndex == index?'#14C5CA':'#E5FAFB',color:colorIndex == index?'#FFF':'#008489'}">
+                    <div v-if="item != ' '&& color[index].index == '0'" style="cursor:pointer;width:100%;height:100%;display: flex;justify-content: center;align-items: center" :style="{backgroundColor:colorIndex == index?'#14C5CA':'#E5FAFB',color:colorIndex == index?'#FFF':'#14C5CA'}">
                       <div :style="{lineHeight:color[index].is_discount?'20px':'40px'}" style="width:40px;height:40px;text-align: center;position: relative;">
                         <p>{{item}}</p>
                         <p class="contentTitle" v-if="color[index].is_discount">{{Number(color[index].is_discount)}}折</p>
@@ -398,20 +398,16 @@
                    if(data[i].online == 0){
                       if(data[i].long_day == 1){
                       this.dayList.push(data[i])
-                    }else{
-                      this.activeList.push(data[i])
-                    }
+                      }else{
+                        this.activeList.push(data[i])
+                      }
                    }
                    this.allTime = data[i].long_day?this.dayList:this.activeList
                   }
                   this.changeAlltime()
                   this.chooseTime()
                 }else if(res.data.code == 3){
-                  this.$http.post(this.api + '/home/index/token')
-                    .then(res=>{
-                      localStorage.setItem('token',res.data.data)
                       this.getALLtime()
-                    })
                 }else if(res.data.code == 0){
                   alert(res.data.msg)
                 }
@@ -470,7 +466,9 @@
             }
           }
           this.color = a.concat(b)
+    
           this.dayData= temp
+      
           this.isLoading = false
         },
          parseDate(str) { // 字符串转时间戳
@@ -699,7 +697,7 @@
         this.getParams()
         if(this.$route.query.orderVolunteer){
           this.orderVolunteer = this.$route.query.orderVolunteer
-          console.log(this.orderVolunteer)
+    
         }
         this.stillist = Lan()
       },

@@ -1,12 +1,12 @@
 <template>
     <div style="line-height: 40px;width: 100%;" class="flexBetween">
-      <div>
+      <div style="width:698px;">
         <div v-if="isRemake" class="flexBetween" style="margin:20px 0;background-color: #eee;padding: 0 10px">
             <p>*您正在修改已创建<span style="color:#CA1425">{{witchDay}}</span>的活动时间</p>
             <p @click="abiosh" style="color:#CA1425;cursor: pointer;">取消</p>
         </div>
         <div v-if="isRemake"  class="block">
-          <span style="margin-right: 10px;"><b>举办活动时间段:</b></span>
+          <div style="margin-right: 10px;"><b>举办活动时间段:</b></div>
           <el-date-picker
             v-model="reMakeDate"
             type="date"
@@ -14,7 +14,7 @@
           </el-date-picker>
         </div>
         <div v-if="!isRemake" class="block">
-          <span style="margin-right: 10px;"><b>举办活动时间段:</b></span>
+          <div style="margin-right: 10px;"><b>举办活动时间段</b></div>
           <el-date-picker
             @change = 'chooseTime'
             v-model="longTime"
@@ -29,13 +29,13 @@
           </el-date-picker>
         </div>
         <div v-show="allTimeL.length" >
-           <span style="margin-right: 10px;"><b>已选活动时间段:</b></span>
+           <div style="margin-right: 10px;"><b>已选活动时间段</b></div>
             <div style="max-width:450px;">
               <el-button @click="deletTime(item,index)"  v-for="(item,index) in allTimeL" size='mini' icon="el-icon-delete">{{item.begin_date}}——{{item.end_date}}</el-button>
             </div>
         </div>
         <div v-if="!isRemake" class="block">
-          <span style="margin-right:10px;"><b>每天举办活动数量：</b></span>
+          <span style="margin-right:10px;"><b>每天举办活动数量</b></span>
           <el-input type="text" v-model="activeNum"  maxlength="2"  placeholder="请输入数量至少为1" style="width:200px;"></el-input>
         </div>
         <div class="block" v-for="(item,index) in activeList" :key="index" >
@@ -47,7 +47,7 @@
               v-model="item.begin_time"
               :picker-options="{
               start: '00:00',
-              step: '00:15',
+              step: '00:05',
               end: '24:00',
               minTime: index>0? activeList[index-1].end_time:''
             }">
@@ -58,7 +58,7 @@
               v-model="item.end_time"
               :picker-options="{
               start: '00:00',
-              step: '00:15',
+              step: '00:05',
               end: '24:00',
               minTime: item.begin_time
             }">
@@ -66,7 +66,7 @@
         </div>
         <div class="block">
           <div style="display: flex;justify-content: flex-start">
-            <span style="margin-right:10px;"><b>活动人数:</b></span>
+            <span style="margin-right:10px;"><b>活动人数</b></span>
             <el-input type="text"  v-model="personNum" placeholder="请输入正整数" style="width:200px;border:none;font-size:15px;"></el-input>
           </div>
         </div>
@@ -74,7 +74,7 @@
         <!-- 第二版本新增 -->
         <div>
           <p><b>优惠设置<span style="color:#999">(可多选)</span></b></p>
-          <div style="position:relative;margin-bottom: 0px;">
+          <div style="position:relative;margin-bottom: 20px;">
             <el-checkbox-group style="text-color: #14c5ce !important" @change="checkDiscount"   v-model="discountChose">
               <el-checkbox  label="1">设置折扣价</el-checkbox>
               <el-checkbox label="2">设置亲子套餐</el-checkbox>
@@ -99,30 +99,30 @@
           
           <!-- 设置折扣价 -->
           <div v-show="choseLook == 1" :v-model="zkCombo">
-            <div class="flexStart " >
-              <span class="contentTitle">标准原价:</span>
-              <div class="inputBorder flexStart">
-                <div class="contentTitle" style="padding: 0 10px;border-right:1px solid #eee">APY(人民币)</div>
-                <input type="text" v-model="zkCombo.oldPrice"  placeholder="请输入价格"  style="width:100px;border:none;padding-left:10px">
+            <div class="flexStart "  >
+              <span class="contentTitle " style="width:70px;">标准原价:</span>
+              <div class="inputBorderL flexStart" style="width:230px;height:40px;">
+                <div class="contentTitle " style="width:110px;text-align:center;border-right:1px solid #eee">APY(人民币)</div>
+                <input type="text" v-model="zkCombo.oldPrice"  placeholder="请输入价格"  style="width:90px;border:none;padding-left:10px">
               </div>
               <span class="contentTitle marginLeft">折扣:</span>
-              <div class="inputBorder" style="height:40px;">
-                <input type="text" v-model="zkCombo.discount"  placeholder="请输入折扣" style="padding-left:10px;width:100px;border:none;paading-left: 10px;">
+              <div class="inputBorderL" style="height:40px;width:90px;">
+                <input type="text" v-model="zkCombo.discount"  placeholder="请输入折扣" style="width:80px;text-align:center;border:none;">
               </div>
               <span class="contentTitle">折</span>
               <div>
-                <span class="contentTitle marginLeft">折扣价:{{disprice}}元</span>
+                <span class="contentTitle marginLeft" style="width:70px;">折扣价:{{disprice}}元</span>
               </div>
             </div>
-            <div class="flexStart">
-              <span class="contentTitle">儿童原价:</span>
-              <div class="inputBorder flexStart">
-                <div class="contentTitle" style="padding: 0 10px;border-right:1px solid #eee">APY(人民币)</div>
-                <input type="text" v-model="zkCombo.oldChildPrice"  placeholder="请输入价格"  style="width:100px;border:none;padding-left:10px">
+            <div class="flexStart"  style="width:698px;">
+              <span class="contentTitle " style="width:70px;">儿童原价:</span>
+              <div class="inputBorderL flexStart" style="width:230px;height:40px;">
+                <div class="contentTitle " style="width:110px;text-align:center;border-right:1px solid #eee">APY(人民币)</div>
+                <input type="text" v-model="zkCombo.oldChildPrice"  placeholder="请输入价格"  style="width:90px;border:none;padding-left:10px">
               </div>
-              <span class="contentTitle marginLeft">折扣:</span>
-              <div class="inputBorder" style="height:40px;">
-                <input type="text" v-model="zkCombo.childDiscount"  placeholder="请输入折扣" style="padding-left:10px;width:100px;border:none;paading-left: 10px;">
+              <span class="contentTitle marginLeft" >折扣:</span>
+              <div class="inputBorderL" style="height:40px;width:90px;">
+                <input type="text" v-model="zkCombo.childDiscount"  placeholder="请输入折扣" style="width:80px;text-align:center;border:none;">
               </div>
               <span class="contentTitle">折</span>
               <div>
@@ -138,19 +138,19 @@
                 使用您创建过的亲子套餐
               </span> 
             </div>
-            <div class="flexStart" v-for="(item,index) in pcCombo">
-              <span class="contentTitle">成人人数:</span>
-              <div class="inputBorder" style="height:40px;">
-                <input type="text" v-model="item.adult"  placeholder="请输入人数" style="padding-left:10px;width:100px;border:none;paading-left: 10px;">
+            <div class="flexStart" style="width:698px;"   v-for="(item,index) in pcCombo">
+              <span class="contentTitle " style="width:70px;height:40px;">成人人数:</span>
+              <div class="inputBorderL" style="height:40px;width:90px;">
+                <input type="text" v-model="item.adult"  placeholder="请输入人数" style="width:80px;text-align:center;border:none;">
               </div>
-              <span class="contentTitle marginLeft">儿童人数:</span>
-              <div class="inputBorder" style="height:40px;">
-                <input type="text" v-model="item.kids"  placeholder="请输入人数" style="padding-left:10px;width:100px;border:none;paading-left: 10px;">
+              <span class="contentTitle marginLeft " style="width:70px;height:40px;">儿童人数:</span>
+              <div class="inputBorderL" style="height:40px;width:90px;">
+                <input type="text" v-model="item.kids"  placeholder="请输入人数" style="width:80px;text-align:center;border:none;">
               </div>
-              <span class="contentTitle marginLeft">套餐价:</span>
-              <div class="inputBorder flexStart">
-                <div class="contentTitle" style="padding: 0 10px;border-right:1px solid #eee">APY(人民币)</div>
-                <input type="text" v-model="item.price"  placeholder="请输入价格"  style="width:100px;border:none;padding-left:10px">
+              <span class="contentTitle marginLeft " style="width:60px;height:40px;">套餐价:</span>
+              <div class="inputBorderL flexStart" style="hieght:40px;width:230px;">
+                <div class="contentTitle "  style="width:110px;text-align:center;border-right:1px solid #eee">APY(人民币)</div>
+                <input type="text" v-model="item.price"  placeholder="请输入价格"  style="width:90px;border:none;padding-left:10px">
               </div>
               <div   @click="aplyDate(item,index,'1')" class="circle"><i class="el-icon-tickets"></i></div>
               <div @click="delteQzCombo(item,index)" class="circle"><i class="el-icon-close"></i></div>
@@ -165,19 +165,19 @@
                 使用您创建过的综合套餐
               </span> 
             </div>
-            <div class="flexStart" v-for="(item,index) in zhCombo">
-                <span class="contentTitle"> 套餐名称:</span>
-              <div class="inputBorder" style="height:40px;">
-                <input type="text" v-model="item.name"  placeholder="请输入名称" style="padding-left:10px;width:100px;border:none;paading-left: 10px;">
+            <div class="flexStart" style="width:698px;"  v-for="(item,index) in zhCombo">
+                <div class="contentTitle " style="width:70px;">套餐名称:</div>
+              <div class="inputBorderL" style="height:40px;width:90px;">
+                <input type="text" v-model="item.name"  placeholder="请输入名称" style="width:80px;text-align:center;border:none;">
               </div>
-              <span class="contentTitle marginLeft">套餐人数:</span>
-              <div class="inputBorder" style="height:40px;">
-                <input type="text" v-model="item.adult"  placeholder="请输入人数" style="padding-left:10px;width:100px;border:none;paading-left: 10px;">
+              <div class="contentTitle marginLeft "  style="width:70px;">套餐人数:</div>
+              <div class="inputBorderL" style="height:40px;width:90px">
+                <input type="text" v-model="item.adult"  placeholder="请输入人数" style="width:80px;text-align:center;border:none;">
               </div>
-              <span class="contentTitle marginLeft">套餐价:</span>
-              <div class="inputBorder flexStart">
-                <div class="contentTitle" style="padding: 0 10px;border-right:1px solid #eee">APY(人民币)</div>
-                <input type="text" v-model="item.price"  placeholder="请输入价格"  style="width:100px;border:none;padding-left:10px">
+              <div class="contentTitle marginLeft "  style="width:60px;">套餐价:</div>
+              <div class="inputBorderL flexStart" style="height:40px;width:230px;">
+                <div class="contentTitle "  style="width:110px;text-align:center;border-right:1px solid #eee">APY(人民币)</div>
+                <input type="text" v-model="item.price"  placeholder="请输入价格"  style="width:90px;border:none;padding-left:10px">
               </div>
               <div   @click="aplyDate(item,index,'2')" class="circle"><i class="el-icon-tickets"></i></div>
               <div @click="delteZhCombo(item,index)" class="circle"><i class="el-icon-close"></i></div>
@@ -194,16 +194,16 @@
           <p><b>设置价格：</b></p>
           <div class="flexStart">
             <span class="contentTitle">标准价格:</span>
-            <div class="inputBorder flexStart">
-              <div class="contentTitle" style="padding: 0 10px;border-right:1px solid #eee">APY(人民币)</div>
-              <input type="text" v-model="bzPrice"  placeholder="请输入价格" style="width:200px;border:none;font-size:15px;padding-left:10px">
+            <div class="inputBorderL flexStart" style="width:230px;text-align:center;">
+              <div class="contentTitle" style="width:112px;border-right:1px solid #eee">APY(人民币)</div>
+              <input type="text" v-model="bzPrice"  placeholder="请输入价格" style="text-align:center;width:119px;;border:none;font-size:15px;padding-left:10px">
             </div>
           </div>
           <div class="flexStart">
             <span class="contentTitle">儿童价格:</span>
-            <div class="inputBorder flexStart">
-              <div class="contentTitle" style="padding: 0 10px;border-right:1px solid #eee">APY(人民币)</div>
-              <input type="text" v-model="etPrice"  placeholder="请输入价格" style="width:200px;border:none;font-size:15px;padding-left:10px">
+            <div class="inputBorderL flexStart"  style="width:230px;text-align:center;">
+              <div class="contentTitle" style="width:112px;padding: 0 10px;border-right:1px solid #eee">APY(人民币)</div>
+              <input type="text" v-model="etPrice"  placeholder="请输入价格" style="text-align:center;width:119px;border:none;font-size:15px;padding-left:10px">
             </div>
           </div>
         </div>
@@ -211,7 +211,7 @@
           <el-button type="primary" style="background-color: #fff !important;color: #14C5CA !important" plain @click="saveActive">添加到日历</el-button>
         </div>
          <div v-if="isRemake" class="block">
-          <el-button  style="background-color: #fff !important;color: #666666 !important;border-color: #D5D8DD !important" @click="saveActive">保存修改</el-button>
+          <el-button  style="background-color: #14C5CA !important;color: #fff !important;border-color: #D5D8DD !important" @click="saveActive">保存修改</el-button>
         </div>
 
 
@@ -222,7 +222,7 @@
           <el-tooltip content="bottom" placement="bottom" effect="light">
             <div slot="content" style="width:300px;line-height:30px;">
               <p class="fontweight">返差价说明：</p>
-              <p>1.活动满设置人数且此体验完成结束时，退还用户预付的百分比金额（人数也包含购买套餐的固定人数）</p>
+              <p>1.活动满设置人数且此体验完成结束时，退还用户预付的百分比金额,用户的返差价金额包含住宿金额（人数也包含购买套餐的固定人数）</p>
               <p>2.如果设置第二次的人数下限大于上一次人数时，返还比例需大于上一次比例</p>
               <p>3.体验结束时，若没有达到满设置退还人数时，
                   将不会退还金额给用户</p>
@@ -255,8 +255,8 @@
         </div>
         <!-- 设置儿童年龄 -->
         <div v-show="isChildren">
-          <p class="fontweight">设置儿童价标准</p>
-          <div class="inputBorder flexStart" style="width:197px">
+          <p class="fontweight">设置儿童价标准年龄</p>
+          <div class="inputBorderL flexStart" style="width:197px">
             <input @blur="isminOld" type="number" style="width:90px;border:none;text-align: center" v-model="minOld" placeholder="最小年龄">
             至
             <input @blur="ismaxOld" type="number" style="border:none;width:90px;text-align:center" v-model="maxOld" placeholder="最大年龄">
@@ -265,15 +265,15 @@
         <!-- 设置参与者年龄 -->
         <div>
           <p class="fontweight">设置参与者年龄下限</p>
-          <div class="inputBorder" style="width:90px">
+          <div class="inputBorderL" style="width:90px">
             <input @blur="isminJoinOld" type="number" style="width:90px;border:none;text-align: center" v-model="minJoinOld" placeholder="最小年龄">
           </div>
         </div>
         <div style="margin: 20px 0;">
-          <el-button type="primary" plain @click="changeRouter">{{complete == '1'?'保存':'下一步'}}</el-button>
+          <el-button type="primary" class="btnColor" @click="changeRouter">{{complete == '1'?'保存':'下一步'}}</el-button>
         </div>
       </div>
-      <div v-show="allDay.length">
+      <div style="width:420px;" v-show="allDay.length">
         <p id="dateShow" style="width:420px;"><span class="fontweight">体验日历</span>
         <span @click="packDate" class="mainColor contentTitle fontweight marginLeft">{{isDate?'查看日历':'收起日历'}}</span>
         </p>
@@ -393,8 +393,8 @@
         <div class="clickDate contentTitle">
           <p>
             <span class="mainColor marginRight">
-              <span v-if="applyCombo">亲子{{applyCombo.adult}}成人{{applyCombo.kids}}儿童￥{{applyCombo.price}}</span>
-              <span v-if="applyZhCombo">综合{{applyZhCombo.adult}}套餐人数￥{{applyZhCombo.price}}</span>
+              <span v-if="applyCombo">亲子&nbsp;&nbsp;{{applyCombo.adult}}成人{{applyCombo.kids}}儿童￥{{applyCombo.price}}</span>
+              <span v-if="applyZhCombo">套餐:{{applyZhCombo.name}}&nbsp;&nbsp;人数{{applyZhCombo.adult}}人&nbsp;&nbsp;￥{{applyZhCombo.price}}</span>
             </span>
             套餐应用到</p>
             <div>
@@ -405,14 +405,14 @@
             <div v-show="dateChoose == '3'">
               <div class="littleDate">
                 <div class="flexBetween year mainCenter">
-                  <span @click="prevYear">&lt;</span>
+                  <span @click="prevYear(1)">&lt;</span>
                   <span>{{year}}</span>
-                  <span @click="nextYear">&gt;</span>
+                  <span @click="nextYear(1)">&gt;</span>
                 </div> 
                 <div class="flexBetween month mainCenter">
-                  <span @click="prevMonth">&lt;</span>
+                  <span @click="prevMonth(1)">&lt;</span>
                   <span>{{month}}</span>
-                  <span @click="nextMonth">&gt;</span>
+                  <span @click="nextMonth(1)">&gt;</span>
                 </div>
               </div>
               <table style=" border-collapse: collapse;text-align: center;font-weight:bold;" width="350px" height="50px;">
@@ -438,7 +438,9 @@
             <div class="mainCenter">
               <span style="color:#C3C5C8;cursor:pointer" @click="abolishDate()">取消</span>
               <span class="marginLeft queding" @click="sendChoose()" >确认</span>
+              
             </div>
+            <p style="text-align:center;line-height:20px;font-size:13px;color:#14C5CA"><span>(添加以后请注意保存!)</span></p>
         </div>
       </div>
     </div>
@@ -465,7 +467,7 @@
                     a == true
                     break
                   }else{
-                    a = time.getTime() == this.parseDate(this.allDay[i].day)
+                    a = time.getTime() == this.parseDate(this.allDay[i].date)
                   }
                 }
                 for(let i = 0;i<this.allTimeL.length;i++){
@@ -576,7 +578,9 @@
           chooseBT:'',
           chooseET:'',
           applyIndex:'',
-          isTimeNumber:[]
+          isTimeNumber:[],
+          isChis:false,
+          Oreg:/^0|0[.]?[0]∗0/
           }
         },
         watch:{
@@ -599,10 +603,10 @@
           }
         },
         year:function(){
-         this.getAllDay()
+         this.getweekDay()
         },
         month:function(){
-         this.getAllDay()
+         this.getweekDay()
         },
         allDay:function(){
           if(this.allDay.length){
@@ -631,6 +635,16 @@
             this.choseLook = ''
           }
         },
+        isTimeNumber(){
+          if(this.isTimeNumber.length){
+            for(var i = 0; i< this.isTimeNumber.length;i++){
+              if(this.isTimeNumber[i].price[1] || this.isTimeNumber[i].price.childDisprice){
+                this.isChis = true
+                return true
+              }
+            }
+          }
+        }
       },
         computed:{
           isDelateDay(item,index){
@@ -645,29 +659,34 @@
           },
           disprice(){
           if(this.zkCombo.oldPrice && this.zkCombo.discount){
-            return this.zkCombo.oldPrice*this.zkCombo.discount*0.1
+            var a = (this.zkCombo.oldPrice*this.zkCombo.discount*0.1).toFixed(2)
+            return a
           }else{
             return this.oldPrice
           }
         },
         childDisprice(){
           if(this.zkCombo.oldChildPrice && this.zkCombo.childDiscount){
-            return this.zkCombo.oldChildPrice * this.zkCombo.childDiscount *0.1
+            var a = (this.zkCombo.oldChildPrice * this.zkCombo.childDiscount *0.1).toFixed(2)
+            return a
           }else{
             return this.oldChildPrice
           }
         },
         isChildren(){
-          if(this.isTimeNumber.length){
+          if(this.isTimeNumber.length || this.timeNumber.length){
             for(var i = 0; i< this.isTimeNumber.length;i++){
               if(this.isTimeNumber[i].price[1] || this.isTimeNumber[i].price.childDisprice){
+                this.isChis = true
                 return true
               }
             }
             return false
           }else if(this.etPrice || this.zkCombo.oldChildPrice){
+            this.isChis = true
             return true
           }else{
+            this.isChis = false
             return false
           }
         },
@@ -750,7 +769,7 @@
             if(res.data.code == 1){
               this.$message({type:'success',message:'删除成功!'})
               this.getDaySlot(this.chooseBT,this.chooseET)
-              this.getActives()
+              this.getActive()
             }else if(res.data.code == 3){
               this.checkDeletDay(val)
             }else if(res.data.code == 0){
@@ -840,6 +859,15 @@
               }else{
                 this.zhCombo[this.applyIndex] = date
               }
+              this.$message(
+                      {
+                        type:'info',
+                        message:'添加成功，请注意保存修改/添加到日历才能生效!',
+                        duration:5000,
+                        showClose:true
+                        }
+                      )
+          this.abolishDate()
             }else{
               this.$message({type:'warning',message:'请选择自定义日期!'})
             }
@@ -851,8 +879,19 @@
               }else{
                 this.zhCombo[this.applyIndex] = date
               }
+              this.$message(
+            {
+              type:'info',
+              message:'添加成功，请注意保存修改/添加到日历才能生效!',
+              duration:5000,
+              showClose:true
+              }
+            )
+          this.abolishDate()
           }else if(this.dateChoose == '1'){
-              date['date'] = this.reMakeDate
+          
+            sendDate.push(this.reMakeDate)
+              date['date'] = sendDate
               date['is_apply'] = 1
               date['flag'] = this.dateChoose
               if(type == '1'){
@@ -860,9 +899,19 @@
               }else{
                 this.zhCombo[this.applyIndex] = date
               }
+              this.$message(
+            {
+              type:'info',
+              message:'添加成功，请注意保存修改/添加到日历才能生效!',
+              duration:5000,
+              showClose:true
+              }
+            )
+          this.abolishDate()
           }else{
             this.$message({type: 'warning',message: '请选择应用方式!'})
           }
+            this.dateChoose = ''
           
         },
         chnageLittle(){
@@ -898,7 +947,7 @@
               this.$message({type: 'error',message:'请检查成人人数是否填写/是否为正整数!'})
             }else if(!item.kids || !this.reg.test(item.kids)){
               this.$message({type: 'error',message:'请检查儿童人数是否填写/是否为正整数!'})
-            }else if(!item.price || !this.priceReg.test(item.price)){
+            }else if(this.Oreg.test(item.price)||!item.price || !this.priceReg.test(item.price)){
               this.$message({type: 'error',message:'请填写正确金额（最多保存两位小数）'})
             }else{
               this.isPosition = !this.isPosition
@@ -912,7 +961,7 @@
               this.$message({type: 'error',message:'请检查是否填写名称(名称小于等于10个字)'})
             }else if(!item.adult || !this.reg.test(item.adult)){
               this.$message({type: 'error',message:'请检查套餐人数是否填写/是否为正整数!'})
-            }else if(!item.price || !this.priceReg.test(item.price)){
+            }else if(this.Oreg.test(item.price)||!item.price || !this.priceReg.test(item.price)){
               this.$message({type: 'error',message:'请填写正确金额（最多保存两位小数）'})
             }else{
                this.isPosition = !this.isPosition
@@ -998,15 +1047,36 @@
         },
         //计算差价是否满足要求
         isCjNum(item,index){
-          if(this.cjList.length > 1 &&  Number(item.num) <= Number(this.cjList[index -1].num)){
-            this.$message({type: 'warning',message:'满减人数必须大于上一个满减人数'})
-            item.cjNum = ''
+          if(index >0 && this.cjList.length > 1){
+            if(Number(item.num) <= Number(this.cjList[index -1].num) && Number(item.num)>0){
+              this.$message({type: 'warning',message:'满减人数必须大于上一个满减人数且大于0'})
+              item.num = ''
+            }
+          }else if(index == 0 && this.cjList.length > 1){
+            if(Number(item.num) > Number(this.cjList[index +1].num) &&  Number(item.num) >0) {
+              this.$message({type: 'warning',message:'满减人数必须小于下一个满减人数且大于0'})
+              item.num = ''
+            }
+          }else if(Number(item.num) <=0){
+              this.$message({type: 'warning',message:'满减人数必须大于0'})
+              item.num = ''
           }
         },
         isCjScale(item,index){
-          if(this.cjList.length > 1 &&  Number(item.refund_rate) <= Number(this.cjList[index -1].refund_rate)){
-            this.$message({type: 'warning',message:'退还比例必须大于上一个退还比例'})
-            item.cjScale = ''
+          if(index >0 && this.cjList.length > 1){
+            if(Number(item.refund_rate) < Number(this.cjList[index -1].refund_rate) && Number(item.refund_rate) >0){
+              this.$message({type: 'warning',message:'退还比例必须大于上一个退还比例且大于0'})
+              item.refund_rate = ''
+            }
+          }else if(index == 0 && this.cjList.length > 1){
+            if(Number(item.refund_rate) > Number(this.cjList[index +1].refund_rate) && Number(item.refund_rate) >0){
+              this.$message({type: 'warning',message:'退还比例必须小于下一个退还比例且大于0'})
+              item.refund_rate = ''
+            }
+          }else if(Number(item.refund_rate) <=0){
+           
+              this.$message({type: 'warning',message:'退还比例必须大于0'})
+              item.refund_rate = ''
           }
         },
         //判断年龄要求
@@ -1143,8 +1213,8 @@
               this.$message({type: 'error',message:'请检查成人人数是否填写/是否为正整数!'})
             }else if(!arr.kids || !this.reg.test(arr.kids)){
               this.$message({type: 'error',message:'请检查儿童人数是否填写/是否为正整数!'})
-            }else if(!arr.price || !this.priceReg.test(arr.price)){
-              this.$message({type: 'error',message:'请填写正确金额（最多保存两位小数）'})
+            }else if(this.Oreg.test(arr.price)||!arr.price || !this.priceReg.test(arr.price)){
+              this.$message({type: 'error',message:'请填写正确金额（大于1最多保留两位小数）'})
             }else{
               this.pcCombo.push({adult:'',kids:'',price:'',type:1})
             }
@@ -1154,8 +1224,8 @@
               this.$message({type: 'error',message:'请检查是否填写名称(名称小于等于10个字)'})
             }else if(!arr.adult || !this.reg.test(arr.adult)){
               this.$message({type: 'error',message:'请检查套餐人数是否填写/是否为正整数!'})
-            }else if(!arr.price || !this.priceReg.test(arr.price)){
-              this.$message({type: 'error',message:'请填写正确金额（最多保存两位小数）'})
+            }else if(this.Oreg.test(arr.price)||!arr.price || !this.priceReg.test(arr.price)){
+              this.$message({type: 'error',message:'请填写正确金额（大于1最多保留两位小数）'})
             }else{
               this.zhCombo.push({name:'',adult:'',price:'',type:2})
             }
@@ -1218,8 +1288,8 @@
           if(this.discountChose.indexOf('2') != -1 && this.discountChose.indexOf('3') == -1){
                 for(var i = 0; i< this.pcCombo.length;i++){
                   var ob = this.pcCombo[i]
-                  if(!ob.adult || !ob.kids || !ob.price){
-                    this.$message({type: 'warning',message:'您的亲子套餐未填完整'})
+                  if(!ob.adult || !ob.kids || !ob.price || !this.priceReg.test(ob.price)|| this.Oreg.test(ob.price)){
+                    this.$message({type: 'warning',message:'您的亲子套餐未填完整(大于1最多保留两位小数)'})
                     return false
                   }
                 }
@@ -1227,8 +1297,8 @@
               }else if(this.discountChose.indexOf('3') != -1 && this.discountChose.indexOf('2') == -1){
                 for(var i = 0; i< this.zhCombo.length;i++){
                   var ob = this.zhCombo[i]
-                  if(!ob.name || !ob.adult || !ob.price){
-                    this.$message({type: 'warning',message:'您的综合套餐未填完整'})
+                  if(!ob.name || !ob.adult || !ob.price || !this.priceReg.test(ob.price)|| this.Oreg.test(ob.price)){
+                    this.$message({type: 'warning',message:'您的综合套餐未填完整(大于1最多保留两位小数)'})
                     return false
                   }
                 }
@@ -1238,15 +1308,15 @@
               }else{
                 for(var i = 0; i< this.pcCombo.length;i++){
                   var ob = this.pcCombo[i]
-                  if(!ob.adult || !ob.kids || !ob.price){
-                    this.$message({type: 'warning',message:'您的亲子套餐未填完整'})
+                  if(!ob.adult || !ob.kids || !ob.price ||  !this.priceReg.test(ob.price)|| this.Oreg.test(ob.price)){
+                    this.$message({type: 'warning',message:'您的亲子套餐未填完整(大于1最多保留两位小数)'})
                     return false
                   }
                 }
                  for(var i = 0; i< this.zhCombo.length;i++){
                   var ob = this.zhCombo[i]
-                  if(!ob.name || !ob.adult || !ob.price){
-                    this.$message({type: 'warning',message:'您的综合套餐未填完整'})
+                  if(!ob.name || !ob.adult || !ob.price ||  !this.priceReg.test(ob.price)|| this.Oreg.test(ob.price)){
+                    this.$message({type: 'warning',message:'您的综合套餐未填完整(大于1最多保留两位小数)'})
                     return false
                   }
                 }
@@ -1316,31 +1386,7 @@
           .then(res=>{
             if(res.data.code == 1){
                this.$message({type: 'success',message:'保存成功!'})
-                // let a = []
-                // a = this.get(this.longTime[0],this.longTime[1])
-                // for(let i =0;i<a.length;i++){
-                //   let c = []
-                //   for(let j =0;j<this.activeList.length;j++){
-                //     c.push({time:[this.activeList[j].startTime,this.activeList[j].endTime]})
-                //   }
-                //   a[i].list = c
-                // }
-                // if(this.allDay.length){
-                //   for(let i =0;i<a.length;i++){
-                //     for(let j = 0 ; j < this.allDay.length;j++){
-                //       if( this.parseDate(a[i].day) == this.parseDate(this.allDay[j].day)){
-                //         this.allDay.splice(j,1)
-                //       }
-                //     }
-                //   }
-                //   for(let i =0;i<a.length;i++){
-                //     this.allDay.push(a[i])
-                //   }
-                // }else{
-                //   this.allDay=(a)
-                // }
-                // this.getweekDay()
-                this.getActives()
+                this.getActive()
     
             }else if(res.data.code == 3){
               this.addTimeList(val)
@@ -1356,7 +1402,7 @@
           this.allTimeL = []
           this.isCreate = false
           this.isZhemo = false
-          this.longTime = []
+          // this.longTime = []
           this.activeList = []
           this.activeNum = ''
           this.personNum = ''
@@ -1387,6 +1433,20 @@
                 type: 2  
               }
             ]
+            this.timeNumber = []
+        },
+        checkCjList(arr){
+          if(this.chaJia){
+              for(var i = 0; i< arr.length ; i++){
+              if(!arr[i].num || !arr[i].refund_rate){
+                return false
+              }
+            }
+            return true
+          }else{
+            return true
+          }
+          
         },
 
 
@@ -1399,17 +1459,82 @@
 
 
         changeRouter(item,index){
-          if(this.complete == '1'){
-            if(this.allDay.length){
+           var isTrue = this.checkCjList(this.cjList)
+           if(!isTrue){
+              this.$message({type: 'error',message:'请检查是否填写完整返差价'})
+           }else{
+               if(this.isChis){
+            if(!this.minOld){
+              this.$message({type:'info',message:'请填写儿童标准价最小年龄'})
+            }else if(!this.maxOld){
+              this.$message({type:'info',message:'请填写儿童标准价最大年龄'})
+            }else{
+               if(this.complete == '1'){
+               
+                  this.$http.post(this.api + '/ActivitSaveTwo',{
+                    token: localStorage.getItem('token'),
+                    activity_id: this.active_id,
+                    version: 2.0,
+                    kids_stand_low: this.minOld,
+                    kids_stand_high: this.maxOld,
+                    age_limit: this.minJoinOld,
+                    differ: this.chaJia? JSON.stringify(this.cjList):'',
+                    step: 11
+                  })
+                    .then(res=>{
+                      if(res.data.code == 1){
+                          this.$message({
+                            type: 'success',
+                            message: '保存成功！'
+                          })
+                      }else if(res.data.code == 3){
+                        this.changeRouter(item,index)
+                      }else if(res.data.code == 0){
+                        alert(res.data.msg)
+                      }
+                    })
+              
+              }else{
+                if(!this.allDay.length){
+                  this.$message({
+                    type: 'error',
+                    message: '请填写活动'
+                  })
+                }else{
+    
+                    this.$http.post(this.api + '/ActivitSaveTwo',{
+                      token: localStorage.getItem('token'),
+                      activity_id: this.active_id,
+                      version: 2.0,
+                      kids_stand_low: this.minOld,
+                      kids_stand_high: this.maxOld,
+                      age_limit: this.minJoinOld,
+                      differ: this.chaJia? JSON.stringify(this.cjList):'',
+                      step: 11
+                    })
+                      .then(res=>{
+                        if(res.data.code == 1){
+                            this.$emit('changeRouter',{id:12,router:'accommodation',information: this.active_id,complete: this.complete})
+                        }else if(res.data.code == 3){
+                          this.changeRouter(item,index)
+                        }else if(res.data.code == 0){
+                          alert(res.data.msg)
+                        }
+                      })
+              
+                }
+              }
+            }
+          }else{
+             if(this.complete == '1'){
               this.$http.post(this.api + '/ActivitSaveTwo',{
                 token: localStorage.getItem('token'),
                 activity_id: this.active_id,
                 version: 2.0,
-                long_day: 1,
                 kids_stand_low: this.minOld,
                 kids_stand_high: this.maxOld,
                 age_limit: this.minJoinOld,
-                differ: JSON.stringify(this.cjList),
+                differ: this.chaJia? JSON.stringify(this.cjList):'',
                 step: 11
               })
                 .then(res=>{
@@ -1424,26 +1549,7 @@
                     alert(res.data.msg)
                   }
                 })
-            }else{
-              this.$http.post(this.api + '/ActivitSaveTwo',{
-                token: localStorage.getItem('token'),
-                activity_id: this.active_id,
-                long_day: 1,
-                step: 11
-              })
-                .then(res=>{
-                  if(res.data.code == 1){
-                    this.$message({
-                      type: 'success',
-                      message: '保存成功！'
-                    })
-                  }else if(res.data.code == 3){
-                    this.changeRouter(item,index)
-                  }else if(res.data.code == 0){
-                    alert(res.data.msg)
-                  }
-                })
-            }
+            
           }else{
             if(!this.allDay.length){
               this.$message({
@@ -1451,16 +1557,15 @@
                 message: '请填写活动'
               })
             }else{
-              if(this.active_id){
+ 
                 this.$http.post(this.api + '/ActivitSaveTwo',{
                   token: localStorage.getItem('token'),
                   activity_id: this.active_id,
                   version: 2.0,
-                  long_day: 1,
                   kids_stand_low: this.minOld,
                   kids_stand_high: this.maxOld,
                   age_limit: this.minJoinOld,
-                  differ: JSON.stringify(this.cjList),
+                  differ: this.chaJia? JSON.stringify(this.cjList):'',
                   step: 11
                 })
                   .then(res=>{
@@ -1472,30 +1577,14 @@
                       alert(res.data.msg)
                     }
                   })
-              }else{
-                this.$http.post(this.api + '/ActivitSaveTwo',{
-                  token: localStorage.getItem('token'),
-                  version: 2.0,
-                  long_day: 1,
-                  kids_stand_low: this.minOld,
-                  kids_stand_high: this.maxOld,
-                  age_limit: this.minJoinOld,
-                  differ: JSON.stringify(this.cjList),
-                  step: 11
-                })
-                  .then(res=>{
-                    if(res.data.code == 1){
-                      this.$emit('saveId',res.data.data)
-                      this.$emit('changeRouter',{id:12,router:'accommodation',information: res.data.data,})
-                    }else if(res.data.code == 3){
-                      this.changeRouter(item,index)
-                    }else if(res.data.code == 0){
-                      alert(res.data.msg)
-                    }
-                  })
-              }
+           
             }
           }
+          }
+           }
+        
+          
+         
         },
         timestampToTime(timestamp) {
            var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
@@ -1544,24 +1633,50 @@
             return dateArr;
           }
         },
-        prevYear(){
+        prevYear(val){
           this.year -= 1
+          this.isShow = false
+          this.dateIndex = -1
+          this.timeNumber = []
+          if(val != 1){
+            this.getActive()
+          }
+           
         },
-        nextYear(){
+        nextYear(val){
           this.year += 1
+          this.isShow = false
+          this.dateIndex = -1
+          this.timeNumber = []
+          if(val != 1){
+            this.getActive()
+          }
         },
-        prevMonth(){
+        prevMonth(val){
           this.month -= 1
           if(this.month == 0){
             this.month = 12
             this.year -=1
           }
+    
+          this.isShow = false
+          this.dateIndex = -1
+          this.timeNumber = []
+          if(val != 1){
+            this.getActive()
+          }
         },
-        nextMonth(){
+        nextMonth(val){
           this.month += 1
           if(this.month == 13){
              this.month = 1
             this.year += 1
+          }
+          this.isShow = false
+          this.dateIndex = -1
+          this.timeNumber = []
+          if(val != 1){
+            this.getActive()
           }
         },
         getMonth(year,month){
@@ -1605,9 +1720,15 @@
                   this.$message({type: 'error',message: '请填写活动时间段'})
                 }else if(!this.personNum || !this.reg.test(this.personNum)){
                   this.$message({type: 'error',message: '请填写正确活动人数（正整数）'})
-                }else if( !this.zkCombo.oldPrice || !this.zkCombo.discount){
-                  this.$message({type: 'error',message: '请填写完整折扣价'})
-                }else{
+                }else if( this.Oreg.test(this.zkCombo.oldPrice)||!this.zkCombo.oldPrice||!this.priceReg.test(this.zkCombo.oldPrice)){
+                    this.$message({type: 'error',message: '请填写完整标准折扣价（金额大于1最多保存两位小数）'})
+                  }else if(!this.zkCombo.discount || this.Oreg.test(this.zkCombo.discount)){
+                    this.$message({type: 'error',message: '请填写标准价折扣（折扣大于1最多保存两位小数）'})
+                  }else if(this.Oreg.test(this.zkCombo.oldChildPrice)&&this.zkCombo.oldChildPrice||this.zkCombo.oldChildPrice && !this.priceReg.test(this.zkCombo.oldChildPrice)){
+                  this.$message({type: 'error',message: '请填写完整儿童折扣价（金额大于1最多保存两位小数）'})
+                 }else if(this.Oreg.test(this.zkCombo.childDiscount)&&this.zkCombo.oldChildPrice || this.zkCombo.oldChildPrice && !this.zkCombo.childDiscount){
+                    this.$message({type: 'error',message: '请填写儿童价价折（折扣大于1最多保存两位小数）'})
+                 }else{
                   this.checkCombo(1) 
                 }
               }else{
@@ -1617,9 +1738,15 @@
                     this.$message({ type: 'error', message: '请填写正确活动数量（正整数）'})
                   }else if(!this.personNum || !this.reg.test(this.personNum)){
                     this.$message({type: 'error',message: '请填写正确活动人数（正整数）'})
-                  }else if( !this.zkCombo.oldPrice || !this.zkCombo.discount){
-                    this.$message({type: 'error',message: '请填写完整折扣价'})
-                  }else{
+                  }else if( this.Oreg.test(this.zkCombo.oldPrice)||!this.zkCombo.oldPrice||!this.priceReg.test(this.zkCombo.oldPrice)){
+                    this.$message({type: 'error',message: '请填写完整标准折扣价（金额大于1最多保存两位小数）'})
+                  }else if(!this.zkCombo.discount || this.Oreg.test(this.zkCombo.discount)){
+                    this.$message({type: 'error',message: '请填写标准价折扣（折扣大于1最多保存两位小数）'})
+                  }else if(this.Oreg.test(this.zkCombo.oldChildPrice)&&this.zkCombo.oldChildPrice||this.zkCombo.oldChildPrice && !this.priceReg.test(this.zkCombo.oldChildPrice)){
+                  this.$message({type: 'error',message: '请填写完整儿童折扣价（金额大于1最多保存两位小数）'})
+                 }else if(this.Oreg.test(this.zkCombo.childDiscount)&&this.zkCombo.oldChildPrice || this.zkCombo.oldChildPrice && !this.zkCombo.childDiscount){
+                    this.$message({type: 'error',message: '请填写儿童价价折（折扣大于1最多保存两位小数）'})
+                 }else{
                     this.checkCombo(1) 
                   }
                 }
@@ -1629,8 +1756,10 @@
                   this.$message({type: 'error',message: '请填写活动时间段'})
                 }else if(!this.personNum || !this.reg.test(this.personNum)){
                   this.$message({type: 'error',message: '请填写正确活动人数（正整数）'})
-                }else if(!this.bzPrice){
-                  this.$message({type: 'error',message: '请填写标准价格'})
+                }else if(this.Oreg.test(this.bzPrice)||!this.bzPrice || !this.priceReg.test(this.bzPrice)){
+                  this.$message({type: 'error',message: '请填写正确金额（大于1最多保存两位小数)'})
+                }else if(this.etPrice &&this.Oreg.test(this.etPrice)||this.etPrice && !this.priceReg.test(this.etPrice)){
+                  this.$message({type: 'error',message: '请填写正确儿童金额（大于1最多保存两位小数）'})
                 }else{
                   this.checkCombo(2)
                 }
@@ -1641,8 +1770,10 @@
                   this.$message({ type: 'error', message: '请填写正确活动数量（正整数）'})
                 }else if(!this.personNum || !this.reg.test(this.personNum)){
                   this.$message({type: 'error',message: '请填写正确活动人数（正整数）'})
-                }else if(!this.bzPrice){
-                  this.$message({type: 'error',message: '请填写标准价格'})
+                }else if(this.Oreg.test(this.bzPrice)||!this.bzPrice || !this.priceReg.test(this.bzPrice)){
+                  this.$message({type: 'error',message: '请填写正确标准金额（大于1最多保存两位小数）'})
+                }else if(this.etPrice &&this.Oreg.test(this.etPrice)||this.etPrice && !this.priceReg.test(this.etPrice)){
+                  this.$message({type: 'error',message: '请填写正确儿童金额（大于1最多保存两位小数）'})
                 }else{
                   this.checkCombo(2)
                 }
@@ -1668,15 +1799,16 @@
             token: localStorage.getItem('token'),
             activity_id: this.active_id ,
             version: 2.0,
-            slot_id: item.slot_id
+            slot_id: item.slot_id,
+            is_all:0
           })
             .then(res=>{
               if(res.data.code == 1){
-                this.Alllist.splice(index,1)
+                this.timeNumber.splice(index,1)
                 if(colorIndex){
-                  this.allDay[colorIndex].list = this.Alllist
+                  this.allDay[colorIndex].list = this.timeNumber
                 }
-                if(!this.Alllist.length){
+                if(!this.timeNumber.length){
                   this.color[this.dayIndex].index = '1'
                   this.allDay.splice(colorIndex,1)
                 }
@@ -1684,6 +1816,7 @@
                   type: 'success',
                   message: '删除成功!'
                 });
+              
               }else if(res.data.code == 3){
                 this.$http.post(this.api + '/home/index/token')
                   .then(res=>{
@@ -1712,18 +1845,19 @@
             b.push({index: 1})
             for (let j = 0; j < this.allDay.length; j++) {
               if(new Date(this.year, this.month - 1, i).getTime() >= Date.now() - 8.64e7){
-                if (new Date(this.year, this.month - 1, i).getTime() == this.parseDate(this.allDay[j].day) && this.allDay[j].list.length && this.allDay[j].status !=2 ) {
-                  for(let m =0; m<this.allDay[j].list.length;m++){
-                    if(this.allDay[j].list[m].online != 1){
-                      b[i - 1] = ({index: 0})
-                    }else{
-                      if(b[i-1].index == 0){
-                        b[i - 1] = ({index: 0})
-                      }else{
-                        b[i - 1] = ({index: 3})
-                      }
-                    }
-                  }
+                if (new Date(this.year, this.month - 1, i).getTime() == this.parseDate(this.allDay[j].date)  && this.allDay[j].status !=2 ) {
+                  b[i - 1] = ({index: 0})
+                 // for(let m =0; m<this.allDay[j].list.length;m++){
+                  //   if(this.allDay[j].list[m].online != 1){
+                  //     b[i - 1] = ({index: 0})
+                  //   }else{
+                  //     if(b[i-1].index == 0){
+                  //       b[i - 1] = ({index: 0})
+                  //     }else{
+                  //       b[i - 1] = ({index: 3})
+                  //     }
+                  //   }
+                  // }
                 } else {
                   if(b[i-1].index == 0){
                     b[i - 1] = ({index: 0})
@@ -1743,7 +1877,6 @@
           return Date.parse(new Date(Date.parse(str.replace(/-/g, "/")))) ; // 精确到秒
         },
         getweekDay(){
-          var beganTime = new Date(this.allDay[0].day)
           var day = this.getMonth(this.year,this.month)
           var dayIn = this.getFirstDay(this.year,this.month)
           var temp =[]
@@ -1758,18 +1891,19 @@
             b.push({index:1})
             for (let j = 0; j < this.allDay.length; j++) {
               if(new Date(this.year, this.month - 1, i).getTime() >= Date.now() - 8.64e7){
-                if (new Date(this.year, this.month - 1, i).getTime() == this.parseDate(this.allDay[j].day) && this.allDay[j].list.length && this.allDay[j].status !=2 ) {
-                  for(let m =0; m<this.allDay[j].list.length;m++){
-                    if(this.allDay[j].list[m].online != 1){
-                       b[i - 1] = ({index: 0})
-                    }else{
-                      if(b[i-1].index == 0){
-                        b[i - 1] = ({index: 0})
-                      }else{
-                        b[i - 1] = ({index: 3})
-                      }
-                    }
-                  }
+                if (new Date(this.year, this.month - 1, i).getTime() == this.parseDate(this.allDay[j].date) && this.allDay[j].status !=2 ) {
+                  b[i - 1] = ({index: 0})
+                  // for(let m =0; m<this.allDay[j].list.length;m++){
+                  //   if(this.allDay[j].list[m].online != 1){
+                  //      b[i - 1] = ({index: 0})
+                  //   }else{
+                  //     if(b[i-1].index == 0){
+                  //       b[i - 1] = ({index: 0})
+                  //     }else{
+                  //       b[i - 1] = ({index: 3})
+                  //     }
+                  //   }
+                  // }
                 } else {
                   if(b[i-1].index == 0){
                     b[i - 1] = ({index: 0})
@@ -1792,15 +1926,7 @@
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            var a = []
-            for(let i = 0;i<this.allDay.length;i++){
-              for(let j = 0; j < this.allDay[i].list.length;j++){
-                if(this.allDay[i].list[j].slot_id){
-                  a.push(this.allDay[i].list[j].slot_id)
-                }
-              }
-            }
-            this.deletAllDay(a)
+            this.deletAllDay()
           }).catch(() => {
             this.$message({
               type: 'info',
@@ -1808,24 +1934,24 @@
             });
           });
         },
-        deletAllDay(val){
-         this.$http.post(this.api + '/SlotD',{
+        deletAllDay(){
+         this.$http.post(this.api + '/ActivitySlotDelTwo',{
            token: localStorage.getItem('token'),
-           slot_id: JSON.stringify(val)
+           activity_id: this.active_id,
+           is_all:1,
+           verson: 2.0,
          })
            .then(res=>{
              if(res.data.code == 1){
-               this.allDay = []
+               this.getActive()
                this.$message({
                  type: 'success',
                  message: '删除成功!'
                });
              }else if(res.data.code == 3){
-               this.$http.post(this.api + '/home/index/token')
-                 .then(res=>{
-                   localStorage.setItem('token',res.data.data)
-                   this.deletAllDay(val)
-                 })
+            
+                this.deletAllDay()
+              
              }else if(res.data.code == 0){
                alert(res.data.msg)
              }
@@ -1833,6 +1959,10 @@
         },
         //修改活动
         remake(item,index){
+           this.asdsad(item,index)
+        },
+        asdsad(item,index){
+          this.discountChose = []
           this.isRemake = true
           this.reMakeDate = this.longTime[0]
           this.witchDay = this.longTime[0] +' '+ item.begin_time + '-'+ item.end_time
@@ -1858,19 +1988,7 @@
             this.discountChose.push('3')
           }
         },
-        abolishRemake(){
-          this.isRemake = false
-          this.Alllist[this.remakeIndex] = (this.remakeList)
-          this.startTime = ''
-          this.endTime = ''
-          this.Newprice = ''
-          this.newPerson = ''
-        },
-        getInformation(){
-            this.$http.post(this.api + '/ActivityAllSlotDetailTwo',{
-              
-            })
-        },
+
         getActives(){
           this.$http.post(this.api + '/ActivityE',{
             token: localStorage.getItem('token'),
@@ -1963,7 +2081,7 @@
             this.isCombine('1',this.isQzCombine)
           }
           if(!this.isZhemo){
-            this.isCombine('2',this.isZhCombine)
+            this.isCombine('2',this.iszhCombo)
           }
         },
         getActive(){
@@ -2015,6 +2133,8 @@
                         )
                      }
                   }
+                  this.allDay = data
+                  this.getweekDay()
               }else if(res.data.code == 3){
                     this.getActive()
               }else if(res.data.code == 0){
@@ -2049,7 +2169,7 @@
       
       mounted(){
           this.getActive()
-         this.getActives()
+        //  this.getActives()
          this.getPriceAcity()
       },
       created(){

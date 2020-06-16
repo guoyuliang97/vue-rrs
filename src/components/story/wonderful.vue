@@ -15,7 +15,8 @@
       <p class="title">精选故事</p>
       <div class="select_list">
         <div class="select_detail" v-for="(item,index) in wonderfulList">
-          <Detail type="2" v-on:toperson="toperson(item,index)" v-on:toStory="toStory(item,index)" :zanIndex="item.zanIndex" :status="item.status" :address="item.address" :remark="item.remark" :imgUrl="item.img" :avator="item.avator" :zan="item.zan" :say="item.say" v-on:addZan="addZan(item,index)"></Detail>
+                      <Detail type="2" v-on:toperson="toperson(item,index)" v-on:toStory="toStory(item,index)" :data="item" v-on:addZan="addZan(item,index)"></Detail>
+
         </div>
       </div>
     </div>
@@ -64,32 +65,7 @@
             if(res.data.code == 1){
               let data = res.data.data.data
               for(let i = 0;i<data.length;i++){
-                let user = data[i].user
-                let avator = ''
-                let zan = ''
-                if(data[i].cover_image){
-                  if(user.head_image){
-                    avator = user.headimage.domain + user.headimage.image_url
-                  }else{
-                    avator =  '../../static/img/static/user.png'
-                  }
-                  if(data[i].is_praise){
-                    zan = 1
-                  }else{
-                    zan = 0
-                  }
-                  this.wonderfulList.push({
-                    img:data[i].cover.domain + data[i].cover.image_url,
-                    address:data[i].province,
-                    remark: data[i].title,
-                    avator:avator,
-                    zan: data[i].praise_num,
-                    say: data[i].leaving_num,
-                    zanIndex:zan,
-                    story_id: data[i].story_id,
-                    userId: data[i].user_id
-                  })
-                }
+               this.wonderfulList.push(data[i])
               }
               if(!data.length){
                 this.request = true

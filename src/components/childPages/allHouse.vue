@@ -20,7 +20,7 @@
       <div v-for="(item,index) in houseList" :key="index"  style="position:relative;padding:20px 0;text-align: center;flex-wrap: wrap;display: flex;justify-content:space-between;border-bottom: 1px solid #E6E6E6">
         <div style="position: absolute;left:-50px;line-height: 80px;"><i  style="font-size:25px;border-radius: 50%;cursor: pointer" @click="chooseHouse(item,index)"  :style="{color:item.color,border:item.color == '#fff'?'1px solid #000':''}" class="el-icon-circle-check"></i></div>
         <div style="width:180px;text-align: center;position:relative">
-          <img :src="item.imgUrl[0]" width="150px" height="80px" >
+          <img :src="item.imgUrl[0]" style="object-fit:cover" width="150px" height="80px" >
           <div @click="lookPhoto(item,index)" style="position: absolute;top:0;left:0;right:0;bottom:0;line-height:80px;color:#fff;cursor: pointer">
             查看更多图片
           </div>
@@ -52,7 +52,7 @@
           已选<span style="color:#008489">{{check.length}}</span>个房源
         </div>
         <div style="margin-left:20px;margin-right:30px;color:#008489">
-          ￥{{allPrice}}
+          ￥{{allPrice.toFixed(2)}}
         </div>
         <div>
           <el-button @click="saveHouse" type="primary">保存</el-button>
@@ -116,10 +116,10 @@
           if(item.color == '#fff'){
             item.color = '#008489'
             this.check.push(item)
-            this.allPrice += parseInt(item.price)
+            this.allPrice += Number(item.price)
           }else{
             item.color = '#fff'
-            this.allPrice -= parseInt(item.price)
+            this.allPrice -= Number(item.price)
             for(let i =0;i<this.check.length;i++){
               if(this.check[i].house_id == item.house_id){
                 this.check.splice(i,1)
@@ -146,7 +146,7 @@
             for(let j = 0;j<this.check.length;j++){
               if(this.houseList[i].house_id == this.check[j].house_id){
                 this.houseList[i].color = '#fff'
-                this.allPrice -= parseInt(this.check[j].price)
+                this.allPrice -= Number(this.check[j].price)
               }
             }
           }
@@ -204,7 +204,7 @@
         reduceNum(item,index){
           if(item.number >1){
             item.number -= 1
-            this.allPrice -= parseInt(item.price) 
+            this.allPrice -= Number(item.price) 
           }else{
             this.$message({
               type:'info',
@@ -215,7 +215,7 @@
         addNum(item,index){
           if(item.number <item.type){
             item.number +=1
-            this.allPrice += parseInt(item.price) 
+            this.allPrice += Number(item.price) 
           }else{
             this.$message({
               type: 'info',
@@ -247,7 +247,6 @@
       mounted(){
         this.activeId = this.$route.query.activeId
         this.slot_id = this.$route.query.slot_id
-        console.log(this.slot_id)
         this.get_activity()
       },
       created(){

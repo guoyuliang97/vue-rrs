@@ -9,11 +9,12 @@
 					<div @click="sosuo">搜索故事 <img alt="" src="../../static/img/story/strorySearch.png" /></div>
 				</div>
 				<el-menu :default-active="activeIndex" class="el-menu-demo story_tabs" mode="horizontal" @select="handleSelect">
-					<el-menu-item index="1"><span :style="{color:activeIndex=='1'?'#008489':'#333333'}">精选故事</span></el-menu-item>
-					<el-menu-item index="2"><span :style="{color:activeIndex=='2'?'#008489':'#333333'}">户外活动</span></el-menu-item>
-					<el-menu-item index="3"><span :style="{color:activeIndex=='3'?'#008489':'#333333'}">少数民族</span></el-menu-item>
-					<el-menu-item index="4"><span :style="{color:activeIndex=='4'?'#008489':'#333333'}">本土文化</span></el-menu-item>
+					<el-menu-item index="1"><span :style="{color:activeIndex=='1'?'#14c5ca':'#333333'}">精选故事</span></el-menu-item>
+					<el-menu-item index="2"><span :style="{color:activeIndex=='2'?'#14c5ca':'#333333'}">户外活动</span></el-menu-item>
+					<el-menu-item index="3"><span :style="{color:activeIndex=='3'?'#14c5ca':'#333333'}">少数民族</span></el-menu-item>
+					<el-menu-item index="4"><span :style="{color:activeIndex=='4'?'#14c5ca':'#333333'}">本土文化</span></el-menu-item>
 				</el-menu >
+			
 				<div>
 					<router-view></router-view>
 				</div>

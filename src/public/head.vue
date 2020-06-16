@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="head" :style="{ backgroundColor:type=='help'||type=='helphome'?'#008489':type=='home'||type=='activeStep'? 'none':'white',color:type=='help'||type=='helphome'||type=='home'||type=='activeStep'?'white':'black',borderBottom:type=='helphome'?'none':'border-bottom: 1px solid #eeeeee;',}">
+		<div class="head" :style="{ backgroundColor:type=='help'||type=='helphome'?'#14C5CA':type=='home'||type=='activeStep'? 'none':'white',color:type=='help'||type=='helphome'||type=='home'||type=='activeStep'?'white':'black',borderBottom:type=='helphome'?'none':'border-bottom: 1px solid #eeeeee;',}">
 			<div class="head_logo" >
 				<div v-if="type!='home'&&type!='help'&&type!='activeStep'" @click="toHome" style="width:42px;"><img src="../../static/img/static/logo1.png" width="100%"></div>
 				<div v-if="type=='home'||type=='activeStep'||type=='help'" @click="toHome" style="width:42px;"><img src="../../static/img/static/logo.png" width="100%"></div>
@@ -16,37 +16,37 @@
             <LoadingImg type="6" :src="userImg"  style="width:100%;height:100%"></LoadingImg></div>
 					<div v-if="isLoginMess" style="width: 280px;margin-top: 20px;padding: 0;margin-left:-206px;background-color:#fff;border:1px solid #eee" >
 						<ul class="head_drop">
-							<li @click="toEdit">编辑个人资料</li>
+							<li @click="toEdit">{{allText[0].login[0][getLan]}}</li>
 							<li @click="toTravelfunds" >
-								<p>旅行基金</p>
+								<p>{{allText[0].login[1][getLan]}}</p>
 							</li>
-      <li @click="toTransaction">交易中心</li>
-							<li @click="toAccount">账号设置</li>
-							<li @click="exitAccount">退出</li>
+              <li @click="toTransaction">{{allText[0].login[2][getLan]}}</li>
+							<li @click="toAccount">{{allText[0].login[3][getLan]}}</li>
+							<li @click="exitAccount">{{allText[0].login[4][getLan]}}</li>
 						</ul>
 					</div>
 
 				</div>
 				<ul class="head_nav" v-if="type!='help'&&type!='helphome'">
-					<li class="fontweight headList" @click="toExperience" :style="{borderBottom: type == 'publishList'?'2px solid #008489':''}">成为策划人</li>
-					<li class="fontweight headList" @click="toVolunteers" :style="{borderBottom: type == 'volunteerList'?'2px solid #008489':''}" >志愿者</li>
-					<li class="fontweight headList" :style="{borderBottom: type == 'story'?'2px solid #008489':''}" >
+					<li class="fontweight headList" @click="toExperience" :style="{borderBottom: type == 'publishList'?'2px solid #14C5CA':''}">{{allText[0].title[0][getLan]}}</li>
+					<li class="fontweight headList" @click="toVolunteers" :style="{borderBottom: type == 'volunteerList'?'2px solid #14C5CA':''}" >{{allText[0].title[1][getLan]}}</li>
+					<li class="fontweight headList" :style="{borderBottom: type == 'story'?'2px solid #14C5CA':''}" >
             <el-popover placement="bottom" width="100" trigger="click">
               <div @click="toStory" style="width:150px;text-align:center;cursor: pointer"><i class="el-icon-view">查看故事</i></div>
               <div @click="toStoryPublish" style="width:150px;text-align:center;margin-top:10px;cursor: pointer;"><i class="el-icon-edit">创建故事</i></div>
-              <span slot="reference" >故事</span>
+              <span slot="reference" >{{allText[0].title[2][getLan]}}</span>
           </el-popover></li>
-          <li class="fontweight headList"  @click="toWish" v-show="isLogin" :style="{borderBottom: type == 'wish'?'2px solid #008489':''}">心愿单</li>
-          <li class="fontweight headList"  @click="toJourney" v-show="isLogin" :style="{borderBottom: type == 'jouerney'?'2px solid #008489':''}">我的旅程</li>
-          <li class="fontweight headList"  @click="toCehua" v-show="someThing" :style="{borderBottom: type == 'myPlay'?'2px solid #008489':''}">
-            <el-badge is-dot :hidden="isPlayer? false:true" class="item">我的策划</el-badge></li>
-          <li class="fontweight headList"  @click="toZhiyuan" v-show="volunteer" :style="{borderBottom: type == 'myWant'?'2px solid #008489':''}">我的志愿</li>
-          <li class="fontweight headList"  @click="toMessage" v-show="isLogin" :style="{borderBottom: type == 'message'?'2px solid #008489':''}">
-            <el-badge is-dot :hidden="isMesage? false:true" class="item">消息</el-badge>
+          <li class="fontweight headList"  @click="toWish" v-show="isLogin" :style="{borderBottom: type == 'wish'?'2px solid #14C5CA':''}">{{allText[0].title[3][getLan]}}</li>
+          <li class="fontweight headList"  @click="toJourney" v-show="isLogin" :style="{borderBottom: type == 'jouerney'?'2px solid #14C5CA':''}">{{allText[0].title[4][getLan]}}</li>
+          <li class="fontweight headList"  @click="toCehua" v-show="someThing" :style="{borderBottom: type == 'myPlay'?'2px solid #14C5CA':''}">
+            <el-badge is-dot :hidden="isPlayer? false:true" class="item">{{allText[0].title[5][getLan]}}</el-badge></li>
+          <li class="fontweight headList"  @click="toZhiyuan" v-show="volunteer" :style="{borderBottom: type == 'myWant'?'2px solid #14C5CA':''}">{{allText[0].title[6][getLan]}}</li>
+          <li class="fontweight headList"  @click="toMessage" v-show="isLogin" :style="{borderBottom: type == 'message'?'2px solid #14C5CA':''}">
+            <el-badge is-dot :hidden="isMesage? false:true" class="item">{{allText[0].title[7][getLan]}}</el-badge>
           </li>
-					<li class="fontweight headList"  @click="showHelp" >帮助</li>
-					<li class="fontweight headList" v-if="!isLogin" @click="toRegister">注册</li>
-					<li class="fontweight headList"  v-if="!isLogin" @click="toLogin">登陆</li>
+					<li class="fontweight headList"  @click="showHelp" >{{allText[0].title[8][getLan]}}</li>
+					<li class="fontweight headList" v-if="!isLogin" @click="toRegister">{{allText[0].title[9][getLan]}}</li>
+					<li class="fontweight headList"  v-if="!isLogin" @click="toLogin">{{allText[0].title[10][getLan]}}</li>
 				</ul>
 				<ul class="head_nav" v-if="type=='help'&&type!='helphome'">
 					<li class="fontweight headList">旅行帮助</li>
@@ -85,13 +85,113 @@
         aeditSearch:'',
         isPlayer:false,
         userDefult: '../../static/img/static/user.png' ,
+        Lan: '',
+        Cur:'',
+        allText:[
+          {
+            title:[
+              {
+                'zh':'成为策划者',
+                'en':'planners',
+                'ja':'企画者'
+              },
+              {
+                'zh':'志愿者',
+                'en':'volunteers',
+                'ja':'ボランティア'
+              },
+              {
+                'zh':'故事',
+                'en':'story',
+                'ja':'ストーリー'
+              },
+              {
+                'zh':'心愿单',
+                'en':'Wish',
+                'ja':'願いごとリスト'
+              },
+              {
+                'zh':'我的旅程',
+                'en':'journey',
+                'ja':'私の旅'
+              },
+              {
+                'zh':'我的策划',
+                'en':'My plan',
+                'ja':'私の企画'
+              },
+              {
+                'zh':'我的志愿',
+                'en':'volunteer',
+                'ja':'私の願い'
+              },
+              {
+                'zh':'消息',
+                'en':'message',
+                'ja':'ニュース'
+              },
+              {
+                'zh':'帮助',
+                'en':'help',
+                'ja':'助けて'
+              },
+              {
+                'zh':'注册',
+                'en':'register',
+                'ja':'登録'
+              },
+              {
+                'zh':'登录',
+                'en':'login',
+                'ja':'アクセス'
+              }
+            ],
+            login:[
+              {
+                'zh':'编辑个人资料',
+                'en':'Edit profile',
+                'ja':'プロファイル編集'
+              },
+              {
+                'zh':'旅行基金',
+                'en':'Travel fund',
+                'ja':'旅行資金'
+              },
+              {
+                'zh':'交易中心',
+                'en':'Trading Center',
+                'ja':'貿易センター'
+              },
+              {
+                'zh':'账号设置',
+                'en':'Account Settings',
+                'ja':'アカウント設定'
+              },
+              {
+                'zh':'退出',
+                'en':'quit',
+                'ja':'脱落'
+              }
+            ]
+
+          }
+         
+        ]
       };
 		},
 		components:{
 			Dialog,
       Navslider,
       LoadingImg
-		},
+    },
+    computed:{
+      getLan(){
+        return this.Store.getters.getValue
+      },
+      getCur(){
+        return this.Store.M
+      }
+    },
     watch:{
       aeditSearch:function(){
         this.$emit('getVal',this.aeditSearch)
@@ -431,7 +531,7 @@
       },
 		},
     mounted(){
-		  this.getToken()
+      this.getToken()
     },
     created(){
       Bus.$on('userImage',(msg)=>{
@@ -490,7 +590,6 @@
 		height: 100%;
 		line-height: 52px;
 		float: left;
-		margin-left: 5px;
 		cursor: pointer;
 	}
 	.header_do{
@@ -498,7 +597,7 @@
 	}
 	.header_do span:nth-child(2){
 		cursor: pointer;
-		color: #008489;
+		color: #14C5CA;
 	}
 	.head_drop{
 		width: 250px;
@@ -516,15 +615,19 @@
 		transition: all .3s linear;
 	}
 	.head_drop li:hover{
-		border-bottom: 2px solid #008489;
-		color: #008489;
+		border-bottom: 2px solid #14C5CA;
+		color: #14C5CA;
 	}
 	.head_drop li:nth-child(5){
 		border: none;
 	}
   .headList{
-    width:73px;
-
+    padding: 5px 10px;
+    margin-right: 10px;
+  }
+  .headList:nth-child(9n){
+     padding: 5px 10px;
+    margin-right: 0
   }
 
 </style>

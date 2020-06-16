@@ -20,7 +20,7 @@
               </div>
             </div>
             <div style="width:800px;margin-left:30px;height:auto">
-              <router-view></router-view>
+              <router-view @changeMone='changeMone'></router-view>
             </div>
           </div>
           <div v-show="isWithdrawal" style="position:fixed;top:0;left:0;right:0;bottom:0;background-color:rgba(0,0,0,.3);z-index:999">
@@ -141,6 +141,11 @@
         this.getbalance()
       },
       methods:{
+          changeMone(val){
+            if(val){
+              this.getbalance()
+            }
+          },
           //提现申请
           sendDraw(){
             this.$http.post(this.api +'/Draw',{
@@ -149,43 +154,40 @@
               bank_id: this.bankChose,
               pay_password: this.password
             })
-              .then(res=>{
-                if(res.data.code == 1){
-                  this.isPassword = false
-                  this.password = ''
-                  this.isWithdrawal = false
-                  this.$message({
-                    type:'success',
-                    message: '提交成功！'
+            .then(res=>{
+              if(res.data.code == 1){
+                this.isPassword = false
+                this.password = ''
+                this.isWithdrawal = false
+                this.$message({
+                  type:'success',
+                  message: '提交成功！'
+                })
+              }else if(res.data.code == 3){
+                this.$http.post(this.api + '/home/Index/token')
+                  .then(res=>{
+                    localStorage.setItem('token',res.data.data)
+                    this.sendDraw()
                   })
-                }else if(res.data.code == 3){
-                  this.$http.post(this.api + '/home/Index/token')
-                    .then(res=>{
-                        localStorage.setItem('token',res.data.data)
-                        this.sendDraw()
-                    })
-                }else if(res.data.code == 0){
-                  alert(res.data.msg)
-                  this.isPassword = false
-                  this.password = ''
-                }
-              })
+              }else if(res.data.code == 0){
+                alert(res.data.msg)
+                this.isPassword = false
+                this.password = ''
+              }
+            })
           },
           getbalance(){
-            this.$http.post(this.api + '/balance',{
+            this.$http.post(this.api + '/BalanceTwo',{
               token: localStorage.getItem('token'),
-              page: 1
+              page: 1,
+              verson:2.0
             })
               .then(res=>{
                 if(res.data.code == 1){
                   this.due_balance = res.data.data.due_balance
                   this.unpaid_amount = res.data.data.unpaid_amount
                 }else if(res.data.code == 3){
-                  this.$http.post(this.api + '/home/index/token')
-                    .then(res=>{
-                      localStorage.setItem('token',res.data.data)
-                      this.getbalance()
-                    })
+                  this.getbalance()
                 }else if(res.data.code == 0){
                   alert(res.data.msg)
                 }
@@ -224,9 +226,6 @@
           if(this.is_setpwd){
             this.$router.push({
               path: '/withdrawal',
-              query:{
-                information: this.due_balance
-              }
             })
           }else{
             this.isWithdrawal = true
@@ -241,15 +240,15 @@
           }
         },
         allReduce(){
-            this.monney = this.due_balance
+          this.monney = this.due_balance
         },
         returnBack(){
-            this.isWithdrawal = false
-            this.monney = ''
-            this.bankChose = ''
+          this.isWithdrawal = false
+          this.monney = ''
+          this.bankChose = ''
         },
         refer(){
-            let reg = /^0|0[.]?[0]∗0/
+          let reg = /^0|0[.]?[0]∗0/
            if(reg.test(this.monney)){
               this.$message({
                 type:'info',

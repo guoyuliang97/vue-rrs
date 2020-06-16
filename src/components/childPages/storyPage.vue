@@ -15,13 +15,13 @@
               </div>
             </div>
             <div style="margin:30px 0;" v-for="item in imgList">
-              <loadingImg type="3" :src="item.img" width="100%" height="100%"></loadingImg>
+              <loadingImg type="2" :src="item.img" style="width:100%;height:100%"></loadingImg>
             </div>
             <div style="text-align:left;line-height:30px;">
               <h2 style="text-align: center" v-html="Xss(title)"></h2>
               <div style=" word-wrap:break-word;white-space:pre-wrap;text-indent: 2rem" v-html="Xss(content)"></div >
             </div>
-            <div style="margin:30px 0 0; display:flex;justify-content: space-between">
+            <div class="flexBetween" style="margin:30px 0 0;">
               <div>
                 <el-button type="text" @click="getLove">{{loveList.length}}人已点赞</el-button>
               </div>
@@ -57,15 +57,16 @@
               </div>
             </div>
             <div v-show="storyList.length">
-              <h3 style="text-align:left">相关故事</h3>
-              <div style="display:flex;flex-wrap: wrap;justify-content: space-between">
-                <div style="width: 260px;margin-left:13px;margin-top: 20px;" v-for="(item,index) in storyList">
-                  <Detail type="2" v-on:toperson="toperson(item,index)" v-on:toStory="toStory(item,index)" :zanIndex="item.zanIndex" :status="item.status" :address="item.address" :remark="item.remark" :imgUrl="item.img" :avator="item.avator" :zan="item.zan" :say="item.leaving_num" v-on:addZan="addZan(item,index)"></Detail>
+              <h3 class="marginBottom" style="text-align:left">相关故事</h3>
+              <div class="flexWrap flexBetween">
+                <div class="marginBottom" v-for="(item,index) in storyList">
+                  <Detail type="2" v-on:toperson="toperson(item,index)" v-on:toStory="toStory(item,index)" :data="item" v-on:addZan="addZan(item,index)"></Detail>
                 </div>
               </div>
+
             </div>
-            <div v-if="isChat" style="z-index:990;position:fixed;top:0;left:0;right:0;bottom:0;display: flex;justify-content: center;align-items: center;background-color: rgba(0,0,0,.8)">
-              <div style="width:500px;padding: 30px;background-color: #fff;border-radius: 10px;">
+            <div v-if="isChat" style="z-index:999;position:fixed;top:0;left:0;right:0;bottom:0;display: flex;justify-content: center;align-items: center;background-color: rgba(255,255,255,.7)">
+              <div style="box-shadow:0px 0px 21px 0px rgba(232,235,238,1);width:500px;padding: 30px;background-color: #fff;border-radius: 10px;">
                 <Person type="discuss" :isLogin="isLogin" :replay="replay" :imgUrl="imgUrl" :review="review"  v-on:abolish="abolish" v-on:discuss="discuss"></Person>
               </div>
             </div>
@@ -111,7 +112,7 @@
             imgUrl:'',
             firstoverflow:'hidden',
             overflow:'hidden',
-            height:'80px',
+            height:'75px',
             status:0,
             review:{
               text:'',
@@ -129,7 +130,7 @@
             changeTime:'',
             replay:'说点什么...',
             firstreplay:'说点什么...',
-            firstheight:'80px',
+            firstheight:'75px',
             time:2,
             storyId:'',
             loveList:[],
@@ -290,7 +291,7 @@
         },
         //点赞
         addZan(item,index){
-          if(item.zanIndex == 0){
+          if(item.is_praise == 0){
             this.$http.post(this.api + '/home/Comment/praise',{
               token: localStorage.getItem('token'),
               flag: 1,
@@ -299,14 +300,12 @@
             })
               .then(res=>{
                 if(res.data.code == 1){
-                  item.zanIndex = 1
+                  item.is_praise = 1
                   item.zan = item.zan + 1
                 }else if(res.data.code == 3){
-                 this.$http.post(this.api + '/home/index/token')
-                   .then(res=>{
-                     localStorage.setItem('token',res.data.data)
+
                      this.addZan(item,index)
-                   })
+      
                 }else if(res.data.code == 0){
                   alert(res.data.msg)
                 }
@@ -322,7 +321,7 @@
               .then(res=>{
                 if(res.data.code == 1){
                   item.zan = item.zan - 1
-                  item.zanIndex = 0
+                  item.is_praise = 0
                 }else if(res.data.code == 3){
                   this.$http.post(this.api + '/home/index/token')
                     .then(res=>{
@@ -341,14 +340,14 @@
         },
         firstabolish(){
           this.review.text = ''
-          this.firstheight = '80px'
+          this.firstheight = '75px'
           this.firstoverflow= 'hidden'
           this.firstreplay = '说点什么...'
         },
         abolish(){
           this.isChat = false
           this.review.text = ''
-          this.height = '80px'
+          this.height = '75px'
           this.overflow= 'hidden'
           this.replay = '说点什么...'
         },
@@ -915,29 +914,12 @@
             .then(res=>{
               if(res.data.code == 1){
                 let data = res.data.data
-                var m = []
-                for(let i = 0;i<data.length;i++){
-                  let user = data[i].user
-                    m.push({
-                        img:data[i].cover_image?data[i].cover.domain + data[i].cover.image_url:'../../static/img/static/back.jpg',
-                        address:data[i].address,
-                        remark: data[i].title,
-                        avator:user.head_image?user.headimage.domain + user.headimage.image_url: '../../static/img/static/user.png',
-                        zan: data[i].praise_num,
-                        say: data[i].leaving_num,
-                        zanIndex:data[i].is_praise?1:0,
-                        story_id: data[i].story_id,
-                        userId: data[i].user_id,
-                        leaving_num: data[i].leaving_num
-                      })
-                }
-                this.storyList = m
+                this.storyList = data
               }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
+
+         
                     this.getStory()
-                  })
+ 
               }else if(res.data.code == 0){
                 alert(res.data.msg)
               }

@@ -2,86 +2,91 @@
     <div style="text-align:left; ">
        <Head type="moreActive" v-on:getVal="getVal"  :content="editSearch"   v-on:search="searchHome"></Head>
       <div style="width:98%;background-color:#fff;border-top:1px solid #eee;padding:10px 1%;position:fixed;top:82px;z-index: 99;display:flex;justify-content:space-between;border-bottom: 1px solid #eee">
-        <div>
+        <div style="display:flex;justify-content:flex-start">
           <el-popover
-          placement="bottom"
-          width="400"
-          @show="show"
-          trigger="click">
-          <el-date-picker
-            v-model="date"
-            style="margin-left:20px;"
-            value-format="timestamp"
-            :picker-options="pickerOptions2"
-            type="daterange"
-            ref="saveDateInput"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期">
-          </el-date-picker>
-          <el-button slot="reference" :type="date?'primary':''">日期</el-button>
-        </el-popover>
-        <el-popover
-          placement="bottom"
-          width="350"
-          trigger="click">
-          <div style="display: flex;justify-content: space-between;margin:20px;" v-for="(item,index) in otherList">
-            <div><b>{{item.person}}</b><p style="font-size:12px;">{{index == 1?'2 - 12岁':index == 2?'2岁以下':''}}</p></div>
-            <div>
-              <el-button icon="el-icon-minus" size="mini" circle @click="reduce(item,index)" ></el-button>
-              <span style="margin:0 10px">{{item.adult}}</span>
-              <el-button icon="el-icon-plus" size="mini" circle @click="add(item,index)" :disabled="addClick"></el-button>
-            </div>
-          </div>
-          <div style="margin:20px 20px 20px 12px;cursor: pointer;display: flex;justify-content: flex-end" ><span @click="chooseMoney(1)">确定</span></div>
-          <el-button slot="reference" :type="allperson?'primary':''">{{allperson?allperson+'人+':'体验人数'}}</el-button>
-        </el-popover>
-        <el-popover
-          placement="bottom"
-          trigger="click">
-          <div style="text-align: center"> <el-radio v-model="tiyan" label="1" border>户外活动</el-radio></div>
-          <div style="text-align: center"> <el-radio v-model="tiyan" label="2" border>少数民族</el-radio></div>
-          <div style="text-align: center"> <el-radio v-model="tiyan" label="3" border>本土文化</el-radio></div>
-          <el-button slot="reference" :type="tiyan.length?'primary':''">体验类型</el-button>
-        </el-popover>
+            placement="bottom"
+            width="400"
+            @show="show"
+            trigger="click">
+            <el-date-picker
+              v-model="date"
+              style="margin-left:20px;"
+              value-format="timestamp"
+              :picker-options="pickerOptions2"
+              type="daterange"
+              ref="saveDateInput"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期">
+            </el-date-picker>
+            <el-button slot="reference" :type="date?'primary':''">日期</el-button>
+          </el-popover>
           <el-popover
-          placement="bottom"
-          width="400"
-          trigger="click">
-            <div style="width:350px;margin-left:20px;">
-              <el-slider
-                v-model="price"
-                range
-                :max="4000">
-              </el-slider>
-              <div style="display: flex;justify-content: space-between;margin:20px 0;">
-                <span>￥{{price[0]}}</span>
-                <span>￥{{price[1]==4000?'4000+':price[1]}}</span>
-              </div>
-            </div>
-            <div style="margin:20px 20px 20px 12px;cursor: pointer;display: flex;justify-content: space-between" ><span @click="rejest">重置</span><span @click="chooseMoney(2)">确定</span></div>
-          <el-button slot="reference" :type="allprice[1]?'primary':''">{{allprice[1]?allprice[0]+'-'+allprice[1]:'价格'}}</el-button>
-        </el-popover>
-        <el-popover
-          placement="bottom"
-          width="400"
-          trigger="click">
-          <div style="padding:20px;">
-            <div style="display: flex;justify-content: space-between;margin:20px 0;">
+          style="margin-left:10px"
+            placement="bottom"
+            width="350"
+            trigger="click">
+            <div style="display: flex;justify-content: space-between;margin:20px;" v-for="(item,index) in otherList">
+              <div><b>{{item.person}}</b><p style="font-size:12px;">{{index == 1?'2 - 12岁':index == 2?'2岁以下':''}}</p></div>
               <div>
-                <h4>是否需要志愿者</h4>
-                <p>参与体验，帮助策划人与大家交流，沟通等</p>
+                <el-button icon="el-icon-minus" size="mini" circle @click="reduce(item,index)" ></el-button>
+                <span style="margin:0 10px">{{item.adult}}</span>
+                <el-button icon="el-icon-plus" size="mini" circle @click="add(item,index)" :disabled="addClick"></el-button>
               </div>
-              <div style="width:70px;" >
-                <div style="transition:width .5s;overflow: hidden;border-top-right-radius:20px;border-bottom-right-radius: 20px;border-top-left-radius: 20px;border-bottom-left-radius: 20px;" :style="{width:closeIndex?'70px':'30px',backgroundColor:closeIndex?'#008489':'#fff'}" @click="change">
-                  <i v-if="closeIndex == ''"  style="font-size:30px;float:left" class="el-icon-circle-close-outline"></i>
-                  <i v-if="closeIndex == 1" style="font-size:30px;background-color:#fff;border-radius:50%;color:#008489;float:right" class="el-icon-circle-check-outline"></i>
+            </div>
+            <div style="margin:20px 20px 20px 12px;cursor: pointer;display: flex;justify-content: flex-end" ><span @click="chooseMoney(1)">确定</span></div>
+            <el-button slot="reference" :type="allperson?'primary':''">{{allperson?allperson+'人+':'体验人数'}}</el-button>
+          </el-popover>
+          <el-popover
+          style="margin-left:10px"
+            placement="bottom"
+            trigger="click">
+            <div style="text-align: center"> <el-radio v-model="tiyan" label="1" border>户外活动</el-radio></div>
+            <div style="text-align: center"> <el-radio v-model="tiyan" label="2" border>少数民族</el-radio></div>
+            <div style="text-align: center"> <el-radio v-model="tiyan" label="3" border>本土文化</el-radio></div>
+            <el-button slot="reference" :type="tiyan.length?'primary':''">体验类型</el-button>
+          </el-popover>
+          <City style="margin-left:10px" type='3'  @selectXian="selectXian" @checkXian="checkXian" @selectCountry="selectCountry" @selectProvince="selectProvince" @selectCity="selectCity"></City>
+            <el-popover
+            style="margin-left:10px"
+            placement="bottom"
+            width="400"
+            trigger="click">
+              <div style="width:350px;margin-left:20px;">
+                <el-slider
+                  v-model="price"
+                  range
+                  :max="4000">
+                </el-slider>
+                <div style="display: flex;justify-content: space-between;margin:20px 0;">
+                  <span>￥{{price[0]}}</span>
+                  <span>￥{{price[1]==4000?'4000+':price[1]}}</span>
+                </div>
+              </div>
+              <div style="margin:20px 20px 20px 12px;cursor: pointer;display: flex;justify-content: space-between" ><span @click="rejest">重置</span><span @click="chooseMoney(2)">确定</span></div>
+            <el-button slot="reference" :type="allprice[1]?'primary':''">{{allprice[1]?allprice[0]+'-'+allprice[1]:'价格'}}</el-button>
+          </el-popover>
+          <el-popover
+            style="margin-left:10px"
+            placement="bottom"
+            width="400"
+            trigger="click">
+            <div style="padding:20px;">
+              <div style="display: flex;justify-content: space-between;margin:20px 0;">
+                <div>
+                  <h4>是否需要志愿者</h4>
+                  <p>参与体验，帮助策划人与大家交流，沟通等</p>
+                </div>
+                <div style="width:70px;" >
+                  <div style="transition:width .5s;overflow: hidden;border-top-right-radius:20px;border-bottom-right-radius: 20px;border-top-left-radius: 20px;border-bottom-left-radius: 20px;" :style="{width:closeIndex?'70px':'30px',backgroundColor:closeIndex?'#008489':'#fff'}" @click="change">
+                    <i v-if="closeIndex == ''"  style="font-size:30px;float:left" class="el-icon-circle-close-outline"></i>
+                    <i v-if="closeIndex == 1" style="font-size:30px;background-color:#fff;border-radius:50%;color:#008489;float:right" class="el-icon-circle-check-outline"></i>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <el-button slot="reference" :type="closeIndex?'primary':''">{{closeIndex?'需要志愿者':'是否需要志愿者'}}</el-button>
-        </el-popover>
+            <el-button slot="reference" :type="closeIndex?'primary':''">{{closeIndex?'需要志愿者':'是否需要志愿者'}}</el-button>
+          </el-popover>
         </div>
         <div style="display:flex;justify-content:flex-end;">
           <div style="margin-right: 10px;line-height: 40px;">
@@ -100,8 +105,9 @@
        <!-- 第一版本活动内容-->
        <div v-show="!mapIndex">
         <div style="margin-top:142px;">
-                <div style="height:380px;background-size:100% 100%;padding:50px 0;display: flex;align-items: center;justify-content: center" :style="{backgroundImage:cityData.top_image_url?' url('+cityData.top_image_url+')':'url('+imgUrl+')'}">
-                    <div style="color:#fff;text-align: center;">
+                <div style="position:relative;height:380px; padding:50px 0;display: flex;align-items: center;justify-content: center">
+                    <loadingImg style="width:100%;height:100%" :src="cityData.top_image_url?cityData.top_image_url:''" type="2"></loadingImg>
+                    <div style="position:absolute;color:#fff;text-align: center;">
                       <div style="font-size:60px;padding:10px 0;">{{adress}}</div>
                       <div style="font-size:20px;">选择让您觉得不错的体验</div>
                     </div>
@@ -111,13 +117,15 @@
               <h2 style="margin: 20px 0;">{{adress}}有{{activeList.length}}处可订的人人游体验</h2>
                 <div style="display: flex;flex-wrap: wrap;">
                   <div  v-for="(item,index) in activeList" :key="index" style="width:330px;" class="activeMargin">
-                    <Detail type="1" :activity_id="item.activity_id" :imgUrl="item.domain + item.image_url" :city="item.city" :total_time="item.total_time" :activ_provite="item.activ_provite" :comment_num="item.comment_num" :name="item.title" :score="item.score" :english="item.main_laguage" :money="item.price" :kind="item.kind" v-on:toPublish="toPublish(item,index)" v-on:consult="consult(index)"></Detail>
+                    <Detail type="active" :data="item"  v-on:toPublish="toPublish(item,index)" v-on:consult="consult(index)"></Detail>
                   </div>
                   <div style="width:100%;" v-if="!activeList.length">
                     <None type="ALLactive"></None>
                   </div>
-                  <div  style="width:100%;margin-bottom: 20px;background-size: 100% 100%;height:300px;display: flex;justify-content: space-around" :style="{backgroundImage:cityData.bottom_image_url?' url('+cityData.bottom_image_url+')':'url('+imgUrl+')'}">
-                    <div style="font-family: '华文楷体';margin-top:100px;">
+                  <div  style="position:relative;width:100%;margin-bottom: 20px;height:300px;display: flex;align-items: center;justify-content: center" >
+                    <loadingImg style="width:100%;height:100%" :src="cityData.bottom_image_url?cityData.bottom_image_url:''" type="2"></loadingImg>
+                    
+                    <div style="position:absolute;font-family: '华文楷体';color:#fff">
                       <h1>更多的体验</h1>
                       <h1>体验可以满足您的所有需求</h1>
                     </div>
@@ -141,34 +149,7 @@
         <div  class="activeList">
            <div class="title">有{{total}}个活动</div>
           <div v-for="(item,index) in activeList " @click="toPublish(item,index)" @mouseenter="changeColorIndex(item,index)" class="active_child">
-            <div >
-              <img :src="item.domain + item.image_url?item.domain + item.image_url : defultImg" style="width:300px;height:200px;border-radius:10px">
-            </div>
-            <div style="display:flex;justify-content:space-between;width:100%;padding: 10px;">
-              <div style="width:70%;border-right: 1px solid #eee;line-height: 40px;padding: 0 5px;">
-                <p><span v-for="items in item.kind">{{'/'+items.kind_name}}</span><span><b>·</b>{{item.city}}</span></p>
-                <p style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;text-align: left;font-size:15px;margin:5px 0;"><b>{{item.title}}</b></p>
-                <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;font-size:13px;"><b><span v-if="item.price">{{'每人￥'+item.price+'·'}}</span><span v-if="item.total_time">{{item.total_time+'·'}}</span><span>{{item.activ_provite}}</span></b></div>
-                <p style="margin-top:5px;display: flex;justify-content: flex-start"><el-rate
-                  :value="parseInt(item.score)"
-                  disabled
-                  show-score
-                  text-color="#008489"
-                  :colors="['#008489', '#008489', '#008489']"
-                  score-template="{value}">
-                </el-rate>
-                  <span style="margin-left:15px;">评论({{item.comment_num}})</span>
-                </p>
-              </div>
-              <div style="width:20%;text-align:center;">
-                <div>
-                  <h4 :style="{color:item.price?'black':'red'}">{{item.price? item.price + '/天':'已过期'}}</h4>
-                </div>
-                <div >
-                  <img :src="defultUserImg" style="margin-top: 80px;width:30px;height: 30px;border-radius:50%;">
-                </div>
-              </div>  
-            </div>
+            <Detail type="mapActive" :data="item"></Detail>
           </div>
         </div>
         <div class="mapStyle" id="mapStyle">
@@ -182,6 +163,7 @@
 </template>
 
 <script>
+  import City from '../public/city'
   import Detail from './detail'
   import None from './noNumber'
   import Loading from './Loading'
@@ -228,6 +210,11 @@
             adreeList:[],
             map:'',
             markerIndex:'',
+            country:'',
+            province:'',
+            city:'',
+            xian:'',
+            xianList:[],
           }
       },
       components:{
@@ -236,7 +223,8 @@
           loadingImg,
           Loading,
           None,
-          Detail
+          Detail,
+          City
       },
       watch:{
         content:function(){
@@ -272,6 +260,28 @@
         }
       },
       methods:{
+         checkXian(msg){
+          this.xianList = msg
+          
+        },
+        selectCountry(msg){
+          this.country = msg[1]
+          this.getall()
+        },
+        selectProvince(msg){
+          this.province = msg[1]
+          this.getall()
+          this.adress = this.province
+          this.creatMap()
+        },
+        selectCity(msg){
+          this.city = msg[1]
+          this.getall()
+        },
+        selectXian(msg){
+          this.xian = msg[1]
+          this.getall()
+        },
         changeColorIndex(item,index){
           this.markerIndex = index
           var markerList = document.getElementsByClassName('markerStyle');
@@ -377,9 +387,9 @@
         },
         getActive(val,price_low,price_high,begin_time,end_time,kind_id,is_volunteen,person){
           this.isLoading = true
-          this.$http.post(this.api + '/home/Activity/activ_list',{
+          this.$http.post(this.api + '/ActivityListUserTwo',{
             token: localStorage.getItem('token'),
-            city: this.adress,
+            verson:2.0,
             keywords: this.content,
             page:val,
             price_low:price_low,
@@ -393,6 +403,10 @@
             lat_end: this.mapIndex? this.eastNorth[1]:'',
             lng_begin: this.mapIndex? this.westSouth[0]:'',
             lng_end: this.mapIndex? this.eastNorth[0]:'',
+            country:this.country? this.country:'',
+            province:this.province? this.province:'',
+            city:this.adress,
+            region:this.xian? this.xian:'',
           })
             .then(res=>{
               if(res.data.code == 1){
@@ -463,10 +477,11 @@
               img.src = item.domain + item.image_url?item.domain + item.image_url : defultImg;
               img.style.width = '300px';
               img.style.height = '200px';
+              img.style.objectFit = 'cover'
               var h = document.createElement('h4');
               h.innerHTML = item.title;
               var p = document.createElement('p');
-              p.innerHTML = text? '价格：'+'￥'+ text +'/人':'已过期' ;
+              p.innerHTML = text? '价格：'+'￥'+ text +'/人起':'已过期' ;
               div.append(img);
               div.appendChild(h);
               div.appendChild(p)
@@ -609,20 +624,7 @@
             })
             _this.map = mp
         },
-        // error(error){
-        //   console.log(error)
-        //   switch(error.code){
-        //     case 1:
-        //       console.log('用户不允许获取定位')
-        //       break;
-        //     case 2:
-        //       console.log('火星人，无法为您定位');
-        //       break;
-        //     case 3:
-        //       console.log('超时');
-        //       break;
-        //   } 
-        // }
+       
         getCityImg(){
           this.$http.post(this.api + '/CityImage',{
             token: localStorage.getItem('token'),

@@ -8,7 +8,7 @@
           </div>
           <div class="flexStart" style="margin:10px 0;">
             <div>
-              <LoadingImg type="3" :src="item.cover.domain + item.cover.themb_url" style="width:200px;height:120px;" ></LoadingImg>
+              <LoadingImg type="2" :src="item.cover.domain + item.cover.themb_url" style="width:200px;height:120px;" ></LoadingImg>
             </div>
             <div style="font-size:14px;margin-left:10px;line-height:30px;cursor: pointer" @click="checkOrder(item,index)">
               <h4>{{item.title}}</h4>
@@ -29,24 +29,24 @@
                </div>
             </div>
           </div>
-          <div class="no_cheap" v-if="item.no_reach_differ.length">
-            <div class="bar"> 
-              <div class="howBar" :style="{width: ((Number(item.num))/(Number(item.no_reach_differ.num))) *100 + 'px'}"></div>
+          <div v-if="item.is_differ == 1">
+            <div class="no_cheap" v-if="JSON.stringify(item.no_reach_differ) != '[]'">
+              <!-- <div class="bar"> 
+                <div class="howBar" :style="{width: ((Number(item.num))/(Number(item.no_reach_differ.num))) *100 + 'px'}"></div>
+              </div> -->
+              <div class="marginLeft">【返差价】当前同时间段内其他用户参与者共{{item.num}}人，活动结束时满{{item.no_reach_differ.num}}人返预付{{Number(item.no_reach_differ.refund_rate)}}%，
+                <span v-if="JSON.stringify(item.reach_differ) != '[]'">当前已满足满{{item.reach_differ.num}}人返预付{{Number(item.reach_differ.refund_rate)}}% </span>              
+              </div>
             </div>
-            <div class="marginLeft">【返差价】当前同时间段内其他用户参与者共{{item.num}}人，活动结束时满{{item.no_reach_differ.num}}人返预付{{orderList.no_reach_differ.refund_rate}}，
-              当前已满足满{{item.reach_differ.num}}人返预付{{Number(item.reach_differ.refund_rate)}}%               
-            </div>
-          </div>
-          <div class="no_cheap" v-if="!item.no_reach_differ.length">
-            <div class="bar"> 
-              <div class="howBar" :style="{width: ((Number(item.num))/(Number(item.reach_differ.num))) *100 + 'px'}"></div>
-            </div>
-            <div class="marginLeft">【返差价】当前已满足满{{item.reach_differ.num}}人返预付{{Number(item.reach_differ.refund_rate)}}%              
+            <div class="no_cheap" v-if="JSON.stringify(item.no_reach_differ) == '[]' && JSON.stringify(item.reach_differ) != '[]'">
+              <!-- <div class="bar"> 
+                <div class="howBar" style="width:100px"></div>
+              </div> -->
+              <div class="marginLeft">【返差价】当前已满足满{{item.reach_differ.num}}人返预付{{Number(item.reach_differ.refund_rate)}}%              
+              </div>
             </div>
           </div>
         </div>
-
-
      
       <None v-if="!orderList.length && !isLoading" type="order"></None>
       <div v-show="isLoading" style="position:fixed;z-index:990;top:0;left:0;bottom:0;right:0;display:flex;justify-content:center;align-items:center;background-color: rgba(255,255,255,.5)">
@@ -107,7 +107,8 @@
           page: num,
           flag: 1,
           iscomplete:2,
-          verson: 2.0
+          verson: 2.0,
+          sort:2
         })
           .then(res=>{
             if(res.data.code == 1){

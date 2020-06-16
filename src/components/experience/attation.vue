@@ -65,24 +65,20 @@
         changeRouter(){
            if(this.value<0){
             this.$message({type:'info',message:'请选择退订政策'})
-          }else if(!this.oldSix || !(/^[1-9]\d*$/).test(this.oldSix)){
-            this.$message({type:'info',message:'请填写年龄限制且只能为数字'})
           }else if(!this.notice){
             this.$message({type:'info',message: '请填写注意事项'})
           }else{
-            if(this.active_id){
               this.$http.post(this.api + '/home/Activity/save_activity',{
                 token: localStorage.getItem('token'),
                 activity_id: this.active_id,
                 return_policy: this.value,
                 return_content: this.content,
-                age_limit: this.oldSix,
                 activ_notice: this.notice,
                 step: 13
               })
                 .then(res=>{
                   if(res.data.code == 1){
-                    if(this.complete == '0'){
+                    if(!this.complete){
                       this.$emit('changeRouter',{id:14,router:'bookSet',information: this.active_id,complete: this.complete})
                     }else{
                       this.$message({
@@ -90,33 +86,13 @@
                         message:'保存成功！'
                       })
                     }
-                  
                   }else if(res.data.code == 3){
                     this.changeRouter()
                   }else if(res.data.code == 0){
                     this.$alert(res.data.msg)
                   }
                 })
-            }else{
-              this.$http.post(this.api + '/home/Activity/save_activity',{
-                token: localStorage.getItem('token'),
-                return_policy: this.value,
-                return_content: this.content,
-                age_limit: this.oldSix,
-                activ_notice: this.notice,
-                step: 13
-              })
-                .then(res=>{
-                  if(res.data.code == 1){
-                    this.$emit('saveId',res.data.data)
-                    this.$emit('changeRouter',{id:14,router:'bookSet',information: res.data.data})
-                  }else if(res.data.code == 3){
-                    this.changeRouter()
-                  }else if(res.data.code == 0){
-                    this.$alert(res.data.msg)
-                  }
-                })
-            }
+
           }
         },
         getActive(){

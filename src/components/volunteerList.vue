@@ -67,7 +67,7 @@
         <div v-if="allVolunteer.length" class="volunteer">
           <div class="list"  v-for="(item,index) in allVolunteer" :key="index" style="">
             <div>
-              <loadingImg type="3" :src="item.head_image?item.headimage.domain + item.headimage.image_url:'../../static/img/static/user.png'" style="width:100%;height:200px;" ></loadingImg>
+              <loadingImg type="2" :src="item.head_image?item.headimage.domain + item.headimage.image_url:'../../static/img/static/user.png'" style="width:100%;height:200px;" ></loadingImg>
             </div>
             <div style="width:188px;font-size:12px;line-height:20px;padding:15px 5px 10px 5px;border:1px solid #eee;border-top:none">
               <div style="display: flex;">
@@ -78,7 +78,7 @@
                 <div style="margin-left:10px">  <el-rate
                   disabled
                   v-bind="parseInt(item.score)"
-                  :colors="['#008489', '#008489', '#008489']">
+                  :colors="['#14c5ca', '#14c5ca', '#14c5ca']">
                 </el-rate></div>
               </div>
               <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis"><b>{{sexArr[item.six].label}}</b>-<b>{{item.country !=0?item.country:'未知'}}</b>-<b>{{languageArr[item.language].label}}/<span  v-for="items in item.other_language.split(',')">{{items?items == 0?'中文,':items == 1?'English,':'日本语,':''}}</span></b></div>

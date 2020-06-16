@@ -142,9 +142,9 @@ import None from '../../public/noNumber'
         ListIndex:0,
         orderList:[
           {name:'活动时间从早到晚',index:1},
-          {name:'活动时间从晚到早',index:-1},
-          {name:'下单时间升序',index:2},
-          {name:'下单时间降序',index:-2},
+          {name:'活动时间从晚到早',index:2},
+          {name:'下单时间升序',index:3},
+          {name:'下单时间降序',index:4},
         ],
         Isorder:false,
         orderIndex:0,

@@ -3,18 +3,18 @@
       <div v-if="type == 'wap'" style="position: fixed;top:0;left:0;right:0;bottom: 0;background-image: url('../../static/img/static/bg_wap.png');background-size: cover">
         <div style="background-color: white;display: flex;justify-content:flex-start;padding: 10px 10px;">
           <i @click="tohome" style="font-size: 30px;color:#000;" class="el-icon-close"></i>
-          <p style="text-align: center;width:100%;">为您的第一趟旅程节省25元！</p>
+          <!-- <p style="text-align: center;width:100%;">为您的第一趟旅程节省25元！</p> -->
         </div>
         <div style="margin-top: 10%;text-align: left;padding: 20px;">
           <img style="cursor: pointer" @click="toHome" src="../../static/img/static/logo.png" width="30px">
         </div>
         <div style="margin-top:10px;color:#fff;text-align:center;" >
-          <div style="width:40px;height:40px;border-radius: 50%;background-color: #fff;margin: 0 auto">
-          </div>
-          <p style="margin-top:10px;">{{userName}} 送你一张</p>
-          <p style="margin-top: 20px;font-size: 30px"><span style="font-size: 50px"><b>￥25</b></span>&nbsp;基金券</p>
-          <p style="font-size: 13px">预定体验，旅程费用最高可减￥50</p>
-          <p style="margin-top:20px;">注册并领取基金券</p>
+          <LoadingImg type="user" style="width:40px;height:40px;margin: 0 auto" :src="useImg">
+          </LoadingImg>
+          <p style="margin-top:10px;">{{userName}} 邀请你</p>
+          <!-- <p style="margin-top: 20px;font-size: 30px"><span style="font-size: 50px"><b>￥25</b></span>&nbsp;基金券</p>
+          <p style="font-size: 13px">预定体验，旅程费用最高可减￥50</p> -->
+          <p style="margin-top:20px;">注册allptp</p>
           <div style="margin: 5px 0;">
             <div @click="toTelPhone" style="width:70%;padding: 10px 0;border-radius: 20px;background-color: #008489;color:#fff;margin: 0 auto;">手机号注册</div>
             <div @click="toWeixin" style="width:70%;padding: 10px 0;border-radius: 20px;opacity:1;border:1px solid #fff;color:#fff;margin: 10px auto 0;">微信</div>
@@ -28,18 +28,18 @@
           </div>
         </div>
       </div>
-      <div v-if="type == 'pc'" style="position: fixed;top:0;left:0;right:0;bottom: 0;background-image: url('../../static/img/static/bg_pc.png');padding: 50px;">
-        <div style="text-align: left;">
+      <div v-if="type == 'pc'" class="flexCenter" style="position: fixed;top:0;left:0;right:0;bottom: 0;background-image: url('../../static/img/static/bg_pc.png');padding: 50px;">
+        <div style="text-align: left;position:fixed;left:20px;top:20px;">
           <img style="cursor: pointer" @click="toHome" src="../../static/img/static/logo.png" width="30px">
         </div>
-        <div style="margin-top:10%;color:#fff;" >
-          <div style="width:40px;height:40px;border-radius: 50%;background-color: #fff;margin: 0 auto">
-          </div>
-          <p style="margin-top:10px;">{{userName}} 送你一张</p>
-          <p style="margin-top: 20px;font-size: 30px"><span style="font-size: 50px"><b>￥25</b></span>&nbsp;基金券</p>
-          <p style="font-size: 13px">预定体验，旅程费用最高可减￥25</p>
-          <p style="margin-top:20px;">注册并领取基金券</p>
-          <div style="margin: 10px 0;">
+        <div style="color:#fff;" >
+          <LoadingImg type="user" style="width:60px;height:60px;margin: 0 auto" :src="useImg">
+          </LoadingImg>
+          <p style="margin-top:5%;">{{userName}} 邀请你</p>
+          <p style="margin: 10% 0;font-size: 30px">体验Allptp</p>
+          <p style="font-size: 13px"></p>
+          <p style="margin-top:0px;">注册allptp</p>
+          <div style="margin: 5% 0;">
             <div @click="toTelPhone" style="width:340px;padding: 10px 0;border-radius: 20px;background-color: #008489;color:#fff;margin: 0 auto;">手机号注册</div>
             <div @click="toWeixin" style="width:340px;padding: 10px 0;border-radius: 20px;opacity:1;border:1px solid #fff;color:#fff;margin: 10px auto 0;">微信</div>
           </div>
@@ -112,6 +112,7 @@
 </template>
 
 <script>
+import LoadingImg from '../public/loadingImg'
     export default {
         name: "share",
       data(){
@@ -138,8 +139,12 @@
             telForbid:true,
             changeTime:'',
             userID:'',
-            userName:''
+            userName:'',
+            useImg:''
           }
+      },
+      components:{
+        LoadingImg,
       },
       methods:{
           getToken(){
@@ -160,6 +165,7 @@
                 if(res.data.code == 1){
                   let data = res.data.data
                   this.userName = data.family_name + data.middle_name + data.name?data.family_name + data.middle_name + data.name:'匿名用户'
+                  this.useImg =  data.head_image? data.headimage.domain + data.headimage.image_url :''
                 }else if(res.data.code == 3){
                   this.getUser()
                 }else if(res.data.code == 0){

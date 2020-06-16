@@ -3,11 +3,11 @@
 		<Head type="edit" v-on:getVal="getVal"  :content="editSearch"   v-on:search="searchHome"></Head>
 		<div class="account_con title_flex">
 			<div class="account_nav">
-				<div class="account_navdetail" @click="changeAccoutnav('0','/notice')" :style="{color:accountNav=='0'?'#008489':'rgb(118, 118, 118)',fontWeight:accountNav=='0'?'bold':'normal'}">通知</div>
-				<div class="account_navdetail" @click="changeAccoutnav('2','/collection')" :style="{color:accountNav=='2'?'#008489':'rgb(118, 118, 118)',fontWeight:accountNav=='2'?'bold':'normal'}">收款方式</div>
-				<div class="account_navdetail" @click="changeAccoutnav('4','/security')" :style="{color:accountNav=='4'?'#008489':'rgb(118, 118, 118)',fontWeight:accountNav=='4'?'bold':'normal'}">安全</div>
-				<div class="account_navdetail" @click="changeAccoutnav('6','/setting')" :style="{color:accountNav=='6'?'#008489':'rgb(118, 118, 118)',fontWeight:accountNav=='6'?'bold':'normal'}">设置</div>
-				<div class="account_navdetail" @click="changeAccoutnav('7','/badge')" :style="{color:accountNav=='7'?'#008489':'rgb(118, 118, 118)',fontWeight:accountNav=='7'?'bold':'normal'}">徽章</div>
+				<div class="account_navdetail" @click="changeAccoutnav('0','/notice')" :style="{color:accountNav=='0'?'#14c5ca':'rgb(118, 118, 118)',fontWeight:accountNav=='0'?'bold':'normal'}">通知</div>
+				<div class="account_navdetail" @click="changeAccoutnav('2','/collection')" :style="{color:accountNav=='2'?'#14c5ca':'rgb(118, 118, 118)',fontWeight:accountNav=='2'?'bold':'normal'}">收款方式</div>
+				<div class="account_navdetail" @click="changeAccoutnav('4','/security')" :style="{color:accountNav=='4'?'#14c5ca':'rgb(118, 118, 118)',fontWeight:accountNav=='4'?'bold':'normal'}">安全</div>
+				<div class="account_navdetail" @click="changeAccoutnav('6','/setting')" :style="{color:accountNav=='6'?'#14c5ca':'rgb(118, 118, 118)',fontWeight:accountNav=='6'?'bold':'normal'}">设置</div>
+				<div class="account_navdetail" @click="changeAccoutnav('7','/badge')" :style="{color:accountNav=='7'?'#14c5ca':'rgb(118, 118, 118)',fontWeight:accountNav=='7'?'bold':'normal'}">徽章</div>
 				<div class="funds_btn fontweight" @click="toTravelfunds">旅行基金</div>
 			</div>
 			<div class="account_container">

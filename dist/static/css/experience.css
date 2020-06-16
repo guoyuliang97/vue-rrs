@@ -6,6 +6,12 @@
 	bottom: 0;
 	top: 0;
 }
+.newContair{
+	width: 85% !important;
+	display:flex ;
+	justify-content: space-between;
+
+}
 .experience_content{
 	position: absolute;
 	left: 0;
@@ -13,27 +19,28 @@
 	bottom: 0;
 	top: 82px;
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-start;
 }
 .experience_nav{
 	width: 15%;
 	height: 100%;
-	overflow: auto;
+	overflow-y: auto;
 }
 .experience_container{
-	width:70%;
+	width:60%;
 	height: 100%;
-	overflow: auto;
+	overflow-y: auto;
 }
 .experience_last{
-	width: 30%;
+	width: 25%;
 	height: 100%;
-	overflow: auto;
+	overflow-y: auto;
 }
 .last_top{
 	width: 100%;
-	height:760px;
+	height:500px;
 	background-color: #008489;
+	padding-top: 100px;
 }
 .last_con{
 	width: 90%;

@@ -45,7 +45,8 @@
               {value:2,label:'日元-J.￥ '}
             ],
             complete:'',
-            active_id:''
+            active_id:'',
+            Oreg:/^0|0[.]?[0]∗0/
           }
       },
       methods:{
@@ -56,10 +57,9 @@
           },
         sendActive(){
             if(this.checked == true){
-              if(!this.price || !(/((^[1-9]\d*)|^0)(\.\d{0,2}){0,1}$/).test(this.price)){
-                this.$message({type:'info',message:'请填写正确金额！（最多保留两位小数的正数）'})
+              if(this.Oreg.test(this.price)|| !this.price || !(/((^[1-9]\d*)|^0)(\.\d{0,2}){0,1}$/).test(this.price)){
+                this.$message({type:'info',message:'请填写正确金额！（大于1最多保留两位小数的正数）'})
               }else{
-                if(this.active_id){
                   this.$http.post(this.api + '/home/Activity/save_activity',{
                     token: localStorage.getItem('token'),
                     activity_id: this.active_id,
@@ -69,7 +69,7 @@
                   })
                     .then(res=>{
                       if(res.data.code == 1){
-                        if(this.complete == '0'){
+                        if(!this.complete){
                           this.$emit('changeRouter',{id:16,router:'needVolunter',information: this.active_id,complete: this.complete})
                         }else{
                           this.$message({
@@ -83,27 +83,10 @@
                         this.$alert(res.data.msg)
                       }
                     })
-                }else{
-                  this.$http.post(this.api + '/home/Activity/save_activity',{
-                    token: localStorage.getItem('token'),
-                    book_whole: this.checked,
-                    low_price: this.price,
-                    step: 15
-                  })
-                    .then(res=>{
-                      if(res.data.code == 1){
-                        this.$emit('saveId',res.data.data)
-                        this.$emit('changeRouter',{id:16,router:'needVolunter',information: res.data.data})
-                      }else if(res.data.code == 3){
-                        this.sendActive()
-                      }else if(res.data.code == 0){
-                        this.$alert(res.data.msg)
-                      }
-                    })
-                }
+             
               }
           }else{
-              if(this.active_id){
+         
                 this.$http.post(this.api + '/home/Activity/save_activity',{
                   token: localStorage.getItem('token'),
                   activity_id: this.active_id,
@@ -113,7 +96,7 @@
                 })
                   .then(res=>{
                     if(res.data.code == 1){
-                      if(this.complete == '0'){
+                      if(!this.complete){
                          this.$emit('changeRouter',{id:16,router:'needVolunter',information: this.active_id,complete:this.complete})
                       }else{
                         this.$message({
@@ -127,24 +110,7 @@
                       this.$alert(res.data.msg)
                     }
                   })
-              }else{
-                this.$http.post(this.api + '/home/Activity/save_activity',{
-                  token: localStorage.getItem('token'),
-                  book_whole: this.checked,
-                  low_price: this.price,
-                  step: 15
-                })
-                  .then(res=>{
-                    if(res.data.code == 1){
-                      this.$emit('saveId',res.data.data)
-                      this.$emit('changeRouter',{id:16,router:'needVolunter',information: res.data.data})
-                    }else if(res.data.code == 3){
-                      this.sendActive()
-                    }else if(res.data.code == 0){
-                      this.$alert(res.data.msg)
-                    }
-                  })
-              }
+            
             }
         },
         getActives(){

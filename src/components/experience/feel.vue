@@ -96,7 +96,6 @@
           }else if(!this.replay.length>=1){
               this.$message({type:'info',message:'请完善体验内容'})
           }else{
-             if(this.active_id){
               this.$http.post(this.api + '/home/Activity/save_activity',{
                 token: localStorage.getItem('token'),
                 activity_id: this.active_id,
@@ -106,7 +105,7 @@
               })
                 .then(res=>{
                   if(res.data.code == 1){
-                    if(this.complete == '0'){
+                    if(!this.complete){
                       this.$emit('changeRouter',{id:5,router:"Provide",information:this.active_id,complete: this.complete})
                     }else{
                       this.$message({
@@ -123,24 +122,7 @@
                 .catch(error=>{
                   alert(error)
                 })
-            }else{
-              this.$http.post(this.api + '/home/Activity/save_activity',{
-                token: localStorage.getItem('token'),
-                question: this.replay,
-                descripte: this.aboutMe,
-                step:4
-              })
-                .then(res=>{
-                if(res.data.code == 1){
-                  this.$emit('saveId',res.data.data)
-                  this.$emit('changeRouter',{id:5,router:"Provide",information:res.data.data})
-                }else if(res.data.code == 3){
-                  this.changeRouter()
-                }else if(res.data.code == 0){
-                  this.$alert(res.data.msg)
-                }
-              })
-            }
+            
           }
 			},
       answerAdd(item,index){

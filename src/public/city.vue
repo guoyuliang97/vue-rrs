@@ -59,9 +59,48 @@
            </el-option>
          </el-select>
        </div>
-      <div class="adress">
-        <p>市/镇/区:</p>
-        <el-select v-model="selectCity" @change="sendCity"  @focus="city" style="width:270px;" placeholder="请选择市区" filterable clearable  :disabled="cityList === ''? true:false">
+        <div class="adress">
+          <p>市/镇/区:</p>
+          <el-select v-model="selectCity" @change="sendCity"  @focus="city" style="width:270px;" placeholder="请选择市区" filterable clearable  :disabled="cityList === ''? true:false">
+            <el-option
+              v-for="(item,index) in cityList"
+              :key="index"
+              :label="item"
+              :value="index">
+            </el-option>
+          </el-select>
+        </div>
+        <div class="adress">
+          <p>区:</p>
+          <el-select v-model="selectXian" @change="sendXian"  @focus="xian" style="width:270px;" placeholder="请选择县" filterable clearable   :disabled="xianList === ''? true:false" >
+            <el-option
+              v-for="(item,index) in xianList"
+              :key="index"
+              :label="item"
+              :value="index">
+            </el-option>
+          </el-select>
+        </div>
+     </div>
+     <div v-if="type == '3'" style="display: flex;justify-content: flex-start">
+        <el-select v-model="selectCountry" @change="sendCountry" class="width"  filterable clearable  placeholder="国家" >
+          <el-option
+            v-for="(item,index) in countryList "
+            v-show="index<1"
+            :key="index"
+            :label="item"
+            :value="index">
+          </el-option>
+        </el-select>
+        <el-select v-model="selectProvince" class="width" style="margin-left:10px;" @change="sendProvince" @focus="province" filterable clearable  placeholder="省份" :disabled="selectCountry === ''? true:false">
+          <el-option
+            v-for="(item,index) in provinceList"
+            :key="index"
+            :label="item"
+            :value="index">
+          </el-option>
+        </el-select>
+        <el-select v-model="selectCity" class="width" style="margin-left:10px;" @change="sendCity"  @focus="city" placeholder="市区" filterable clearable  :disabled="selectProvince === ''? true:false">
           <el-option
             v-for="(item,index) in cityList"
             :key="index"
@@ -69,10 +108,7 @@
             :value="index">
           </el-option>
         </el-select>
-      </div>
-      <div class="adress">
-        <p>区:</p>
-        <el-select v-model="selectXian" @change="sendXian"  @focus="xian" style="width:270px;" placeholder="请选择县" filterable clearable   :disabled="xianList === ''? true:false" >
+        <el-select v-model="selectXian" class="width" style="margin-left:10px;" @change="sendXian"  @focus="xian" placeholder="县" filterable clearable  :disabled="selectCity === ''? true:false" >
           <el-option
             v-for="(item,index) in xianList"
             :key="index"
@@ -81,7 +117,6 @@
           </el-option>
         </el-select>
       </div>
-     </div>
     </div>
 </template>
 
@@ -114,7 +149,8 @@
           let C = this.selectCountry
           let CountryList = this.selectList[0].Location.CountryRegion
           if(CountryList[C].State){
-              this.selectCity = ''
+             this.selectCity = ''
+             this.selectXian = ''
             let province = CountryList[C].State.length>1? CountryList[C].State : CountryList[C].State.City
             let a = []
             for (let i = 0; i < province.length; i++) {
@@ -133,7 +169,7 @@
         if (CountryList[C].State.length>1) {
           if (this.provinceList[P] == '上海' || this.provinceList[P] == '重庆' || this.provinceList[P] == '北京' || this.provinceList[P] == '天津') {
             this.cityList =[this.provinceList[P]]
-               this.selectXian = ''
+            this.selectXian = ''
           } else{
             this.selectXian = ''
             let a = []
@@ -200,5 +236,8 @@
     margin:20px 0;
     line-height:40px;
     font-size:14px;
+  }
+  .width{
+    width:100px;
   }
 </style>

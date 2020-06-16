@@ -10,6 +10,14 @@ import "babel-polyfill";
 Vue.use(MintUI)
 
 
+import Store from './status/status'
+Vue.prototype.Store = Store
+
+
+
+
+
+
 Vue.config.productionTip = false
 import ElementUI from 'element-ui'
 import './assets/theme/index.css'

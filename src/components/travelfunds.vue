@@ -1,32 +1,42 @@
 <template>
 	<div class="travelfunds">
 		<Head type="edit" v-on:reload="reload" v-on:getVal="getVal"  :content="editSearch"  v-on:search="searchHome"></Head>
-		<div class="funds_con">
-      <img src="../../static/img/static/tran/tranvel_1.png" width="100%" height="33%">
-      <img src="../../static/img/static/tran/tranvel_2.png" width="100%" height="33%">
-      <img src="../../static/img/static/tran/tranvel_3.png" width="100%" height="33%">
-			<div class="funds_container">
-				<p class="funds_title">分享你对旅行的热爱</p>
-				<p class="funds_txt">您可以通过微信、微博、邮箱等方式，把你的专属链接分享给朋友</p>
-			</div>
+		<div class="funds_con flexCenter" :style="{height:height + 'px'}">
+      <div style="display:flex;justify-content:space-around">
+        <div >
+          <div class="funds_container">
+            <p>邀请新用户注册Allptp</p>
+            <p style="margin-top: 11px;">你将获得¥25基金</p>
+          </div>
+          <div class="funds_two">
+            <p>当任何用户通过您的分享链接注册成功，则该用户会成为您的亲密好友。</p>
+            <p>该亲密好友只要在我们平台上预定了任何体验活动，您不但可以得到25元的基金而且还
+              可以得到平台对该体验活动收取的10%服务费中的20%提成。</p>
+            <p>该基金必须在您的亲密好友参加过他所预定的活动后，这些基金才会出现在您账户
+              可用余额上，该活动未结束前这笔基金为不可用余额。
+              该余额可以用于提现和在本平台上消费使用。</p>
+          </div>
+          <div style="font-size:24px;padding: 19px 44px;border-radius:8px;" class="mainButton" @click="goShare">立即分享</div>
+        </div>
+        <div class="flexCenter" style="margin-left:47px;">
+          <img src="../../static/img/static/transct.png" width="570px" height="381px">
+        </div>
+      </div>
 		</div>
-		<div style="width: 1080px;margin: 20px auto;display: flex;justify-content: space-between">
-			<div style="width:600px;text-align: left">
-        <h2>分享方式</h2>
-        <div style="display: flex;justify-content: space-between;margin-top:30px;">
+		<div :style="{height: height + 'px'}" style="align-items:center; width:1035px;margin: 20px auto;display: flex;justify-content: space-between">
+			<div style="width:603px;text-align: left">
+        <h2 id="shareLocal">分享方式</h2>
+        <div style=" display: flex;justify-content: space-between;margin-top:30px">
           <div v-for="(item,index) in shreList" style="position: relative">
             <img :src="item.img" style="width:50px;height:50px;margin-left:5px;">
             <div v-if="index <3" style="display: flex;justify-content: flex-start;margin-top:15px;">
-              <div @click="chooseShare(item,index)" style="width:15px;height:15px;border-radius: 50%;border:1px solid #008489;display: flex;justify-content: center;align-items: center;margin-top:3px;cursor: pointer">
-                <div style="width:10px;height:10px;border-radius: 50%;" :style="{backgroundColor:clickIndex == index? '#008489':'#fff'}"></div>
+              <div @click="chooseShare(item,index)" style="width:15px;height:15px;border-radius: 50%;border:1px solid #14c5ca;display: flex;justify-content: center;align-items: center;margin-top:3px;cursor: pointer">
+                <div style="width:10px;height:10px;border-radius: 50%;" :style="{backgroundColor:clickIndex == index? '#14c5ca':'#fff'}"></div>
               </div>
               <div style="margin-left:10px;">
                 {{item.name}}
               </div>
             </div>
-            <!--<div v-if="index == 3" style="margin-top:12px;padding:2px 5px; background-color: #F0F0F0">
-              {{item.name}}
-            </div>-->
             <div v-if="index == 3">
               <button   style="position: absolute;width: 70px;bottom:0; left:-5px;border:none;margin-top:12px;padding:2px 5px; background-color: #F0F0F0;cursor: pointer" v-clipboard:copy="asd" v-clipboard:success="onCopy" v-clipboard:error="onError">
                 复制链接
@@ -87,11 +97,11 @@
               <el-input type="textarea" v-model="shareContent" :autosize="{minRows:5}" placeholder="说说你要分享的内容" ></el-input>
             </div>
             <el-button type="primary" @click="share" style="margin-top:20px">分享</el-button>
-<!--            <a href="mailto:1464153279@qq.com?&Subject=Hello&Body=你好">给我发邮件</a>-->
           </div>
         </div>
 			</div>
-			<div style="width:300px;margin-left:40px;padding:20px;border: 1px solid #B9B9B9;text-align: left;margin-top:20px;">
+      <div></div>
+			<!-- <div style="width:300px;margin-left:40px;padding:20px;border: 1px solid #B9B9B9;text-align: left;margin-top:20px;">
         <h2>简单入门</h2>
         <div class="List">
           <p>  当任何用户通过您的分享链接注册成功，则该用户会成为您的亲密好友。</p>
@@ -101,7 +111,7 @@
         </div>
         <p @click="toYUedu" style="color:#008489;width:65px;border-bottom: 1px solid #B9B9B9;padding: 10px 0;font-weight: bold">阅读条款</p>
         <p style="color:#000;margin-top:20px;">了解如何通过邀请好友加入allptp赚取旅行基金</p>
-			</div>
+			</div> -->
 		</div>
     <div v-if="isLoading" style="position: fixed;top:0;left:0;right:0;bottom:0;z-index:990;background-color: rgba(255,255,255,.8);display: flex;justify-content: center;align-items: center">
       <div>
@@ -148,7 +158,8 @@
         emailCenter:'',
         isLoading:false,
         param:'',
-        index:0
+        index:0,
+        height:''
 			};
 		},
 		components:{
@@ -156,6 +167,10 @@
       Loading
 		},
     methods:{
+      goShare(){
+        var top = document.getElementById('shareLocal').offsetTop
+        document.documentElement.scrollTop = top
+      },
 		  getImg(){
         if(localStorage.getItem('userImg')){
           this.imgUrl = localStorage.getItem('userImg')
@@ -439,32 +454,44 @@
             this.isLoading = false
           })
       },
+      getHeight(){
+        let a = document.documentElement.clientHeight 
+        this.height = a
+        console.log(a)
+      },
     },
     mounted() {
-		  this.getImg()
+      this.getImg()
+      this.getHeight()
     
     },
   }
 </script>
 
 <style>
-.travelfunds{
-	padding-bottom: 80px;
-}
+
 .funds_con{
-	margin-top: 82px;
-	height: 480px;
+  margin: 0 auto;
 	border-top: 1px solid white;
-  font-size: 0;
-  position: relative;
+  background-color: #F9FFFF;
 }
 .funds_container{
-	text-align: center;
-  position: absolute;
-  color:#fff;
-  z-index: 1;
-  top:180px;
-  left:30%;
+	width:418px;
+  font-size:42px;
+  font-family:Source Han Sans CN;
+  font-weight:bold;
+  color:rgba(20,197,202,1);
+  text-align:left
+
+}
+.funds_two{
+  width:418px;
+  font-size:16px;
+  font-family:Source Han Sans CN;
+  color:#444A4A;
+  text-align:left;
+  line-height:30px;
+  margin: 30px 0;
 }
 
 .funds_headbg>div{
@@ -477,11 +504,11 @@
 .funds_title{
 	margin-top: 20px;
 	font-size: 32px;
-	color: white;
+
 }
 .funds_txt{
 	font-size: 18px;
-	color: white;
+
 	width: 700px;
 	margin: 0 auto;
 	margin-top: 20px;

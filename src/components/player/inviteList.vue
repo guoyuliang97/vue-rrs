@@ -36,7 +36,7 @@
       <div  style="display: flex;flex-wrap: wrap;">
         <div class="list" v-if="userId != item.user_id" v-for="(item,index) in volunteerList" :key="index" style="width:200px;margin-right:90px;margin-bottom:20px;">
           <div>
-            <LoadingImg type="3" :src="item.head_image? item.headimage.domain + item.headimage.image_url:'../../../static/img/static/user.png'" style="width:200px;height:200px;"></LoadingImg>
+            <LoadingImg type="2" :src="item.head_image? item.headimage.domain + item.headimage.image_url:'../../../static/img/static/user.png'" style="width:200px;height:200px;"></LoadingImg>
           </div>
           <div style="width:188px;font-size:12px;line-height:20px;padding:15px 5px 10px 5px;border:1px solid #eee;border-top:none">
             <div style="display: flex;">

@@ -77,59 +77,70 @@
             </div>
           </div>
         </div>
-        <div class="marginBottom" style="width:1080px;margin: 0 auto;display: flex;justify-content: flex-end">
+        <!-- <div class="marginBottom" style="width:1080px;margin: 0 auto;display: flex;justify-content: flex-end">
               <el-row  ><el-button icon="el-icon-star-off" circle @click="like" :style="{backgroundColor:is_collection? '#FF5A5F':'#fff'}"></el-button></el-row>
               <el-row  class="marginLeft"><el-button icon="el-icon-share" circle @click="share"></el-button></el-row>
-        </div>
+        </div> -->
         <div style="width:1080px;margin: 16px auto">
           <div >
             <h1  style="text-align:left">{{title}}</h1>
             <div class="flexStart marginBottom" style="color:#2C3E50;font-weight:bold;" >
               <div class="marginBottom firstCOntent">
-                  <div  style="margin-left:50px">{{score}}</div>
-                  <div style="">
+                  <div  :style="{marginLeft:score?'50px':''}">{{score?score:allText.content[0][Lan]}}</div>
+                  <div v-if="score">
                     <el-rate  disabled
                       :colors="['#000','#000','#000']"
                       :value="parseInt(score)">
                     </el-rate>
                   </div>
                   <div class="marginBottom" style="min-width:150px;">
-                    <div><span  style="cursor: pointer" @click="tiYan=true">翻译体验内容</span></div>
-                    <div style="margin-top:20px;"><span @click="toTranslation" style="cursor: pointer">查看体验翻译</span></div>
+                    <div><span  style="cursor: pointer" @click="tiYan=true">{{allText.content[1][Lan]}}</span></div>
+                    <div style="margin-top:20px;"><span @click="toTranslation" style="cursor: pointer">{{allText.content[2][Lan]}}</span></div>
                   </div>
               </div>
               <div class="flexBetween"  style="width:77%;">
-                  <div class="marginBottom" style="text-align:left;">
+                  <div class="marginBottom hiddenText" style="text-align:left;width:33%;">
                     <div>
-                      
-                      <div><img :src="arr[0].img">&nbsp;&nbsp;<span style="color:#83919E">地点</span></div>
+                      <div class="flexStart"><img :src="arr[0].img" class="icon">&nbsp;&nbsp;<span style="color:#83919E;padding:2px 0;">{{allText.content[3][Lan]}}</span></div>
                       <p class="marginBottom">{{province}}</p>
                     </div>
                     <div class="marginBottom">
-                      <p><img :src="arr[2].img">&nbsp;&nbsp;<span style="color:#83919E">体验时长</span></p>
+                      <div class="flexStart"><img :src="arr[2].img" class="icon">&nbsp;&nbsp;<span style="color:#83919E">{{allText.content[4][Lan]}}</span></div>
                       <p class="marginBottom">{{total_time}}</p>
                     </div>
                 </div>
-              <div class="marginBottom" style="text-align:left">
+                <div class="marginBottom" style="text-align:left">
+                    <div>
+                      <div class="flexStart">
+                        <img :src="arr[4].img" class="icon">&nbsp;&nbsp;
+                        <span style="color:#83919E">{{allText.content[5][Lan]}}</span>
+                        </div>
+                      <p class="marginBottom">{{main_language}}({{allText.content[13][Lan]}}) , <span v-for="(item,index) in other_laguage">&nbsp;&nbsp;{{language[item].label}}</span>({{allText.content[14][Lan]}})</p>
+                    </div>
+                    <div class="marginBottom">
+                      <div class="flexStart">
+                        <img :src="arr[3].img" class="icon">&nbsp;&nbsp;
+                        <span style="color:#83919E">{{allText.content[6][Lan]}}</span>
+                      </div>
+                      <p class="marginBottom hiddenText">{{activ_provite}}</p>
+                    </div>
+                </div>
+                <div class="marginBottom " style="text-align:left;width:33%">
                   <div>
-                    <p><img :src="arr[4].img">&nbsp;&nbsp;<span style="color:#83919E">语言</span></p>
-                    <p class="marginBottom">{{main_language}}(主要) , <span v-for="(item,index) in other_laguage">&nbsp;&nbsp;{{language[item].label}}</span>(其他)</p>
-                  </div>
-                  <div class="marginBottom">
-                    <p><img :src="arr[3].img">&nbsp;&nbsp;<span style="color:#83919E">提供</span></p>
-                    <p class="marginBottom">{{activ_provite}}</p>
-                  </div>
-              </div>
-              <div class="marginBottom" style="text-align:left;">
-                <div>
-                    <p><img :src="arr[3].img">&nbsp;&nbsp;<span style="color:#83919E">准备</span></p>
-                    <p class="marginBottom">{{activ_bring}}</p>
-                  </div>
-                  <div class="marginBottom" >
-                    <p><img :src="arr[1].img">&nbsp;&nbsp;<span style="color:#83919E">房源</span></p>
-                    <p class="marginBottom">{{long_day == '1'?'该体验包含住宿':'该体验单独提供住宿'}}</p>
-                  </div>
-              </div>
+                      <div class="flexStart">
+                        <img :src="arr[3].img" class="icon">&nbsp;&nbsp;
+                        <span style="color:#83919E">{{allText.content[7][Lan]}}</span>
+                      </div>
+                      <p class="marginBottom hiddenText">{{activ_bring?activ_bring:allText.content[12][Lan]}}</p>
+                    </div>
+                    <div class="marginBottom" >
+                      <div class="flexStart">
+                        <img :src="arr[1].img" class="icon">&nbsp;&nbsp;
+                        <span style="color:#83919E">{{allText.content[8][Lan]}}</span>
+                      </div>
+                      <p class="marginBottom hiddenText">{{long_day == '1'?allText.content[9][Lan]:long_day == '2'?allText.content[10][Lan]:allText.content[11][Lan]}}</p>
+                    </div>
+                </div>
               </div>
             </div>
               <div v-if="is_volunteen"  class="flexStart" >
@@ -137,56 +148,71 @@
               
                 </div>
                 <div class="flexStart secendWidth"  style="line-height:40px;height:40px;margin-top: 49px;">
-                  <span  class="mainButton"  size="medium"  @click="orderVolunter">志愿者报名></span>
-                  <span  style="color:#666666;font-size: 14px; margin-left:19px;">报名需知：需要会<span v-for="(item,index) in needLanguage">{{language[item].label+ '、'}}</span>&nbsp;|&nbsp;其他要求：{{volun_require}}</span>
+                  <span v-if="orderNum&&userId != isOwer"  style="height: 23px;padding: 5px;background: rgba(20,197,202,1);border-radius: 2px;line-height: 23px;text-align: center;color: #fff;"  size="medium"  @click="orderVolunter">{{allText.click[0][Lan]}}></span>
+                  <span  style="color:#666666;font-size: 14px; margin-left:19px;">{{orderNum&&userId != isOwer?'':'自愿者'}}报名需知：需要会<span v-for="(item,index) in needLanguage">{{language[item].label+ '、'}}</span>&nbsp;|&nbsp;其他要求：{{volun_require?volun_require:'无'}}</span>
                 </div>
               </div>
               <hr class="line">
               <div class="flexStart">
                 <div class=" mainFont firstWidth" >
-                  体验优惠
+                  {{allText.title[0][Lan]}}
                 </div>
                 <div class="secendWidth">
-                  <div class="flexStart">
+                  <div class="flexStart" v-if="discount.length">
                     <div style="height:24px;width:50px;background:rgba(243,247,250,1);text-align:center" class="mainColor" >折扣</div>
                     <div  style="margin-left:15px;width:100%;">
                       <div class="flexWrap" >
                         <div class="marginRight marginTop" style="" v-for="(item,index) in discount" v-show="isDiscount? index < 4:true">{{item.date}} {{item.begin_time}}—{{item.end_time}}时间内标准价{{Number(item.price_discount)}}折儿童价{{Number(item.kids_price_discount)}}折</div>
-                        <div v-if="!discount.length">该活动没有折扣!</div>
+                        
                       </div>
                       <div class='mainButton' style="height:20px;width:80px;cursor:pointer" @click="isDiscount = !isDiscount" v-if="discount.length > 4">{{isDiscount?'查看更多':'收起查看'}}</div>
                     </div>
                   </div>
-                  <div class="flexStart">
-                      <div style="height:24px;background:rgba(243,247,250,1);text-align:center;width:80px;" class="mainColor" >返差价</div>
+                  <div v-if="Differ.length" class="flexStart">
+                      <div style="height:24px;background:rgba(243,247,250,1);text-align:center;width:80px;" class="mainColor" >返差价
+                        <el-tooltip content="bottom" placement="bottom" effect="light">
+                          <div slot="content" style="width:300px;line-height:30px;">
+                            <p class="fontweight">{{allText.Chajia[0][Lan]}}：</p>
+                            <p>1.{{allText.Chajia[1][Lan]}}</p>
+                            <p>2.{{allText.Chajia[2][Lan]}}</p>
+                            <p>3.{{allText.Chajia[3][Lan]}}</p>
+                            <p>4.{{allText.Chajia[4][Lan]}}</p>
+                            <p class="zhuShi">{{allText.Chajia[5][Lan]}}</p>
+                          </div>
+                          <i class='el-icon-question' style="color:#999" ></i>
+                        </el-tooltip>
+                      </div>
                       <div  style="margin-left:15px;">
-                        <div class="flexWrap">
+                        <div v-if="Differ.length" class="flexWrap">
                           时间段内体验结束时满
                           <div class="marginTop"  v-for="(item,index) in Differ">
                             {{item.num}}人返预付的{{Number(item.refund_rate)}}%;
                           </div>
                         </div>
-                        <div v-if="!Differ.length">该活动没有折扣!</div>
                       </div>
                     </div>
-                  <div class="flexStart">
-                    <div style="height:24px;width:48px;background:rgba(243,247,250,1);font-size:14px;text-align:center" class="mainColor">套餐</div>
-                    <div  style="margin-left:15px;">
-                      <p>{{is_combine?'该活动包含亲子套餐和综合套餐':'该活动未包含亲子和组合套餐'}}</p>
+                    <div v-if="is_combine_qinzi || is_combine_zuhe" class="flexStart">
+                      <div style="height:24px;width:48px;background:rgba(243,247,250,1);font-size:14px;text-align:center" class="mainColor">套餐</div>
+                      <div  style="margin-left:15px;">
+                        <p v-if="is_combine_qinzi && is_combine_zuhe">该活动包含亲子套餐和组合套餐</p>
+                        <p v-if="!is_combine_qinzi && is_combine_zuhe">该活动包组合套餐</p>
+                        <p v-if="is_combine_qinzi && !is_combine_zuhe">该活动包含亲子套餐</p>
+                      </div>
                     </div>
-                  </div>
                 </div>
               </div>
               <hr class="line">
               <div class="flexStart">
                 <div class=" mainFont firstWidth" >
-                  关于策划人
+                   {{allText.title[1][Lan]}}
                 </div>
                 <div class="secendWidth">
                   <div style="min-width:150px">
-                    <div><img @click="toPerson(userId)" :src="userImg" width="48px" height="48px" style="border-radius:50%;margin-bottom: 10px;"></div>
+                    <div>
+                      <img @click="toPerson(userId)" :src="userImg" width="48px" height="48px" style="object-fit:cover;border-radius:50%;margin-bottom: 10px;">
+                      </div>
                     <p style="font-size:18px;font-weight:bold;">{{userName?userName:'匿名用户'}}</p>
-                    <p v-if="userId != isOwer " @click="contactPlanner" style="font-size:14px;color:#000;cursor: pointer;margin-top:15px;">联系策划人</p>
+                    <p v-if="userId != isOwer " @click="contactPlanner" style="font-size:14px;color:#000;cursor: pointer;margin-top:15px;">{{allText.click[4][Lan]}}</p>
                   </div>
                   <div>
                     <div style="margin-top:20px;line-height:40px;word-wrap:break-word;white-space:pre-wrap;line-height:30px;" v-html="Xss(userintroduce)"></div>
@@ -196,8 +222,9 @@
               </div>
               <hr class="line">
               <div class="flexStart">
+                
                 <div class=" mainFont firstWidth" >
-                  体验内容
+                   {{allText.title[2][Lan]}}
                 </div>
                 <div class="secendWidth">
                   <div style="margin-top:20px;word-wrap:break-word;white-space:pre-wrap;line-height:30px" v-html="Xss(content)"></div>
@@ -207,7 +234,7 @@
               <hr class="line">
               <div class="flexStart">
                 <div class=" mainFont firstWidth" >
-                  体验地点
+                  {{allText.title[3][Lan]}}
                 </div>
                 <div class="secendWidth flexStart" style="text-align:left;">
                   <div>
@@ -229,7 +256,7 @@
           <hr class="line">
           <div class="flexStart">
             <div class="firstWidth mainFont">
-              <p>评论列表</p>
+              <p> {{allText.title[4][Lan]}}</p>
             </div>
             <div class="secendWidth">
               <div>
@@ -255,31 +282,35 @@
               <img style="width:50%;"   :src="videoIMg" alt="" />
             </el-dialog>
           </div>
-          <hr class="line">
-          <div class="flexStart">
-              <div class=" mainFont firstWidth" >
-                房源图片
-              </div>
-              <div class="secendWidth">
-                <div style="display: flex;flex-wrap: wrap;">
-                  <div v-for="(item,index) in houseImage"  style="position: relative;margin: 20px 0;">
-                    <div v-if="isflag">
-                      <loadingImg :src="item.domain+item.image_url" type="3" style="width:250px;height:200px;margin-right:10px;"></loadingImg>
-                      <span style="position: absolute;bottom:0;left:0;padding:1px 10px ;background-color: rgba(0,0,0,.5);color:#fff;">{{item.flag == 1?'露营':item.flag == 2?'民宿':'酒店'}}</span>
-                      <span @click="lookHouseImg(item,index)" style="cursor:pointer;position: absolute;left:50%;top:50%;padding:1px 10px ;background-color: rgba(0,0,0,.5);color:#fff;margin-left:-42px;margin-top:-10px;border-radius: 5px;">查看更多</span>
-                    </div>
-                    <div v-if="!isflag && index <1">
-                      <loadingImg :src="item.domain+item.image_url" type="3" style="width:250px;height:200px;margin-right:10px;"></loadingImg>
-                      <span @click="lookHouseImg(item,index)" style="cursor:pointer;position: absolute;left:50%;top:50%;padding:1px 10px ;background-color: rgba(0,0,0,.5);color:#fff;margin-left:-42px;margin-top:-10px;border-radius: 5px;">查看更多</span>
+          <div v-if="houseImage.length">
+            <hr class="line">
+            <div  class="flexStart">
+                <div class=" mainFont firstWidth" >
+                   {{allText.title[5][Lan]}}
+                </div>
+                <div class="secendWidth">
+                  <div style="display: flex;flex-wrap: wrap;">
+                    <div v-for="(item,index) in houseImage"  style="position: relative;margin: 20px 0;">
+                      <div @click="lookHouseImg(item,index)" v-if="isflag">
+                        <loadingImg :src="item.domain+item.image_url" type="new2" style="cursor:pointer; width:250px;height:200px;margin-right:10px;overflow:hidden"></loadingImg>
+                        <span style="position: absolute;bottom:0;left:0;padding:1px 10px ;background-color: rgba(0,0,0,.5);color:#fff;">{{item.flag == 1?'露营':item.flag == 2?'民宿':'酒店'}}</span>
+                        <!-- <span  style="cursor:pointer;position: absolute;left:50%;top:50%;padding:1px 10px ;background-color: rgba(0,0,0,.5);color:#fff;margin-left:-42px;margin-top:-10px;border-radius: 5px;">查看更多</span> -->
+                      </div>
+                      <div @click="lookHouseImg(item,index)" v-if="!isflag && index <1">
+                        <loadingImg :src="item.domain+item.image_url" type="new2" style="cursor:pointer;width:250px;height:200px;margin-right:10px;overflow:hidden"></loadingImg>
+                        <!-- <span @click="lookHouseImg(item,index)" style="cursor:pointer;position: absolute;left:50%;top:50%;padding:1px 10px ;background-color: rgba(0,0,0,.5);color:#fff;margin-left:-42px;margin-top:-10px;border-radius: 5px;">查看更多</span> -->
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+            </div>
           </div>
+
+          
           <hr class="line">
           <div class="flexStart">
               <div class=" mainFont firstWidth" >
-                注意事项
+                 {{allText.title[6][Lan]}}
               </div>
               <div class="secendWidth">
                 <div class="secendWidth flexStart" style="text-align:left;">
@@ -291,7 +322,9 @@
                     </p>
                     <p class="marginTop">{{return_content}}</p>
                     <p class="fontweight marginTop">年龄要求</p>
-                    <p class="marginTop">{{age_limit}}岁以上</p>
+                    <p class="marginTop" v-if="age_limit">{{age_limit}}岁以上</p>
+                    <p class="marginTop" v-if="!age_limit">没有要求</p>
+
                   </div>
                   <div style="margin-left:100px;">
                     <p class="fontweight marginTop">团体人数</p>
@@ -303,41 +336,36 @@
             </div>
             <hr class="line">
             <div v-show="listA.length">
-              <div  class="flexStart">
-                <div class="firstWidth mainFont">
-                  类似体验
+              <div class="flexStart">
+                <div class="mainFont firstWidth">
+                   {{allText.title[7][Lan]}}
                 </div>
-                <div  style="width:860px;height:300px;overflow:hidden;position:relative;">
-                  <div id="b" :style="{width:listA.length * 300 + 'px'}" style="height:300px;position:absolute;left:0px;transition: all .3s linear">
-                    <div v-for="item in listA" style="width:280px;margin:0 10px;float:left" >
-                      <Detail type="1" :activity_id="item.activity_id" :imgUrl="item.domain + item.image_url" :city="item.city" :total_time="item.total_time" :activ_provite="item.activ_provite" :comment_num="item.comment_num" :name="item.title" :score="item.score" :english="item.main_laguage" :money="item.money" :kind="item.kind" v-on:toPublish="toPublish(item)" v-on:consult="consult(index)"></Detail>
+                <div class="secendWidth flexStart">
+                    <div style="margin-right:100px;" v-for="(item,index) in listA"  >
+                      <Detail type="active" :data="item" v-on:toPublish="toPublish(item)" v-on:consult="consult(index)"></Detail>
                     </div>
-                  </div>
-                  <div class="prev">
-                    <el-button type="warning" icon="el-icon-arrow-left" circle v-show="prevOver" @click="prevIndex"></el-button>
-                  </div>
-                  <div class="next">
-                    <el-button type="warning" icon="el-icon-arrow-right" circle v-show="listA.length>3?nextOver:false" @click="nextIndex"></el-button>
-                  </div>
                 </div>
               </div>
             </div>
-      
         </div>
       </div>
       <div style="position: fixed;bottom:0;background:rgba(245,247,250,1);height:98px;width:100%;z-index:99">
+         <div class="flexColumn" style="right:200px;position:absolute;bottom:100px;margin: 0 auto;display: flex;justify-content: flex-end">
+              <el-row  ><el-button icon="el-icon-star-off" circle @click="like" :style="{backgroundColor:is_collection? '#FF5A5F':'#fff'}"></el-button></el-row>
+              <el-row style="margin-top:10px;"><el-button icon="el-icon-share" circle @click="share"></el-button></el-row>
+        </div>
         <div class="flexBetween" style="margin:6px 18% 30px;">
           <div class="flexStart">
-            <div><img :src="userImg" width="62" height="62" style="border-radius:50%;margin-top: 6px;"></div>
-          
+            <div>
+              <loadingImg type="user" :src="userImg"  style="width:62px;height:62px;margin-top: 6px;"></loadingImg>
+              </div>
               <div style="margin-left:24px;line-height:40px;margin-top: 28px;">
                <el-rate void-color="#000"  :colors="['#000', '#000', '#000']" :value="parseInt(score)" disabled></el-rate>
               </div>
-           
           </div>
           <div style="display: flex;align-items: center;font-size:18px;">
             <span v-if="price" style="margin-right:20px;font-weight: bold;color:##14C5CA"><span>￥</span>{{price}}+/人</span>
-            <span class="mainClick" @click="toDate" v-if="orderNum&&userId != isOwer">查看日期</span>
+            <span class="mainClick" @click="toDate" v-if="orderNum&&userId != isOwer">{{allText.click[5][Lan]}}</span>
             <el-button v-if="!orderNum&&userId != isOwer" style="border:1px solid red;color:red" plain >已过期/已满</el-button>
           </div>
         </div>
@@ -377,7 +405,7 @@
                   <i @click="prev" class="el-icon-arrow-left"></i>
                 </div>
                 <div style="position: relative;width:90%;height:100%" >
-                  <loadingImg type="2" :src="lookImage[photoIndex].domain + lookImage[photoIndex].image_url" style="height:100%;max-width:100%;overflow: hidden"></loadingImg>
+                  <loadingImg type="3" :src="lookImage[photoIndex].domain + lookImage[photoIndex].image_url" style="height:100%;max-width:100%;overflow: hidden"></loadingImg>
                   <span v-if="isflag" style="position: absolute;bottom:0;left:0;padding:1px 10px ;background-color: rgba(0,0,0,.5);color:#fff;">{{flag == 1?'露营':flag == 2?'民宿':'酒店'}}</span>
                 </div>
                 <div style="color:#fff;font-size:50px;display: flex;align-items: center;margin-left:50px;">
@@ -387,7 +415,7 @@
               <div style="width:530px;position: relative;height:80px;overflow: hidden;margin: 20px auto;">
                 <div style="position: absolute;transition:.3s all linear;display: flex;justify-content: flex-start;align-items: center" :style="{marginLeft:left+'px'}">
                   <div  v-for="(item,index) in lookImage" @click="lookclick(item,index)" style="width:100px;height:75px;border:2px solid;margin-right:10px;"  :style="{borderColor:photoIndex == index? '#FFF':''}" >
-                    <loadingImg type="3"  :src="item.domain + item.image_url" style="width:100px;height:75px"  ></loadingImg>
+                    <loadingImg type="3"  :src="item.domain + item.image_url" style="width:100px;height:75px;overflow:hidden"  ></loadingImg>
                   </div>
                 </div>
               </div>
@@ -428,7 +456,7 @@
           <el-button type="primary" @click="shreEmail" style="margin-top:20px">分享</el-button>
         </div>
 
-          <!--            <a href="mailto:1464153279@qq.com?&Subject=Hello&Body=你好">给我发邮件</a>-->
+          <!--<a href="mailto:1464153279@qq.com?&Subject=Hello&Body=你好">给我发邮件</a>-->
         </div>
       </div>
     </div>
@@ -484,7 +512,7 @@
             text:''
           },
           age_limit:'',
-          height:'80px',
+          height:'78px',
           status:0,
           review:{
             text:''
@@ -577,15 +605,200 @@
           discount:[],
           isDiscount:true,
           Differ:[],
-          is_combine:'',
+          is_combine_qinzi:'',
+          is_combine_zuhe:'',
           arr:[
-            {img:"../../../static/img/publish/icon_1(1).png"},
-            {img:"../../../static/img/publish/icon_1(2).png"},
-            {img:"../../../static/img/publish/icon_1(3).png"},
-            {img:"../../../static/img/publish/icon_1(4).png"},
-            {img:"../../../static/img/publish/icon_1(5).png"},
-
-          ]
+            {img:"../../../static/img/publish/icon_1.png"},
+            {img:"../../../static/img/publish/icon_2.png"},
+            {img:"../../../static/img/publish/icon_3.png"},
+            {img:"../../../static/img/publish/icon_4.png"},
+            {img:"../../../static/img/publish/icon_5.png"},
+          ],
+          allText:{
+            content:[
+              {
+                'zh':'暂无评分',
+                'en':'No ratings yet',
+                'ja':'評価はまだありません'
+              },
+              {
+                'zh':'翻译体验内容',
+                'en':'Translation experience content',
+                'ja':'翻訳体験コンテンツ'
+              },
+              {
+                'zh':'查看体验翻译',
+                'en':'View Experience Translation',
+                'ja':'経験の翻訳を見る'
+              },
+              {
+                'zh':'地点',
+                'en':'location',
+                'ja':'ロケーション'
+              },
+              {
+                'zh':'体验时长',
+                'en':'Experience duration',
+                'ja':'体験期間'
+              },
+              {
+                'zh':'语言',
+                'en':'Language',
+                'ja':'言語'
+              },
+              {
+                'zh':'提供',
+                'en':'provide',
+                'ja':'提供する'
+              },
+              {
+                'zh':'准备',
+                'en':'ready',
+                'ja':'準備ができて'
+              },
+              {
+                'zh':'住宿',
+                'en':'Accommodation',
+                'ja':'宿泊施設'
+              },
+              {
+                'zh':'免费住宿',
+                'en':'Free accommodation',
+                'ja':'無料宿泊'
+              },
+              {
+                'zh':'需购买',
+                'en':'Need to buy',
+                'ja':'購入する必要があります'
+              },
+              {
+                'zh':'无住宿',
+                'en':'No accommodation',
+                'ja':'宿泊施設なし'
+              },
+              {
+                'zh':'不需要自带',
+                'en':'No need to bring your own',
+                'ja':'持参する必要はありません'
+              },
+              {
+                'zh':'主要',
+                'en':'main',
+                'ja':'メイン'
+              },
+               {
+                'zh':'其他',
+                'en':'other',
+                'ja':'その他の'
+              }
+            ],
+            title:[
+              {
+                'zh':'体验优惠',
+                'en':'Experience discount',
+                'ja':'体験割引'
+              },
+              {
+                'zh':'关于策划人',
+                'en':'About the planner',
+                'ja':'プランナーについて'
+              },
+              {
+                'zh':'体验内容',
+                'en':'Experience content',
+                'ja':'体験内容'
+              },
+              {
+                'zh':'体验地点',
+                'en':'Experience location',
+                'ja':'体験場所'
+              },
+              {
+                'zh':'评论列表',
+                'en':'comment list',
+                'ja':'コメントリスト'
+              },
+              {
+                'zh':'房源图片',
+                'en':'Listing pictures',
+                'ja':'画像のリスト'
+              },
+              {
+                'zh':'注意事项',
+                'en':'Precautions',
+                'ja':'予防'
+              },
+              {
+                'zh':'类似体验',
+                'en':'Similar experience',
+                'ja':'同様の経験'
+              }
+            ],
+            click:[
+              {
+                'zh':'志愿者报名',
+                'en':'Volunteer registration',
+                'ja':'ボランティア登録'
+              },
+              {
+                'zh':'折扣',
+                'en':'discount',
+                'ja':'ディスカウント'
+              },
+              {
+                'zh':'返差价',
+                'en':'Rebate',
+                'ja':'リベート'
+              },
+              {
+                'zh':'套餐',
+                'en':'Package',
+                'ja':'パッケージ'
+              },
+              {
+                'zh':'联系策划人',
+                'en':'Contact planner',
+                'ja':'お問い合わせプランナー'
+              },
+              {
+                'zh':'查看日期',
+                'en':'View date',
+                'ja':'日付を表示'
+              }
+            ],
+            Chajia:[
+               {
+                'zh':'返差价说明',
+                'en':'Rebate difference',
+                'ja':'リベートの違い'
+              },
+              {
+                'zh':'活动满设置人数且此体验完成结束时，退还用户预付的百分比金额（人数也包含购买套餐的固定人数）',
+                'en':'When the event is full of people and the experience is completed, the user will be refunded the percentage of the prepaid percentage (the number of people also includes the fixed number of people who purchase the package)',
+                'ja':'イベントが満員で体験が完了した場合、ユーザーは前払いの割合の割合で返金されます（人数には、パッケージを購入した固定人数も含まれます）'
+              },
+              {
+                'zh':'如果设置第二次的人数下限大于上一次人数时，返还比例需大于上一次比例',
+                'en':'If the lower limit of the number of people set for the second time is greater than the previous number of people, the return rate must be greater than the previous rate',
+                'ja':'2回目に設定した人数の下限が前回の人数よりも多い場合、還元率は前回よりも大きくする必要があります'
+              },
+              {
+                'zh':'体验结束时，若没有达到满设置退还人数时，将不会退还金额给用户',
+                'en':'At the end of the experience, if the set number of refunds is not reached, the amount will not be refunded to the user',
+                'ja':'エクスペリエンスの最後に、設定された払い戻し回数に達しなかった場合、その金額はユーザーに払い戻されません'
+              },
+              {
+                'zh':'退差价的返还金额比例不叠加，默认选择只满足要求的一档返还',
+                'en':'The refund amount ratio of the refund price difference is not superimposed.',
+                'ja':'差額の返金額の比率は重畳せず、デフォルトでは要件を満たす1年生の返金のみが選択されます。'
+              },
+              {
+                'zh':'例子：小王购买了某策划者的体验，此体验参与时间为14:00-18:00，策划者设置此体验满10人参与则退还10%，若此体验在结束时满了10人参与，小王将收到支付的10%的退款。',
+                'en':'Example: Xiao Wang purchased the experience of a certain planner. The participation time of this experience is 14:00-18:00. If the planner sets this experience to 10 people, it will be refunded 10%. If the experience ends, 10 people will participate. , Xiao Wang will receive a 10% refund for the payment.',
+                'ja':'例：Xiao Wangが特定のプランナーのエクスペリエンスを購入しました。このエクスペリエンスの参加時間は14：00-18：00です。プランナーがこのエクスペリエンスを10人に設定すると、10％が返金されます。エクスペリエンスが終了すると、10人が参加します。 、Xiao Wangは10％の払い戻しを受け取ります'
+              }
+            ]
+          }
         }
       },
       components: {
@@ -605,12 +818,11 @@
         if(localStorage.getItem('isLogin')){
           _this.getOwers()
         }
-         _this.ScrollContent()
+        _this.ScrollContent()
         _this.sendBuidu()
         _this.getComment(1)
         _this.getActls()
         _this.imgUrl = localStorage.getItem('userImg')
-       
       },
       created:function(){
         this.language = test()
@@ -655,6 +867,11 @@
           }
           this.photoList = a
           this.videoList = b
+        }
+      },
+      computed:{
+        Lan(){
+          return this.Store.getters.getValue
         }
       },
       methods:{
@@ -1032,7 +1249,7 @@
         },
         abolish(){
           this.review.text = ''
-          this.height = '80px'
+          this.height = '78px'
           this.overflow= 'hidden'
           this.replay = '说点什么...'
           this.NowChat = false
@@ -1151,7 +1368,12 @@
             if(res.data.code == 1){
               let data  = res.data.data
               if(data.length){
-                this.orderNum = data[0].max_person_num
+                for(var i = 0; i< data.length;i++){
+                  if(data[i].status == 0&& data[i].online != 1){
+                    this.orderNum = data[i].max_person_num
+                  }
+                }
+                
               }
               
             }else if(res.data.code == 3){
@@ -1258,7 +1480,8 @@
                 this.best_descripte = data.best_descripte
                 this.best_introduce = data.best_introduce
                 this.price = data.price
-                this.is_combine = data.is_combine
+                this.is_combine_qinzi = data.is_combine_qinzi
+                this.is_combine_zuhe = data.is_combine_zuhe
                 if(data.volun_laguage){
                   var a = []
                   for(let m = 0;m<data.volun_laguage.split(',').length;m++){
@@ -1281,56 +1504,10 @@
                 }else if(data.issatay == 1){
                   this.isflag = true
                   this.long_day = '2'
-                  // var a = []
-                  // for(let i=0;i<data.house.length;i++){
-                  //   a.push({img:data.house[i].image,flag:data.house[i].flag})
-                  // }
-                  // this.houseImage = a
+
                 }else{
                   this.long_day = ''
                 }
-                // if(data.long_day == 1){
-                //   if(data.slot.length){
-                //     let a = []
-                //     for(let i= 0;i<data.slot.length;i++ ){
-                //       var b = []
-                //       for(let j =0;j<data.slot[i].list.length;j++){
-                //         if(data.slot[i].list[j].personNum > data.slot[i].list[j].order_person_num && data.slot[i].list[j].status == 0){
-                //           b.push(data.slot[i].list[j])
-                //         }
-                //       }
-                //       if(b.length){
-                //         a.push({day:data.slot[i].day,list:b})
-                //       }
-                //     }
-                //     this.dayList = a
-                //     if(this.dayList.length){
-                //       this.orderNum =this.dayList[0].list[0].personNum
-                //     }
-                //     this.weekDay = this.getWeekDay(data.slot[0].day)
-                //   }
-                // }else{
-                //   if(data.slot.length){
-                //     for(let i =0;i<data.slot.length;i++){
-                //       if(data.slot[i].status == 0 && data.slot[i].max_person_num> data.slot[i].order_person_num){
-                //         this.activeList.push({
-                //           beginTime:data.slot[i].begin_date,
-                //           endTime: data.slot[i].end_date,
-                //           begin_time: data.slot[i].begin_time,
-                //           end_time: data.slot[i].end_time,
-                //           active_id: data.slot[i].activity_id,
-                //           max_person_num: data.slot[i].max_person_num,
-                //           order_person_num: data.slot[i].order_person_num,
-                //           price: data.slot[i].price,
-                //           slot_id: data.slot[i].slot_id,
-                //         })
-                //       }
-                //     }
-                //     if(this.activeList.length){
-                //       this.orderNum = this.activeList[0].max_person_num
-                //     }
-                //   }
-                // }
                 this.is_collection = data.is_collection
                 if(localStorage.getItem('isLogin')){
                   if(data.is_order || this.userId == this.isOwer){
@@ -1694,9 +1871,11 @@
         },
         //查看相似体验
         getActls(){
-          this.$http.post(this.api + '/actls',{
+          this.$http.post(this.api + '/ActlsTwo',{
             token: localStorage.getItem('token'),
-            activity_id: this.routerParams
+            activity_id: this.routerParams,
+            per_page:2,
+            page:1
           })
             .then(res=>{
               if(res.data.code == 1){
@@ -1825,9 +2004,10 @@
   text-align: left;
 }
 .firstWidth{
-  
-  padding-right: 144px;
-  padding-top: 87px;
+  width:182px;
+  text-align: left;
+  padding-right: 55px;
+  padding-top: 20px;
 }
 .secendWidth{
   width:75%;
@@ -1837,5 +2017,11 @@
 margin: 52px 0;
 border:none;
 border-top:1px solid #F3F5FA;
+}
+.icon{
+  width:16px;
+  height:18px;
+  margin: 2px 0;
+  object-fit: cover;
 }
 </style>

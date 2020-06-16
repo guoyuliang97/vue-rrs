@@ -7,7 +7,7 @@
             <h3 style="text-align: left;margin:20px 0;">相关活动：</h3>
             <div class="hot_list">
               <div class="hot_detail" v-for="(item,index) in hotList">
-                <Detail type="1" :activity_id="item.activity_id" :imgUrl="item.domain + item.image_url" :city="item.city" :total_time="item.total_time" :activ_provite="item.activ_provite" :comment_num="item.comment_num" :name="item.title" :score="item.score" :english="item.main_laguage" :money="item.price" :kind="item.kind" v-on:toPublish="toPublish(item,index)" v-on:consult="consult(index)"></Detail>
+                <Detail type="active"  :data="item" v-on:toPublish="toPublish(item,index)" v-on:consult="consult(index)"></Detail>
               </div>
             </div>
             <p v-if="hotList.length == 10"  style="text-align: left;margin-top:20px;cursor: pointer"><span @click="toMore(1)"><b>查看更多</b></span></p>
@@ -16,7 +16,8 @@
             <h3 style="text-align: left;margin:20px 0;">相关故事：</h3>
             <div class="wonderful">
               <div class="wonderful_detail" v-for="(item,index) in wonderfulList" v-if="index < 8">
-                <Detail type="2" v-on:toperson="toperson(item,index)" v-on:toStory="toStory(item,index)" :zanIndex="item.is_praise" :status="item.status" :address="item.address" :remark="item.title" :imgUrl="item.cover_image? item.cover.domain + item.cover.image_url:'../../../static/img/static/defult.png' " :avator="item.user.head_image?item.user.headimage.domain + item.user.headimage.image_url:'../../../static/img/static/user.png'" :zan="parseInt(item.praise_num)" :say="parseInt(item.leaving_num)" v-on:addZan="addZan(item,index)"></Detail>
+                                  <Detail type="2" v-on:toperson="toperson(item,index)" v-on:toStory="toStory(item,index)" :data="item" v-on:addZan="addZan(item,index)"></Detail>
+
               </div>
             </div>
             <p v-if="wonderfulList.length >= 8" style="text-align: left;margin-top:20px;cursor: pointer"><span @click="toMore(2)"><b>查看更多</b></span></p>
@@ -24,8 +25,8 @@
           <div v-if="goodVolunteer.length">
             <h3 style="text-align: left;margin:20px 0;">相关志愿者：</h3>
             <div class="volunteer">
-              <div @click="toPerson(item)" style="cursor: pointer" v-for="item in goodVolunteer">
-                <LoadingImg class="img" type="3" :src="item.head_image?item.headimage.domain + item.headimage.image_url:''"></LoadingImg>
+              <div @click="toPerson(item)" class="marginG" style="cursor: pointer" v-for="item in goodVolunteer">
+                <LoadingImg style=" width: 250px;height: 235px;" type="2" :src="item.head_image?item.headimage.domain + item.headimage.image_url:''"></LoadingImg>
                 <div class="text">
                   <div class="clear">
                     <div style="float:left">{{item.name}}</div>
@@ -285,7 +286,6 @@
     width: 1080px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
   }
   .img{
     width: 250px;
@@ -294,5 +294,8 @@
   .text{
     margin-top: 10px;
     overflow: hidden;
+  }
+  .marginG{
+    margin-right: 20px;
   }
 </style>

@@ -19,7 +19,7 @@
 				  </el-collapse-item>
 				  <el-collapse-item title="联系方式" name="2">
 				   <div>
-					   可在您的个人资料页面编辑此信息。<span style="cursor: pointer;color: #008489;" @click="toEditdata">编辑个人资料</span>
+					   可在您的个人资料页面编辑此信息。<span style="cursor: pointer;color: #14c5ca;" @click="toEditdata">编辑个人资料</span>
 					   <p style="margin-top: 10px;">电子邮件: {{userData.email}}</p>
 					   <p style="margin-top: 10px;">电话号码: {{userData.mobile}}</p>
 				   </div>
@@ -57,7 +57,7 @@
 		},
 		methods:{
       change(){
-        console.log(this.msgData)
+
       },
 			handleChange(){
 				

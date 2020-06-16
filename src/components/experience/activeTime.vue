@@ -79,7 +79,10 @@
             getMoney:'',
             server_fee:'',
             isLookPrice: false,
-            howprice:''
+            howprice:'',
+             priceReg: /((^[1-9]\d*)|^0)(\.\d{0,2}){0,1}$/,
+             reg: /^[1-9]\d*$/,
+             Oreg:/^0|0[.]?[0]∗0/
           }
       },
       computed:{
@@ -109,10 +112,10 @@
             
           },
           howprice:function(){
-            if(this.howprice && !this.priceReg.test(this.howprice)){
+            if(this.Oregtest(this.howprice)&&this.howprice ||this.howprice && !this.priceReg.test(this.howprice)){
               this.$message({
                 type: 'error',
-                message: '请输入正确金额'
+                message: '请输入正确金额（大于1最多保留两位小数）'
               })
             }else if(this.prideNum && this.howprice){
               this.getMoney =parseInt(this.prideNum) * parseInt(this.howprice) - parseInt(this.prideNum) * parseInt(this.howprice)*(this.server_fee.replace("%","")/100)

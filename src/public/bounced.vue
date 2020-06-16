@@ -162,7 +162,7 @@
                   <i style="font-size: 40px;cursor: pointer" @click="prev" class="el-icon-arrow-left"></i>
                 </div>
                 <div v-if="changeColor == 1" style="width:90%;height:100%">
-                  <LoadingImg type="2" :src="imgList[photoIndex].img" style="height:100%;max-width:100%;overflow: hidden"></LoadingImg>
+                  <LoadingImg type="3" :src="imgList[photoIndex].img" style="height:100%;width:100%;overflow:hidden"></LoadingImg>
                 </div>
                 <div v-if="changeColor == 2&& imgList.length" style="width:90%;height:100%;position: relative">
                   <video id="videoI" controls :src="imgList[photoIndex].img" style="max-width:90%;height:100%; object-fit: fill"  ></video>
@@ -175,7 +175,7 @@
               <div style="width:530px;position: relative;height:80px;overflow: hidden;margin: 20px auto;">
                 <div style="position: absolute;transition:.3s all linear;display: flex;justify-content: flex-start;align-items: center" :style="{marginLeft:left+'px'}">
                   <div v-if="changeColor == 1" v-for="(item,index) in imgList" @click="lookclick(item,index)" style="width:100px;height:75px;border:2px solid;margin-right:10px;"  :style="{borderColor:photoIndex == index? '#FFF':''}" >
-                    <LoadingImg type="3"  :src="item.img" style="width:100px;height:75px"  ></LoadingImg>
+                    <LoadingImg type="3"  :src="item.img" style="width:100px;height:75px;overflow:hidden"  ></LoadingImg>
                   </div>
                   <div  v-if="changeColor == 2" v-for="(item,index) in imgList" @click="lookclick(item,index)" style="width:100px;height:75px;border:2px solid;margin-right:10px;position: relative"  :style="{borderColor:photoIndex == index? '#FFF':''}" >
                     <video :src="item.img"  style="width:100%; height:100%; object-fit: fill"></video>

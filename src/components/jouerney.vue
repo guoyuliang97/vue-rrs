@@ -11,7 +11,7 @@
             <div style="position:absolute;overflow: hidden;transition: all .3s linear;" :style="{left:goLeft + 'px',width:goONList.length * 360 + 'px'}">
               <el-col style="width:300px;margin:30px 30px;text-align:left;float:left"  v-for="(item,index) in goONList" >
                 <el-card :body-style="{ padding: '0px'}" >
-                  <loadingImg  type="3" :src="item.cover.domain+item.cover.image_url" class="image" v-on:toPublish="toPublish(item,index)" ></loadingImg>
+                  <loadingImg  type="2" :src="item.cover.domain+item.cover.image_url" class="image" v-on:toPublish="toPublish(item,index)" ></loadingImg>
                   <div style="padding: 14px;">
                     <div style="display: flex;justify-content: space-between">
                       <div style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap">{{item.title}}</div>  <div class="button" @click="contact(item,index)">联系策划人</div>
@@ -24,10 +24,10 @@
               </el-col>
             </div>
             <div class="prev">
-              <el-button style="background-color:#fff;color:#008489;border: 2px solid #008489;" v-show="goONIndex"   icon="el-icon-arrow-left" circle @click="prevGoon"></el-button>
+              <el-button style="background-color:#fff;color:#14c5ca;border: 2px solid #14c5ca;" v-show="goONIndex"   icon="el-icon-arrow-left" circle @click="prevGoon"></el-button>
             </div>
             <div class="next">
-              <el-button style="background-color:#fff;color:#008489;border: 2px solid #008489;" v-if="goONIndex<goONList.length -3" icon="el-icon-arrow-right" circle @click="nextGoon"></el-button>
+              <el-button style="background-color:#fff;color:#14c5ca;border: 2px solid #14c5ca;" v-if="goONIndex<goONList.length -3" icon="el-icon-arrow-right" circle @click="nextGoon"></el-button>
             </div>
           </div>
           <div v-if="goMore && goONList.length>=10" style="text-align: left"><span @click="lookMore(1)">查看更多</span></div>
@@ -41,7 +41,7 @@
             <div style="position:absolute;overflow: hidden;transition: all .3s linear;" :style="{left:left + 'px',width:orderList.length * 360 + 'px'}">
               <el-col style="width:300px;margin:30px 30px;text-align:left;float:left"  v-for="(item,index) in orderList" >
                 <el-card :body-style="{ padding: '0px'}" >
-                  <loadingImg  type="3" :src="item.cover.domain+item.cover.image_url" class="image" v-on:toPublish="toPublish(item,index)" ></loadingImg>
+                  <loadingImg  type="2" :src="item.cover.domain+item.cover.image_url" class="image" v-on:toPublish="toPublish(item,index)" ></loadingImg>
                   <div style="padding: 14px;">
                     <div style="display: flex;justify-content: space-between">
                       <div style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap">{{item.title}}</div>  <div class="button" @click="contact(item,index)">联系策划人</div>
@@ -54,10 +54,10 @@
               </el-col>
             </div>
             <div class="prev">
-              <el-button style="background-color:#fff;color:#008489;border: 2px solid #008489;" v-show="sliderIndex"   icon="el-icon-arrow-left" circle @click="prevIndex"></el-button>
+              <el-button style="background-color:#fff;color:#14c5ca;border: 2px solid #14c5ca;" v-show="sliderIndex"   icon="el-icon-arrow-left" circle @click="prevIndex"></el-button>
             </div>
             <div class="next">
-              <el-button style="background-color:#fff;color:#008489;border: 2px solid #008489;" v-if="sliderIndex<orderList.length -3" icon="el-icon-arrow-right" circle @click="nextIndex"></el-button>
+              <el-button style="background-color:#fff;color:#14c5ca;border: 2px solid #14c5ca;" v-if="sliderIndex<orderList.length -3" icon="el-icon-arrow-right" circle @click="nextIndex"></el-button>
             </div>
           </div>
           <div v-if="jionMore && orderList.length >= 10" style="text-align: left"><span @click="lookMore(2)">查看更多</span></div>
@@ -68,7 +68,7 @@
           <el-row style="display:flex;flex-wrap:wrap;">
             <el-col style="width:300px;margin:30px 30px;text-align:left;font-size:12px;"  v-for="(item,index) in overList" >
               <el-card :body-style="{ padding: '0px'}">
-                <loadingImg type="3"  v-on:toPublish="look(item,index)" :src="item.cover.domain + item.cover.image_url" class="image" ></loadingImg>
+                <loadingImg type="2"  v-on:toPublish="look(item,index)" :src="item.cover.domain + item.cover.image_url" class="image" ></loadingImg>
                 <div style="padding: 14px;">
                   <div style="display: flex;justify-content: space-between">
                     <div style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap">{{item.title}}</div><div class="button" @click="item.isevaluate == 1?discuss(item,index):''">{{item.isevaluate == 1? '立即评价':'已评价'}}</div>

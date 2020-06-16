@@ -1,6 +1,6 @@
 <template>
     <div style="text-align:left">
-      <div style="text-align: right;font-size: 13px;font-weight: bold;cursor: pointer" :style="{color:clearNum?'#008489':'#8e8e8e'}"><span @click="clearNum?readall():''">{{clearNum?'全部标为已读':'全部为已读'}}</span></div>
+      <div style="text-align: right;font-size: 13px;font-weight: bold;cursor: pointer" :style="{color:clearNum?'#14c5ca':'#8e8e8e'}"><span @click="clearNum?readall():''">{{clearNum?'全部标为已读':'全部为已读'}}</span></div>
       <div v-for="(item,index) in messageList" @click="check(item,index)" style="margin-bottom:20px;line-height:30px;cursor: pointer;display: flex;justify-content: space-between;border-bottom:1px solid #eee">
         <div>
           <p>{{item.title}}</p>

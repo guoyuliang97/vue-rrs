@@ -22,7 +22,7 @@
         <p class="contentTitle fontweight">订单详情<span v-if="orderInformation.is_refund == 1" style="color:red">(有退款)</span></p>
         <div >
           <div class="flexStart marginBottom">
-            <LoadingImg type="3" :src="orderInformation.cover.domain+ orderInformation.cover.image_url" style="width:100px;height:70px;overflow: hidden"></LoadingImg>
+            <LoadingImg type="2" :src="orderInformation.cover.domain+ orderInformation.cover.image_url" style="width:100px;height:70px;overflow: hidden"></LoadingImg>
              <p class="elips"><b>{{orderInformation.title}}</b></p>
           </div>
           <div style="line-height:30px;">

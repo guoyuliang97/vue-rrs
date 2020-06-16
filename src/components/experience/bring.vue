@@ -50,7 +50,7 @@
           }
         },
       save(){
-        if(this.active_id){
+
           this.$http.post(this.api + '/home/Activity/save_activity',{
             token: localStorage.getItem('token'),
             activity_id: this.active_id,
@@ -59,7 +59,7 @@
           })
             .then(res=>{
               if(res.data.code == 1){
-                if(this.complete == '0'){
+                if(!this.complete){
                   this.$emit('changeRouter',{id:7,router:"Title",information: this.active_id,complete: this.complete})
                 }else{
                   this.$message({
@@ -73,23 +73,7 @@
                 this.$alert(res.data.msg)
               }
             })
-        }else {
-          this.$http.post(this.api + '/home/Activity/save_activity', {
-            token: localStorage.getItem('token'),
-            activ_bring: this.needThing,
-            step: 6
-          })
-            .then(res => {
-              if (res.data.code == 1) {
-                this.$emit('saveId',res.data.data)
-                this.$emit('changeRouter', {id: 7, router: "Title",information:res.data.data})
-              } else if (res.data.code == 3) {
-                this.save()
-              } else if(res.data.code == 0){
-                this.$alert(res.data.msg)
-              }
-            })
-        }
+        
       },
       changeTxt(){
 			  if(this.bringData == 1){

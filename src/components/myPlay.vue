@@ -50,7 +50,7 @@
               <h2>我的策划</h2>
               <div v-show="dateActive.length" v-for="(item,index) in dateActive" style="" >
                 <div v-if="chooseTime.length" :style="{color:item.online == 0?'#000':'#999999'}">
-                      <div v-if="JSON.stringify(item.differ)!=''&& !item.day" class="flexStart fontweight" style="margin: 11px 0;padding: 5px;background:rgba(243,245,248,1);color:#476785;font-size:12px">
+                      <div v-if="item.differ&& !item.day" class="flexStart fontweight" style="margin: 11px 0;padding: 5px;background:rgba(243,245,248,1);color:#476785;font-size:12px">
                           <div style="width:60px;">
                             [返差价]
                           </div>
@@ -63,7 +63,7 @@
                       </div>
                       <div style="border: 1px solid #CCCCCC;font-size:12px;margin-top:15px;padding: 11px 10px;">
                          <p ><b>{{item.day?item.day:''}}&nbsp;&nbsp;&nbsp;{{item.time}}</b></p>
-                          <div v-if="JSON.stringify(item.differ)!=''&& item.day" class="flexStart fontweight" style="margin: 11px 0;padding: 5px;background:rgba(243,245,248,1);color:#476785;font-size:12px">
+                          <div v-if="item.differ&& item.day " class="flexStart fontweight" style="margin: 11px 0;padding: 5px;background:rgba(243,245,248,1);color:#476785;font-size:12px">
                               <div style="width:60px;">
                                 [返差价]
                               </div>
@@ -76,11 +76,11 @@
                           </div>
                           <div style="display: flex;justify-content: flex-start;border-bottom: 1px solid #E8E8E8;padding: 10px 0;">
                             <div @click="toPublish(item,index)" style="position: relative;width:200px;height:120px;">
-                              <loadingImg type="3"  :src="item.cover.domain+ item.cover.image_url" style="width:200px;height:120px;"></loadingImg>
+                              <loadingImg type="2"  :src="item.cover.domain+ item.cover.image_url" style="width:200px;height:120px;"></loadingImg>
                               <span v-if="item.online == 0" style="padding:5px 10px;color:#fff;position: absolute;font-size:12px;top:0" :style="{backgroundColor:item.is_doing ==0? '#008489':'#FA9F00'}">
                                 {{item.is_doing == 0? '已发布':'进行中'}}
                               </span>
-                              <span v-if="item.online == 1" style="z-index:999;padding:5px 10px;color:#fff;position: absolute;font-size:12px;top:0;left:0;right:0;bottom:0;background-color: rgba(102,102,102,.5);display: flex;justify-content: center;align-items: center">
+                              <span v-if="item.online == 1" style="z-index:996;padding:5px 10px;color:#fff;position: absolute;font-size:12px;top:0;left:0;right:0;bottom:0;background-color: rgba(102,102,102,.5);display: flex;justify-content: center;align-items: center">
                               已取消
                             </span>
                           </div>
@@ -114,7 +114,7 @@
                   </div>
                   <div v-if="!chooseTime.length" style="border: 1px solid #CCCCCC;font-size:12px;margin-top:15px;padding: 11px 10px;" >
                     <p ><b>发布时间：{{item.create_time}}</b></p>
-                     <div class="flexStart fontweight" style="margin: 11px 0;padding: 5px;background:rgba(243,245,248,1);color:#476785;font-size:12px">
+                     <div v-if="JSON.stringify(item.differ) != '[]'" class="flexStart fontweight" style="margin: 11px 0;padding: 5px;background:rgba(243,245,248,1);color:#476785;font-size:12px">
                       <div style="width:60px;">
                         [返差价]
                       </div>
@@ -127,7 +127,7 @@
                     </div>
                     <div style="display: flex;justify-content: flex-start;border-bottom: 1px solid #E8E8E8;padding: 10px 0;">
                       <div @click="toPublish(item,index)" style="position: relative;width:200px;height:120px;">
-                        <loadingImg type="3"  :src="item.cover.domain+ item.cover.image_url" style="width:200px;height:120px;"></loadingImg>
+                        <loadingImg type="2"  :src="item.cover.domain+ item.cover.image_url" style="width:200px;height:120px;"></loadingImg>
                         <span  style="padding:5px 10px;color:#fff;position: absolute;font-size:12px;top:0" :style="{backgroundColor:item.is_doing ==0? '#008489':'#FA9F00'}">
                   {{item.is_doing == 0? '已发布':'进行中'}}
                   </span>
@@ -222,8 +222,8 @@
           </div>
           <div v-for="(item,index) in orderActive" :key="index" style="border-bottom: 1px solid #E6E6E6">
             <div style="display: flex;justify-content: space-between;font-size:12px;text-align: center;">
-              <div style="display: flex;justify-content:flex-start;width:120px;padding:19px 0;">
-                <img :src="item.user.head_image?item.user.headimage.domain + item.user.headimage.image_url:'../../../static/img/static/user.png'" width="32px" height="32px" style="border-radius: 50%;margin-left:40px;">
+              <div style="display: flex;justify-content:center;width:120px;padding:19px 0;">
+                <loadingImg type="user" :src="item.user.head_image?item.user.headimage.domain + item.user.headimage.image_url:''"  style="width:32px;height:32px;"></loadingImg>
                 <div style="line-height:32px;margin-left:10px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{(item.user.family_name+item.user.middle_name+ item.user.name)?(item.user.name):'匿名用户'}}</div>
               </div>
               <div><el-popover
@@ -254,7 +254,7 @@
                 width="200"
                 :content="item.introduce"
               >
-                <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.user.mobile}}</el-button>
+              <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.user.mobile}}</el-button>
               </el-popover></div>
               <div class="width" style="color:#008489">
                 <span >{{item.ispay == 1? '￥'+item.total_price:'￥'+item.total_price+'(未)' }}</span>
@@ -355,7 +355,7 @@
         <div v-for="(item,index) in refundList" :key="index" style="border-bottom: 1px solid #E6E6E6">
           <div style="display: flex;justify-content: space-between;font-size:12px;text-align: center;">
             <div style="display: flex;justify-content:flex-start;width:150px;padding:19px 0;">
-              <img :src="item.domain?item.domain + item.image_url:'../../../static/img/static/user.png'" width="32px" height="32px" style="border-radius: 50%;margin-left:40px;">
+              <loadingImg type="user" :src="item.domain?item.domain + item.image_url:''"  style="width:32px;height:32px;margin-left:40px;"></loadingImg>
               <div style="line-height:32px;margin-left:10px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{(item.family_name+item.middle_name+ item.name)?(item.family_name+item.middle_name+ item.name):'匿名用户'}}</div>
             </div>
             <div><el-popover
@@ -416,11 +416,11 @@
         </div>
         <div  v-for="(item,index) in completList" style="display: flex;justify-content: space-around;padding:20px 0px;font-size:12px;border-bottom: 1px solid #E6E6E6;">
           <div class="conpletewidth" style="display: flex;justify-content:center;">
-            <img  :src="item.user.head_image?item.user.headimage.domain+item.user.headimage.image_url:'../../static/img/static/user.png'" style="width:40px;height:40px;border-radius: 50%;margin-top:10px;">
+            <loadingImg type="user" :src="item.user.head_image?item.user.headimage.domain+item.user.headimage.image_url:''" style="width:40px;height:40px;margin-top:10px;"></loadingImg>
             <div style="margin-left:10px;line-height: 60px;">{{item.user.family_name+item.user.middle_name+item.user.name?item.user.family_name+item.user.middle_name+item.user.name:'匿名用户'}}</div>
           </div>
           <div class="conpletewidth" style="display: flex;justify-content: flex-start">
-            <loadingImg type="3" :src="item.cover?item.cover.domain + item.cover.image_url:''" style="width:60px;height:60px;overflow: hidden"></loadingImg>
+            <loadingImg type="2" :src="item.cover?item.cover.domain + item.cover.image_url:''" style="width:60px;height:60px;overflow: hidden"></loadingImg>
             <div style="text-align: left;line-height: 60px;margin-left:5px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap">{{item.title}}</div>
           </div>
           <div class="conpletewidth" style="line-height: 60px;">
@@ -430,7 +430,7 @@
             {{item.activ_begin_time}}—{{item.activ_end_time}}
           </div>
           <div class="conpletewidth" style="line-height: 60px;color:#008489">
-            <span>￥</span><span>{{item.pay_price}}</span>
+            <span>￥</span><span>{{item.total_price}}</span>
           </div>
           <div class="conpletewidth" >
             <span style="cursor: pointer;color:#008489" @click="lookMore(item)"><b>查看详情</b></span>
@@ -571,9 +571,9 @@
             ListIndex:0,
             orderList:[
               {name:'活动时间从早到晚',index:1},
-              {name:'活动时间从晚到早',index:-1},
-              {name:'下单时间升序',index:2},
-              {name:'下单时间降序',index:-2},
+              {name:'活动时间从晚到早',index:2},
+              {name:'下单时间升序',index:3},
+              {name:'下单时间降序',index:4},
             ],
             Isorder:false,
             orderIndex:0,
@@ -613,7 +613,7 @@
         month:function(){
           this.chooseTime = []
           this.getMonth()
-          this.getDateActive()
+           this.getDateActive()
         },
         isInvite:function() {
           if (!this.isInvite) {
@@ -926,7 +926,7 @@
             query:{
               information: item.order_id,
               type:4,
-              index: '5'
+              index:5
             }
           })
         },
@@ -1032,12 +1032,13 @@
         },
         getAll(val){
           this.isLoading = true
-          this.$http.post(this.api + '/OrderLPlanner',{
+          this.$http.post(this.api + '/OrderLPlannerTwo',{
             token: localStorage.getItem('token'),
             page: val,
             flag: 1,
             iscomplete: 2,
-            status:0
+            status:0,
+            sort:2
           })
             .then(res=>{
               if(res.data.code == 1){
@@ -1108,12 +1109,14 @@
           })
         },
           getMonth(){
+            console.log(this.time)
             let lastDay = this.getLastDay(this.year,this.month)
             let day = this.getFirtDay(this.year,this.month -1)
             let temp = []
             let dayCount = []
             let color = []
             let b = []
+            console.log(day,lastDay)
             for(let i =1;i<day;i++){
               temp.push(' ')
               color.push({index:0})
@@ -1122,6 +1125,7 @@
               temp.push(j)
               b.push({index:0})
               if(this.time.length){
+           
                 for(let m = 0;m<this.time.length;m++){
                   if(this.time[m].long_day){
                     //单天活动
@@ -1212,6 +1216,7 @@
                     }
                   }else{
                     //多天活动
+
                     for(let n = 0;n< this.time[m].slot.length;n++){
                       if(new Date(this.year,this.month -1,j).getTime() >= this.parseDate(this.time[m].slot[n].begin_date) && new Date(this.year,this.month -1,j).getTime() <= this.parseDate(this.time[m].slot[n].end_date)){
                         if(new Date(this.year,this.month-1,j).getTime() == new Date(this.todayYear,this.todayMonth-1,this.day).getTime()){
@@ -1342,7 +1347,7 @@
             }
         },
         getActive(){
-          this.$http.post(this.api + '/ActivityList',{
+          this.$http.post(this.api + '/ActivityListTwo',{
             token: localStorage.getItem('token'),
           })
             .then(res=>{
@@ -1355,6 +1360,7 @@
                     a.push({long_day:this.activeList[i].long_day,slot:this.activeList[i].slot})
                   }
                   this.time = a
+               
                 }
                 this.getMonth()
               }else if(res.data.code == 3){
@@ -1444,6 +1450,7 @@
           this.getDateActive()
         },
         getDateActive(){
+          this.isLoading = true
           this.$http.post(this.api + '/ActivityListTwo',{
             token: localStorage.getItem('token'),
             date:JSON.stringify(this.chooseTime),
@@ -1453,28 +1460,28 @@
               if(res.data.code == 1){
                 let data = res.data.data
                 let a = []
-                
                 if(this.chooseTime.length){
                   for(let i =0;i< data.length;i++){
                     if(data[i].long_day){
                       for(let m=0;m<data[i].slot.length;m++){
                         for(let j = 0;j<data[i].slot[m].list.length;j++){
+                          var l = data[i].slot[m].list[j]
                           a.push({
-                            time:data[i].slot[m].list[j].time[0]+'—'+data[i].slot[m].list[j].time[1],
-                            price:data[i].slot[m].list[j].price,
+                            time:l.time[0]+'—'+l.time[1],
+                            price:l.price,
                             title: data[i].title,
                             kind:data[i].kind,
                             activity_id:data[i].activity_id,
-                            slot_id:data[i].slot[m].list[j].slot_id,
+                            slot_id:l.slot_id,
                             day:data[i].slot[m].day,
                             cover_image:data[i].cover_image,
                             cover:data[i].cover,
-                            enroll_count:data[i].slot[m].list[j].enroll_count,
-                            sale_num:data[i].slot[m].list[j].order_num,
+                            enroll_count:l.enroll_count,
+                            sale_num:l.order_num,
                             is_doing:data[i].is_doing,
-                            online:data[i].slot[m].list[j].online,
-                            refund_num:data[i].slot[m].list[j].refund_num,
-                            differ: data[i].slot[m].list[j].no_reach_differ
+                            online:l.online,
+                            refund_num:l.refund_num,
+                            differ:JSON.stringify(l.no_reach_differ) != '[]'?l.no_reach_differ:JSON.stringify(l.reach_differ)?l.reach_differ:''
                           })
                         }
                       }
@@ -1494,7 +1501,7 @@
                           is_doing:data[i].is_doing,
                           online:data[i].slot[j].online,
                           refund_num:data[i].slot[j].refund_num,
-                          differ:data[i].slot[j].no_reach_differ
+                          differ: JSON.stringify(data[i].slot[j].no_reach_differ) != '[]'?data[i].slot[j].no_reach_differ:JSON.stringify(data[i].slot[j].reach_differ)?data[i].slot[j].reach_differ:''
                         })
                       }
                     }
@@ -1502,12 +1509,15 @@
                 }else{
                   a = res.data.data
                 }
-                this.dateActive = a
          
+                this.dateActive = a
+                console.log(a)
                 this.isADate = false
+                this.isLoading = false
               }else if(res.data.code == 3){
                 this.getDateActive()
               }else if(res.data.code == 0){
+                 this.isLoading = false
                 this.$message({type:'error',message:res.data.msg})
               }
             })
@@ -1553,7 +1563,7 @@
         },
         //邀请志愿者
         toInvite(item,index){
-   /*       console.log(item)
+   /*       
           localStorage.setItem('invite_id',item.activity_id)*/
           this.$router.push({
             name: 'invitVolunter',
@@ -1838,30 +1848,30 @@
   width:70px;
   font-weight: bold;
 }
-  .dateList{
-    width:68px;
-    height:68px;
-    line-height: 70px;
-    text-align: center;
-    margin: 0 2px 2px 0;
-    font-size: 12px;
-    user-select: none;
-    position: relative;
-  }
-  .conpletewidth{
-    width:180px;
-    text-align: center;
-  }
-  .refundWidth{
-    width:150px;
-    height:25px;
-  }
-  .refundMiniwidth{
-    width:150px;
-    height:70px;
-    line-height:70px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
+.dateList{
+  width:68px;
+  height:68px;
+  line-height: 70px;
+  text-align: center;
+  margin: 0 2px 2px 0;
+  font-size: 12px;
+  user-select: none;
+  position: relative;
+}
+.conpletewidth{
+  width:180px;
+  text-align: center;
+}
+.refundWidth{
+  width:150px;
+  height:25px;
+}
+.refundMiniwidth{
+  width:150px;
+  height:70px;
+  line-height:70px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div>
       <Head type="classification" v-on:getVal="getVal" :content="editSearch" v-on:search="search"></Head>
-      <div style="width:100%;background-color:#fff;border-top:1px solid #eee;padding:10px 20px;position:fixed;top:82px;z-index: 99;text-align: left">
+      <div class="flexStart" style="border-bottom:1px solid #eee;width:100%;background-color:#fff;border-top:1px solid #eee;padding:10px 20px;position:fixed;top:82px;z-index: 99;text-align: left">
         <el-popover
           placement="bottom"
           width="400"
@@ -21,6 +21,7 @@
           <el-button slot="reference" :type="date?'primary':''">日期</el-button>
         </el-popover>
         <el-popover
+        style="margin-left:10px"
           placement="bottom"
           width="350"
           trigger="click">
@@ -35,7 +36,10 @@
           <div style="margin:20px 12px 20px 12px;display: flex;justify-content: flex-end" ><span @click="chooseMoney(1)">确定</span></div>
           <el-button slot="reference" :type="personNum?'primary':''">{{personNum?personNum+'人+':'体验人数'}}</el-button>
         </el-popover>
+          <City style="margin-left:10px" type='3'  @selectXian="selectXian" @checkXian="checkXian" @selectCountry="selectCountry" @selectProvince="selectProvince" @selectCity="selectCity"></City>
+
         <el-popover
+        style="margin-left:10px"
           placement="bottom"
           width="400"
           trigger="click">
@@ -54,6 +58,7 @@
           <el-button slot="reference" :type="allprice[1]?'primary':''">{{allprice[1]?allprice[0]+'-'+allprice[1]:'价格'}}</el-button>
         </el-popover>
         <el-popover
+        style="margin-left:10px"
           placement="bottom"
           trigger="click">
           <div style="text-align: center"> <el-radio v-model="tiyan" label="1" border>户外活动</el-radio></div>
@@ -62,6 +67,7 @@
           <el-button slot="reference" :type="tiyan?'primary':''">{{tiyan==1?'户外活动':tiyan == 2?'少数民族':tiyan == 3?'本土文化':'体验类型'}}</el-button>
         </el-popover>
         <el-popover
+        style="margin-left:10px"
           placement="bottom"
           width="400"
           trigger="click">
@@ -104,19 +110,19 @@
             </div>
           </div>
         </div>
-        <div v-if="activeList.length">
+        <!-- <div v-if="activeList.length">
           <h3 style="margin-top:30px;">热门高分体验</h3>
           <p>集结最受欢迎和高分的体验</p>
           <div style="margin-top:15px;display: flex;flex-wrap: wrap;width:100%;">
             <div v-for="(item,index) in activeList" :key="index"  class="marginR">
-              <Detail type="1" :activity_id="item.activity_id" :imgUrl="item.domain + item.image_url" :city="item.city" :total_time="item.total_time" :activ_provite="item.activ_provite" :comment_num="item.comment_num" :name="item.title" :score="item.score" :english="item.main_laguage" :money="item.price" :kind="item.kind" v-on:toPublish="toPublish(item,index)" v-on:consult="consult(index)"></Detail>
+              <Detail type="active"  :data="item" v-on:toPublish="toPublish(item,index)" v-on:consult="consult(index)"></Detail>
             </div>
           </div>
-        </div>
+        </div> -->
         <h3 style="margin-top:30px;">所有{{tiyan==1?'户外活动':tiyan == 2?'少数民族':tiyan == 3?'本土文化':'体验'}}</h3>
         <div style="margin-top:15px;display: flex;flex-wrap: wrap;width:100%;">
           <div v-for="(item,index) in AllactiveList" :key="index"  class="marginR">
-            <Detail type="1" :activity_id="item.activity_id" :imgUrl="item.domain + item.image_url" :city="item.city" :total_time="item.total_time" :activ_provite="item.activ_provite" :comment_num="item.comment_num" :name="item.title" :score="item.score" :english="item.main_laguage" :money="item.price" :kind="item.kind" v-on:toPublish="toPublish(item,index)" v-on:consult="consult(index)"></Detail>
+            <Detail type="active" :data="item" v-on:toPublish="toPublish(item,index)" v-on:consult="consult(index)"></Detail>
           </div>
         </div>
         <div v-if="!AllactiveList.length">
@@ -133,6 +139,7 @@
 </template>
 
 <script>
+import City from '../../public/city'
   import Detail from '../../public/detail'
   import Loading from '../../public/Loading'
   import Head from '../../public/head'
@@ -169,7 +176,12 @@
             content:'',
             tiyan:'',
             personNum:'',
-            allprice:''
+            allprice:'',
+            country:[],
+            province:[],
+            city:[],
+            xian:[],
+            xianList:[],
           }
       },
       components:{
@@ -178,6 +190,7 @@
         None,
         loadingImg,
         Detail,
+        City
       },
       watch:{
         content:function(){
@@ -235,9 +248,29 @@
 
       },
       methods:{
+        checkXian(msg){
+          this.xianList = msg
+          
+        },
+        selectCountry(msg){
+          this.country = msg
+          this.goOn(1)
+        },
+        selectProvince(msg){
+          this.province = msg
+          this.goOn(1)
+        },
+        selectCity(msg){
+          this.city = msg
+          this.goOn(1)
+        },
+        selectXian(msg){
+          this.xian = msg
+          this.goOn(1)
+        },
           goOn(val){
-            this.getSearch(val,this.date?this.date[0]/1000:0,this.date?this.date[1]/1000:0,this.allprice[0],this.allprice[1],this.personNum,this.closeIndex)
-            this.getActive(val,this.date?this.date[0]/1000:0,this.date?this.date[1]/1000:0,this.allprice[0],this.allprice[1],this.personNum,this.closeIndex)
+             this.getSearch(val,this.date?this.date[0]/1000:0,this.date?this.date[1]/1000:0,this.allprice[0],this.allprice[1],this.personNum,this.closeIndex)
+            // this.getActive(val,this.date?this.date[0]/1000:0,this.date?this.date[1]/1000:0,this.allprice[0],this.allprice[1],this.personNum,this.closeIndex)
           },
         chooseMoney(val){
           if(val == 1){
@@ -319,34 +352,33 @@
             this.pageIndex++
           }
         },
-        getActive(val,data1,data2,price1,price2,person,volunteen){
-          this.$http.post(this.api + '/home/Activity/activ_list',{
-            token: localStorage.getItem('token'),
-            kind_id: this.KindId ,
-            keywords: this.content,
-            sort:1,
-            page:val,
-            activ_begin_time: data1,
-            activ_end_time: data2,
-            price_low:price1,
-            price_high: price2,
-            max_person_num:person,
-            is_volunteen:volunteen,
-          })
-            .then(res=>{
-              if(res.data.code == 1){
-                this.activeList = res.data.data.data
-              }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/Index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.getActive()
-                  })
-              }else{
-                alert(res.data.msg)
-              }
-            })
-        },
+        // getActive(val,data1,data2,price1,price2,person,volunteen){
+        //   this.isLoading = true
+        //   this.$http.post(this.api + '/ActivityListUserTwo',{
+        //     token: localStorage.getItem('token'),
+        //     verson:2.0,
+        //     kind_id: this.KindId ,
+        //     keywords: this.content,
+        //     sort:1,
+        //     page:val,
+        //     activ_begin_time: data1,
+        //     activ_end_time: data2,
+        //     price_low:price1,
+        //     price_high: price2,
+        //     max_person_num:person,
+        //     is_volunteen:volunteen,
+        //   })
+        //     .then(res=>{
+        //       if(res.data.code == 1){
+        //         this.activeList = res.data.data.data
+        //         this.isLoading = false
+        //       }else if(res.data.code == 3){
+        //         this.getActive()
+        //       }else if(res.data.code == 0){
+        //         this.$message({type:'error',message:res.data.msg})
+        //       }
+        //     })
+        // },
 /*        getAll(val){
           this.$http.post(this.api + '/home/Activity/activ_list',{
             token: localStorage.getItem('token'),
@@ -434,8 +466,9 @@
         },
         getSearch(val,data1,data2,price1,price2,person,volunteen){
           this.isLoading = true
-          this.$http.post(this.api + '/home/Activity/activ_list',{
+          this.$http.post(this.api + '/ActivityListUserTwo',{
             token: localStorage.getItem('token'),
+            verson:2.0,
             keywords: this.content,
             kind_id:this.KindId,
             page:val,
@@ -445,6 +478,10 @@
             price_high: price2,
             max_person_num:person,
             is_volunteen:volunteen,
+            country:this.country? this.country[1]:'',
+            province: this.province? this.province[1]:'',
+            city: this.city? this.city[1]:'',
+            region: this.xian? this.xian[1]:'',
           })
             .then(res=>{
               if(res.data.code == 1){
@@ -452,19 +489,15 @@
                 this.AllactiveList = res.data.data.data
                 this.isLoading = false
               }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.getSearch(val,data1,data2,price1,price2,person,volunteen)
-                  })
-              }else{
-                alert(res.data.msg)
+                this.getSearch(val,data1,data2,price1,price2,person,volunteen)
+              }else if(res.data.code == 0){
+                this.$message({type:'error',message:res.data.msg})
               }
             })
         }
       },
       mounted(){
-          this.isLoading = true
+        
         this.getKind()
       },
       created(){

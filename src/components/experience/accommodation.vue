@@ -99,6 +99,7 @@
           <div style="line-height: 40px;text-align: center;width:200px;border:1px solid #008489;padding-left:10px;padding-right:10px;">
             <input style="width:200px;border:none;" v-model="price"  type="text"  placeholder="请输入价格...">
           </div>
+          <span style="color:red;line-height:40px;">小贴士:用户的返差价金额包含住宿金额</span>
         </div>
         <el-button type="primary" @click="addHouse" plain>添加</el-button>
         <el-button type="primary" @click="closeHouse" plain>取消</el-button>
@@ -190,7 +191,8 @@
             isLoading:false,
             param: '',
             index:0,
-            active_id:''
+            active_id:'',
+            Oreg:/^0|0[.]?[0]∗0/
           }
       },
       components:{
@@ -502,7 +504,7 @@
                 this.houseNum = item.type,
                 this.perNum = item.perNum,
                 this.describe = item.title,
-                this.price = parseInt(item.price.slice(3))
+                this.price = Number(item.price.slice(3))
               this.backHOuseId = this.sendList[index].image
             }else{
               this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -581,8 +583,8 @@
               this.$message({type:'info',message:'请描述房源'})
             }else if(!this.perNum || !(/^[1-9]\d*$/).test(this.perNum)){
               this.$message({type:'info',message:'请填写房间可住人数(数字)'})
-            }else if(!this.price || !( /((^[1-9]\d*)|^0)(\.\d{0,2}){0,1}$/).test(this.price)){
-              this.$message({type:'info',message:'请填写正确金额！（最多保留两位小数的正数）'})
+            }else if(this.Oreg.test(this.price)||!this.price || !( /((^[1-9]\d*)|^0)(\.\d{0,2}){0,1}$/).test(this.price)){
+              this.$message({type:'info',message:'请填写正确金额！（大于1最多保留两位小数）'})
             }else{
               this.sendImgList = []
               this.houseImgList = []

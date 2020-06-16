@@ -9,7 +9,7 @@
           </div>
           <div style="display: flex;justify-content: flex-start;margin:10px 0;">
             <div>
-              <LoadingImg type="3" :src="item.domain + item.themb_url" style="width:200px;height:120px;" ></LoadingImg>
+              <LoadingImg type="2" :src="item.domain + item.themb_url" style="width:200px;height:120px;" ></LoadingImg>
             </div>
             <div style="font-size:14px;margin-left:10px;line-height:40px;cursor: pointer" @click="checkFund(item,index)">
               <h4>{{item.title}}</h4>
@@ -69,7 +69,8 @@
         getOrderList(val){
           this.$http.post(this.api + '/RefundLUserTwo',{
             token: localStorage.getItem('token'),
-            page: val
+            page: val,
+            sort:4
           })
           .then(res=>{
             if(res.data.code == 1){
@@ -78,7 +79,7 @@
             }else if(res.data.code == 3){
               this.getOrderList(val)
             }else if(res.data.code == 0){
-              alert(res.data.msg)
+              this.$message({type:'error',message:res.data.msg})
             }
           })
         },

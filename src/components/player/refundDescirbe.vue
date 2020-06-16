@@ -89,6 +89,9 @@
                           <div class="marginTop">标准{{item.adult}}人<span class="marginLeft"></span>儿童{{item.kids}}人<span class="marginLeft"></span>¥{{item.price}}</div>
                         </div>
                       </div>
+                      <div>
+
+                      </div>
                     </div>
                    
                   </div>
@@ -112,8 +115,8 @@
                       <b>退订住宿：</b>
                     </div>
                     <div v-if="Rdata.refund_detail.length">
-                      <div class="marginTop" v-for="(item,index) in Rdata.refund_detail">
-                        <div v-if="item.type == '3'">
+                      <div  v-for="(item,index) in Rdata.refund_detail">
+                        <div class="marginTop" v-if="item.type == '3'">
                           {{item.name}}<span class="marginLeft"></span>房数X{{item.house_num}}	<span class="marginLeft"></span>总额¥{{item.price}}
                         </div>
                       </div>
@@ -136,15 +139,20 @@
                 <div v-if="type == '1'">
                   <p>支付状态&nbsp;&nbsp;&nbsp;<span style="color:#F73D3D">已支付</span></p>
                </div>
-               
                <div class=" marginT">
                  <p>支付总额&nbsp;&nbsp;&nbsp;￥{{Rdata.total_price}}</p>
                </div>
-               <div  v-if="type == 3 || Rdata.is_refund == 1 " class="marginT">
-                 <p>申请退款&nbsp;&nbsp;&nbsp;￥{{Rdata.refund_audit_price}}</p>
+                <div class=" marginT" v-if="Rdata.is_differ">
+                  <p>返差价退款&nbsp;&nbsp;&nbsp;￥{{Rdata.differ_total_price?Rdata.differ_total_price:0}}</p>
+                </div>
+               <div  v-if="type == 3||type == 4" class="marginT">
+                 <p>申请退款&nbsp;&nbsp;&nbsp;￥{{Rdata.refund_audit_price?Rdata.refund_audit_price:0}}</p>
                </div>
-               <div class=" marginT" v-if="type == 3 || Rdata.is_refund == 1 ">
-                 <p>退款总额&nbsp;&nbsp;&nbsp;<span style="color:#F73D3D">￥{{Rdata.refund_total_price}}</span></p>
+               <div class=" marginT" v-if="type == 3 || Rdata.is_refund == 1 || type == 4">
+                 <p>实际退款&nbsp;&nbsp;&nbsp;<span style="color:#F73D3D">￥{{Rdata.refund_total_price?Rdata.refund_total_price:0}}</span></p>
+               </div>
+               <div class=" marginT">
+                 <p>实际支付&nbsp;&nbsp;&nbsp;<span style="color:#F73D3D">￥{{Number( Rdata.total_price) - Number(Rdata.refund_total_price?Rdata.refund_total_price:0) - Number(Rdata.differ_total_price?Rdata.differ_total_price:0)}}</span></p>
                </div>
                <div class="marginT">
                  <p>{{type == '3'?'申请时间':'下单时间'}}&nbsp;&nbsp;&nbsp;{{Rdata.create_time}}</p>
@@ -609,7 +617,7 @@ export default {
           .then(res=>{
             if(res.data.code == 1){
               this.Rdata = res.data.data
-              console.log(this.Rdata)
+    
             }else if(res.data.code == 3){
               this.$http.post(this.api + '/home/index/token')
                 .then(res=>{
@@ -768,7 +776,7 @@ export default {
           .then(res=>{
             if(res.data.code == 1){
               this.Rdata = res.data.data
-              console.log(this.Rdata)
+        
             }else if(res.data.code == 3){
               this.$http.post(this.api + '/home/index/token')
                 .then(res=>{
@@ -818,7 +826,7 @@ export default {
         }
       },
       contact(){
-        console.log(this.Rdata)
+
         this.isChat = true
         this.to_user_id = this.Rdata.user.user_id
         this.userName = this.Rdata.user.family_name+this.Rdata.user.middle_name+this.Rdata.user.name?this.Rdata.user.family_name+this.Rdata.user.middle_name+this.Rdata.user.name:'匿名用户'

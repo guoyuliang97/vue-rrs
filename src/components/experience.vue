@@ -21,9 +21,9 @@
 			<div class="experience_last" v-show="navindex != 11">
 				<div v-show="navindex!=0&&navindex!=1&&navindex!=7&&navindex != 11&&navindex != 12 && navindex != 15">
 					<div class="last_top">
-						<img alt="" :src="data.cover_image?data.cover.domain+data.cover.themb_url:'../../static/img/exprerience/photo.png'" :style="{marginTop:data.cover_image?'100px':'300px'}"/>
+						<LoadingImg type="2" :src="data.cover_image?data.cover.domain+data.cover.themb_url:''" style="width:300px;height:224px;margin: 0 auto;" ></LoadingImg>
 						<div class="last_con">
-							<p class="fontweight" style="font-size: 22px;color: white;margin-top: 200px;">{{data.title?data.title:'体验'}}</p>
+							<p class="fontweight" style="font-size: 22px;color: white;margin-top: 100px;">{{data.title?data.title:'体验'}}</p>
 							<div style="border-top:2px solid rgba(255,255,255,.4);margin-top: 20px;"></div>
 							<p class="last_detail"><i class="el-icon-location"></i> {{data.city?data.city:'地点'}}</p>
 							<p class="last_detail"><i class="el-icon-time"></i> {{time?time:'未知'}}</p>
@@ -111,6 +111,7 @@
 </template>
 
 <script>
+import LoadingImg from '../public/loadingImg'
   import Bus from '../assets/eventBus'
 	import Head from "../public/head.vue"
 	import Experiencenav from "./experience/experienceNav"
@@ -136,11 +137,15 @@
         howprice:'',
         activeId:'',
         isLookPrice:false,
+        priceReg: /((^[1-9]\d*)|^0)(\.\d{0,2}){0,1}$/,
+        reg: /^[1-9]\d*$/,
+         Oreg:/^0|0[.]?[0]∗0/
 			};
 		},
 		components:{
 			Head,
-			Experiencenav
+      Experiencenav,
+      LoadingImg
 		},
 		methods:{
       lookPrice(){
@@ -224,17 +229,17 @@
         this.priceall = this.price * 3
       },
       howprice:function(){
-        if(this.howprice && !(/((^[1-9]\d*)|^0)(\.\d{0,2}){0,1}$/).test(this.howprice)){
+        if(this.Oreg.test(this.howprice)&&this.howprice||this.howprice && !this.priceReg.test(this.howprice)){
           this.$message({
             type: 'error',
-            message: '请输入正确金额'
+            message: '请输入正确金额(大于1最多保留两位小数)'
           })
         }else if(this.prideNum && this.howprice){
           this.getMoney =parseInt(this.prideNum) * parseInt(this.howprice) - parseInt(this.prideNum) * parseInt(this.howprice)*(this.server_fee.replace("%","")/100)
         }
       },
       prideNum:function(){
-        if(this.prideNum && !(/^[1-9]\d*$/).test(this.prideNum)){
+        if(this.prideNum && !this.reg.test(this.prideNum)){
           this.$message({
             type: 'error',
             message: '请输入正确数量!'
@@ -244,7 +249,7 @@
         }
       },
       activeId:function(){
-          Bus.$emit('changeAC',this.activeId)
+        Bus.$emit('changeAC',this.activeId)
       }
     },
 		mounted(){

@@ -273,10 +273,14 @@
           this.isLoading = true
             let b = []
             for(let i =0;i<this.orderInformation.house.length;i++){
+               if(this.orderInformation.house[i].number){
               b.push({oh_id:this.orderInformation.house[i].oh_id,num:this.orderInformation.house[i].number})
+
+              }
             }
             this.$http.post(this.api + '/RefundSTwo',{
               token: localStorage.getItem('token'),
+              verson:2.0,
               order_id: this.order_id,
               person_num: this.value? this.adult_num:this.person_a,
               house: this.value?'':JSON.stringify(b),

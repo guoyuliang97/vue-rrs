@@ -8,14 +8,14 @@
           <div style="margin:20px auto;width:1080px;text-align:left">
           <div style="display: flex;justify-content: space-between">
             <div style="font-size:30px;font-weight:bold;">心愿单</div>
-            <el-button style="color:#008489;font-weight:bold;font-size:15px;cursor: pointer" @click="createWish">创建心愿单</el-button>
+            <el-button style="color:#14c5ca;font-weight:bold;font-size:15px;cursor: pointer" @click="createWish">创建心愿单</el-button>
           </div>
           <hr style="border:1px  solid #eee;margin:20px 0;">
-          <div v-if="wishList.length" style="text-align: right"><span style="color:#008489;cursor: pointer" @click="deelList">{{cancel}}</span></div>
+          <div v-if="wishList.length" style="text-align: right"><span style="color:#14c5ca;cursor: pointer" @click="deelList">{{cancel}}</span></div>
           <div style="display: flex;flex-wrap: wrap">
             <div class="wishMargin" v-for="(item,index) in wishList" style="position:relative;width:330px;height:250px;cursor: pointer;border-radius: 10px;overflow: hidden" :style="{'background-color':item.cover == ''? 'rgba(0,0,0,.8)':''}">
               <div @click="toList(item,index)" style="width:330px;height:250px;overflow: hidden">
-                <loadingImg type="3" :src="item.cover.domain + item.cover.image_url" style="width:330px;height:250px;"  v-show="item.cover == ''? false:true"></loadingImg>
+                <loadingImg type="2" :src="item.cover.domain + item.cover.image_url" style="width:330px;height:250px;"  v-show="item.cover == ''? false:true"></loadingImg>
               </div>
               <div style="position:absolute;bottom:10px;left:10px;display: flex;justify-content: space-between;width:90%;">
                 <div>
@@ -192,7 +192,7 @@
             })
         },
         toRename(item,index){
-          console.log(item,index)
+ 
           this.group_id = item.group_id
           this.isRena = true
         },
