@@ -96,7 +96,6 @@
               if(res.data.code == 1){
                 this.orderList =  res.data.data.data
                 this.total = res.data.data.total
-                console.log(this.orderList)
               }else if(res.data.code == 3){
                 this.$http.post(this.api + '/home/index/token')
                   .then(res=>{

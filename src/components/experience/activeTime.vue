@@ -199,7 +199,7 @@
       created(){
           this.active_id = this.$route.query.information
         this.complete = this.$route.query.complete
-        console.log(this.complete)
+  
       },
       destroyed(){
           localStorage.removeItem('Time')

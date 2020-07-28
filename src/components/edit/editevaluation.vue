@@ -160,7 +160,6 @@
 
       },
       sendReplay(item){
-		    console.log(item)
         document.getElementById('textarea').focus()
         this.replayId = item.say_id
         this.flag = item.flag_comm

@@ -20,7 +20,7 @@
               <el-option  v-for="item in countryNumber" :key="item.value" :label="item.label" :value="item.label">
               </el-option>
             </el-select>
-            <input class="login_input" style="margin-left:10px"  :placeholder="allText.login[2][Lan]" v-model="tel_register.mobile" @blur="verifyPhone"></input>
+            <input class="login_input" style="margin-left:10px"  :placeholder="allText.login[2][Lan]" v-model="tel_register.mobile"></input>
           </div>
 					<div class="tel_check">
 						<p><input type="text" :placeholder="allText.login[5][Lan]" v-model="tel_register.sms_code" /></p>
@@ -56,7 +56,7 @@
 				</form>
 				<!--邮箱重置-->
 				<form v-show="model=='6'" :model="emailForm">
-          <el-input v-model="emailForm.email" @blur="checkEmailA" :placeholder="allText.login[10][Lan]" style="margin-top:15px;" ></el-input>
+          <el-input v-model="emailForm.email" :placeholder="allText.login[10][Lan]" style="margin-top:15px;" ></el-input>
           <div style="display: flex;justify-content: space-between;margin-top:15px;" >
             <el-input v-model="emailForm.smsEmail"   :placeholder="allText.login[11][Lan]" ></el-input>
             <el-button @click="sendEmail" :disabled="emailForm.forbid?true:false" style="font-size:12px;margin-left:10px;background-color: #008489;color:#fff;width:200px">{{emailForm.sms}}</el-button>
@@ -70,7 +70,8 @@
 				<form class="email_register" :model="email_Login" v-show="model=='3'">
           <el-input @blur="checkEmail" @keyup.enter.native="tel_email" v-model="email_Login.email_num"  style="margin-top:30px;" :placeholder="allText.login[10][Lan]"></el-input>
           <div style="display: flex;justify-content: flex-start;margin-top:10px;">
-            <el-input @keyup.enter.native="tel_email" v-model="email_Login.email_sms"  :placeholder="allText.login[11][Lan]" > </el-input> <el-button size="mini" :disabled="email_Login.fobid == 1? true:false" @click="login" style="margin-left:10px;">{{email_Login.sms}}</el-button>
+            <el-input @keyup.enter.native="tel_email" v-model="email_Login.email_sms"  :placeholder="allText.login[11][Lan]" > </el-input> 
+            <el-button type="primary" size="mini" :disabled="email_Login.fobid == 1? true:false" @click="login" style="margin-left:10px;">{{email_Login.sms}}</el-button>
           </div>
           <div style="display: flex;justify-content: flex-start">
             <el-input type="password" @keyup.enter.native="tel_email" style="margin-top:10px;" v-model="email_Login.email_password" :placeholder="allText.login[3][Lan]"></el-input>
@@ -78,8 +79,9 @@
           </div>
           <el-select  @change="v = true" style="width:321.6px;margin-top: 15px;" v-model="email_Login.flag" clearable placeholder="请选择类型">
             <el-option   v-for="item in options"  :key="item.value" :label="item.label" :value="item.value"></el-option></el-select>
-			<div class="register_btns" style="background-color: #008489;"> <el-button @click="tel_email" style="background-color: #008489;border:0;color:#000;width:100%;" :disabled='disabledBtn'>{{allText.click[0][Lan]}}</el-button></div>
-					<div class="register_btns" @click="toPhone" >{{allText.login[6][Lan]}}</div>
+            <div class="register_btns" style="background-color: #008489;"> 
+              <el-button type="primary" @click="tel_email" style="border:0;width:100%;" >{{allText.click[0][Lan]}}</el-button></div>
+            <div class="register_btns" @click="toPhone" >{{allText.login[6][Lan]}}</div>
 				</form>
 				<!--登录-->
 				<form class="login_con" v-show="model=='0'||model=='7'||model == '8'" :model="tel_onlogin">
@@ -144,7 +146,6 @@
         v:false,
         c:false,
         api:this.GLOBAL.baseURL,
-        disabledBtn:true,
         smsTime:60,
         changeTime:'',
         options:[
@@ -197,7 +198,7 @@
           smsEmail:'',
           emailPass:'',
           emailRePass:'',
-          forbid:1,
+          forbid:0,
           sms:'发送验证码',
         },
         topId:'',
@@ -262,8 +263,8 @@
               'zh':'邮箱验证码',
               'en':'E-mail code',
               'ja':'メール確認コード'
-            }
-           
+            }, 
+             
           ],
           click:[
             {
@@ -321,40 +322,40 @@
       }
     },
 		methods:{
+
 		  //邮箱重置
-      sendEmail(){
+      async sendEmail(){
         if(!this.emailForm.email){
           this.$message({
             type: 'info',
             message: '你还没有输入邮箱！'
           })
         }else{
-          this.$http.post(this.api + '/email',{
-            token: localStorage.getItem('token'),
-            flag: 2,
-            toemail: this.emailForm.email
-          })
-            .then(res=>{
+          var isTrue =  await this.checkEmailA()
+          if(isTrue){
+            this.$post('/email',{
+              flag: 2,
+              toemail: this.emailForm.email
+            }).then(res=>{
               if(res.data.code == 1){
                 this.emailForm.forbid = 1
-                this.changeTime = setInterval(()=>{
                   this.smsTime--
                   this.emailForm.sms = '重新发送（'+this.smsTime+ '）'
-                  if(this.smsTime <= 0){
-                    this.smsTime = 60
-                    this.emailForm.forbid = 0
-                    this.emailForm.sms = '重新发送'
-                    clearInterval(this.changeTime)
-                  }
-                },1000)
+                  this.changeTime = setInterval(()=>{
+                    this.smsTime--
+                    this.emailForm.sms = '重新发送（'+this.smsTime+ '）'
+                    if(this.smsTime <= 0){
+                      this.smsTime = 60
+                      this.emailForm.forbid = 0
+                      this.emailForm.sms = '重新发送'
+                      clearInterval(this.changeTime)
+                    }
+                  },1000)
               }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.sendEmail()
-                  })
+                this.sendEmail()
               }
             })
+          }
         }
       },
       checkEmail(){
@@ -372,23 +373,24 @@
         }
       },
       checkEmailA(){
-        if(this.emailForm.email){
-          this.$http.post(this.api + '/CheckEmail',{
-            token: localStorage.getItem('token'),
-            email: this.emailForm.email
-          })
-            .then(res=>{
+        return new Promise(resolve=>{
+            if(this.emailForm.email){
+            this.$post('/CheckEmail',{
+              email: this.emailForm.email
+            }).then(res=>{
               if(res.data.code == 1){
                 this.emailForm.email = ''
                 this.$message({
                   type: 'error',
                   message: '该邮箱没有注册！'
                 })
+                resolve(false) 
               }else if(res.data.code == 0){
-                this.emailForm.forbid = 0
+                resolve(true) 
               }
             })
-        }
+          }
+        })
       },
       reEmail(){
         this.$http.post(this.api + '/CheckEmail',{
@@ -421,82 +423,103 @@
         var baseurl = location.href
         window.open(this.api + "/QqLogin"+'?baseurl='+encodeURIComponent(baseurl)+'&token='+ localStorage.getItem('token')+'&userId='+this.top_id,'_self')
       },
-			delDialog(){
-				this.$emit('deldialog')
+      changeDialog(){
         this.tel_register = {
-          mobile:'',
           m_code:'+86(中国)',
           fobid:0,
-          sms_code:'',
           sms:'发送验证码',
-          password:'',
-          repassword:'',
-          flag:'',
         }
         this.tel_onlogin={
           m_code:'+86(中国)',
-          lmobile:'',
-          password:'',
           fobid:'',
           sms:'发送验证码',
-          sms_code:'',
           email:'',
           emailPassword:''
         }
         this.resetPhone = {
           m_code:'+86(中国)',
-          lmobile:'',
-          sms_code:'',
           forbid:0,
           sms:'发送验证码',
           password:''
         }
+        this.emailForm = {
+          forbid:0,
+          sms:'发送验证码',
+        }
         this.smsTime = 60
         clearInterval(this.changeTime)
+      },
+			delDialog(){
+        this.changeDialog()
+				this.$emit('deldialog')
 			},
       toPhone(){
         this.$emit('toPhone')
       },
 			registerView(){
+        this.changeDialog()
 				this.$emit('registerView')
 			},
 			loginView(){
+        this.changeDialog()
 				this.$emit('loginView')
 			},
 			telRegister(){
+        this.changeDialog()
 				this.$emit('telRegister')
 			},
 			emailRegister(){
+        this.changeDialog()
 				this.$emit('emailRegister')
 			},
 			forgetPass(){
+        this.changeDialog()
 				this.$emit('forgetPass')
 			},
 			telReset(){
+        this.changeDialog()
 				this.$emit('telReset')
 			},
 			emailReset(){
+        this.changeDialog()
 				this.$emit('emailReset')
 			},
 			checkLogin(){
+        this.changeDialog()
 				this.$emit('checkLogin')
 			},
 			passLogin(){
+        this.changeDialog()
 				this.$emit('passLogin')
 			},
       toEmail_login(){
+        this.changeDialog()
         this.$emit('emailLogin')
       },
+      goAuth(b){
+        if(b == 1){
+          this.$router.push({
+            path: '/Validation',
+            query:{
+              information: 'volunteer'
+            }
+          })
+        }else if(b == 2){
+          this.$router.push( '/authentication')
+        }
+      },
       login(){
-			  this.disabledBtn = false
-        this.$http.post(this.api + '/email',{
-          token: localStorage.getItem('token'),
-          toemail: this.email_Login.email_num,
-          flag: 1
-        })
-          .then(res=>{
+        if(!this.email_Login.email_num){
+          this.$message({type:'info',message:'请填写邮箱'})
+        }else{
+          this.$post('/email',{
+            toemail: this.email_Login.email_num,
+            flag: 1
+          }).then(res=>{
             if(res.data.code == 1){
               this.email_Login.fobid = 1
+              this.smsTime--
+              this.email_Login.sms = '重新发送（'+this.smsTime+ '）'
               this.changeTime = setInterval(()=>{
                 this.smsTime--
                 this.email_Login.sms = '重新发送（'+this.smsTime+ '）'
@@ -510,61 +533,40 @@
             }else if(res.data.code == 3){
               this.login()
             }else if(res.data.code == 0){
-              alert(res.data.msg)
+              this.$message({type:'info',message:res.data.msg})
             }
           })
+        }
       },
       tel_email(){
-        this.$http.post(this.api + '/RegisterEmail',{
-          token: localStorage.getItem('token'),
-          email: this.email_Login.email_num,
-          sms_code: this.email_Login.email_sms,
-          password: this.email_Login.email_password,
-          repassword: this.email_Login.email_Repassword,
-          flag: this.email_Login.flag,
-          top_user_id: this.topId,
-        })
-          .then(res=>{
+        if(!this.email_Login.email_num){
+          this.$message({type:'info',message:'请填写邮箱地址'})
+        }else if(!this.email_Login.email_sms){
+          this.$message({type:'info',message:'请填写邮箱验证码'})
+        }else if(!this.email_Login.email_password){
+          this.$message({type:'info',message:'请填写密码'})
+        }else if(!this.email_Login.email_Repassword){
+          this.$message({type:'info',message:'请重复填写邮箱地址'})
+        }else {
+          this.$post('/RegisterEmail',{
+            email: this.email_Login.email_num,
+            sms_code: this.email_Login.email_sms,
+            password: this.email_Login.email_password,
+            repassword: this.email_Login.email_Repassword,
+            flag: this.email_Login.flag,
+            top_user_id: this.topId,
+          }).then(res=>{
             if(res.data.code == 1){
-              localStorage.setItem('isLogin',true)
+              this.delDialog()
               this.$emit('regist',res)
-
-              if( this.email_Login.flag == 1){
-                this.$router.push({
-                  path: '/Validation',
-                  query:{
-                    information: 'volunteer'
-                  }
-                })
-              }else if(  this.email_Login.flag == 2){
-                this.$router.push( '/authentication')
-              }
-              this.email_Login ={
-                email_num:'',
-                email_sms:'',
-                email_password:'',
-                email_Repassword:''
-              }
-              if(this.email_Login.flag == 1){
-                this.$router.push({
-                  path: '/authentication',
-                  query:{
-                    information: 'volunteer'
-                  }
-                })
-              }else if(this.email_Login.flag == 2){
-                this.$router.push( '/authentication')
-              }
+              this.goAuth(this.email_Login.flag)
             }else if(res.data.code == 3){
-              this.$http.post(this.api + '/home/index/token')
-                .then(res=>{
-                  localStorage.setItem('token',res.data.data)
-                  this.tel_email()
-                })
+              this.tel_email()
             }else if(res.data.code == 0){
-              alert(res.data.msg)
+              this.$message({type:'error',message:res.data.msg})
             }
           })
+        }
       },
       listenLogin(){
 			    if(event.keyCode === 13){
@@ -580,218 +582,207 @@
         this.$emit('toEmail')
       },
       verifyPhone(){
-			  if(this.tel_register.mobile){
-          this.$http.post(this.api + '/home/User/validate_mobile',{
-            token: localStorage.getItem('token'),
+        return new Promise(resolve=>{
+          this.$post('/home/User/validate_mobile',{
             m_code: parseInt(this.tel_register.m_code),
             mobile:this.tel_register.mobile
           }).then(res=>{
-            if(res.data.code == 1){
-              this.tel_register.fobid = 0
-            }else if(res.data.code == 3){
-              this.$http.post(this.api + '/home/Index/token')
-                .then(res=>{
-                  localStorage.setItem('token',res.data.data)
-                })
-            }else{
-              this.tel_register.fobid = 1
-              alert(res.data.msg)
-            }
+              if(res.data.code == 1){
+                resolve(false)
+              }else if(res.data.code == 3){
+                this.verifyPhone()
+              }else{
+                resolve(true)
+              }
           })
-            .catch(error=>{
-              this.tel_register.fobid = 0
-            })
-        }
-
+        })
       },
       telSend() {
-                this.$http.post(this.api + '/home/User/register', {
-                  token: localStorage.getItem('token'),
-                  mobile: this.tel_register.mobile,
-                  m_code: parseInt(this.tel_register.m_code),
-                  sms_code: this.tel_register.sms_code,
-                  password: this.tel_register.password,
-                  repassword: this.tel_register.repassword,
-                  flag: this.tel_register.flag,
-                  top_user_id:this.topId
-                }).then(res => {
-                  if (res.data.code == 1){
-                    localStorage.setItem('isLogin',true)
-                    this.$message({
-                      type:'success',
-                      message:'注册成功！'
-                    })
-                    if(this.tel_register.flag == 1){
-                      this.$router.push({
-                        path: '/Validation',
-                        query:{
-                          information: 'volunteer'
-                        }
-                      })
-                    }else if( this.tel_register.flag == 2){
-                      this.$router.push( '/authentication')
-                    }
-                    this.$emit('regist',res)
-                  }else if(res.data.code == 3){
-                    this.$http.post(this.api + '/home/index/token')
-                      .then(res=>{
-                        localStorage.setItem('token',res.data.data)
-                        this.telSend()
-                      })
-                  }else if(res.data.code == 0){
-                    alert(res.data.msg)
-                  }
-                })
-
+        if(!this.tel_register.mobile){
+          this.$message({type:'info',message:'请填写手机号'})
+        }else if(!this.tel_register.sms_code){
+          this.$message({type:'info',message:'请填写验证码'})
+        }else if(!this.tel_register.password){
+          this.$message({type:'info',message:'请填写登陆密码'})
+        }else if(!this.tel_register.repassword){
+          this.$message({type:'info',message:'请重复填写密码'})
+        }else{
+          this.$post('/home/User/register',{
+            mobile: this.tel_register.mobile,
+            m_code: parseInt(this.tel_register.m_code),
+            sms_code: this.tel_register.sms_code,
+            password: this.tel_register.password,
+            repassword: this.tel_register.repassword,
+            flag: this.tel_register.flag,
+            top_user_id:this.topId
+          }).then(res=>{
+            if (res.data.code == 1){
+                this.delDialog()
+                this.goAuth(this.tel_register.flag)
+                this.$emit('regist',res)
+              }else if(res.data.code == 3){
+                this.telSend()
+              }else if(res.data.code == 0){
+                this.$message({type:'error',message:res.data.msg})
+            }
+          })
+        }
       },
       tel_login(){
-			  if(this.tel_onlogin.sms_code == ''){
 			    if(this.model == '0'){
-                this.$http.post(this.api + '/home/User/login_psw',{
-                  token: localStorage.getItem('token'),
+              if(!this.tel_onlogin.lmobile){
+                this.$message({type:'info',message:'请填写手机号!'})
+              }else if(!this.tel_onlogin.password){
+                this.$message({type:'info',message:'请填写密码!'})
+              }else if(!this.tel_onlogin.m_code){
+                this.$message({type:'info',message:'请选择区号!'})
+              }else{
+                this.$post('/home/User/login_psw',{
                   m_code: parseInt(this.tel_onlogin.m_code),
                   mobile: this.tel_onlogin.lmobile,
-                  password: this.tel_onlogin.password
+                  password: this.tel_onlogin.password 
                 }).then(res=>{
                   if(res.data.code == 1){
-                    this.tel_onlogin.m_code = ''
-                    this.tel_onlogin.lmobile = ''
-                    this.tel_onlogin.password = ''
-                    localStorage.setItem('isLogin',true)
+                    this.delDialog()
                     this.$emit('onLogin',res)
-                    this.smsTime = 60
-                    clearInterval(this.changeTime)
                   }else if(res.data.code == 3){
-                    this.$http.post(this.api + '/home/Index/token')
-                      .then(res=>{
-                        localStorage.setItem('token',res.data.data)
-                        this.tel_login()
-                      })
+                      this.tel_login()
                   }else if(res.data.code == 0){
-                    this.$alert(res.data.msg)
+                    this.$message({type:'error',message:res.data.msg})
                   }
                 })
+              }
           }else if(this.model == '8'){
-			      this.$http.post(this.api + '/EmailLogin',{
-			        token: localStorage.getItem('token'),
-              email: this.tel_onlogin.email,
-              password: this.tel_onlogin.emailPassword
-            })
-              .then(res=>{
+            if(!this.tel_onlogin.email){
+              this.$message({type:'info',message:'请填写邮箱地址!'})
+            }else if(!this.tel_onlogin.emailPassword){
+              this.$message({type:'info',message:'请填写密码!'})
+            }else{
+              this.$post('/EmailLogin',{
+                email: this.tel_onlogin.email,
+                password: this.tel_onlogin.emailPassword
+              }).then(res=>{
                 if(res.data.code == 1){
-                  this.tel_onlogin.email = ''
-                  this.tel_onlogin.emailPassword = ''
-                  localStorage.setItem('isLogin',true)
+                  this.delDialog()
                   this.$emit('onLogin',res)
                 }else if(res.data.code == 3){
-                  this.$http.post(this.api + '/home/Index/token')
-                    .then(res=>{
-                      localStorage.setItem('token',res.data.data)
-                      this.tel_login()
-                    })
+                  this.tel_login()
                 }else if(res.data.code == 0){
-                  alert(res.data.msg)
+                  this.$message({type:'error',message:res.data.msg})
                 }
               })
-          }
-        }else{
-              this.$http.post(this.api + '/home/User/login_sms',{
-                token: localStorage.getItem('token'),
+            }
+          }else{
+            if(!this.tel_onlogin.lmobile){
+              this.$message({type:'info',message:'请填写手机号!'})
+            }else if(!this.tel_onlogin.sms_code){
+              this.$message({type:'info',message:'请填写手机验证码!'})
+            }else if(!this.tel_onlogin.m_code){
+              this.$message({type:'info',message:'请选择区号!'})
+            }else{
+              this.$post('/home/User/login_sms',{
                 mobile: this.tel_onlogin.lmobile,
                 sms_code : this.tel_onlogin.sms_code,
                 m_code: parseInt(this.tel_onlogin.m_code)
-              })
-                .then(res=>{
-                  if(res.data.code == 1){
-                    this.tel_onlogin.m_code = ''
-                    this.tel_onlogin.lmobile = ''
-                    this.tel_onlogin.password = ''
-                    localStorage.setItem('isLogin',true)
+              }).then(res=>{
+                if(res.data.code == 1){
+                    this.delDialog()
                     this.$emit('onLogin',res)
-                    this.smsTime = 60
-                    clearInterval(this.changeTime)
                   }else if(res.data.code == 3){
-                   this.$http.post(this.api + '/home/Index/token')
-                     .then(res=>{
-                       localStorage.setItem('token',res.data.data)
-                       this.tel_login()
-                     })
-                  }else{
-                    this.$alert(res.data.msg)
+                    this.tel_login()
+                  }else if(res.data.code == 0){
+                    this.$message({type:'error',message:res.data.msg})
                   }
-                })
+              })
+            }
         }
-
       },
-      sendSms(){
-			  this.$http.post(this.api + '/home/User/send_msg',{
-			    token: localStorage.getItem('token'),
-          m_code: parseInt(this.tel_register.m_code),
-          mobile: this.tel_register.mobile,
-          flag:2
-        })
-          .then(res=>{
-            if(res.data.code == 1){
-
-              this.tel_register.fobid = 1
-              this.changeTime = setInterval(()=>{
+      async sendSms(){
+        if(!this.tel_register.mobile){
+          this.$message({type:'info',message:'请填写手机号!'})
+        }else if(!this.tel_register.m_code){
+          this.$message({type:'info',message:'请选择区号!'})
+        }else{
+          var isTrue = await this.verifyPhone()
+          if(!isTrue){
+            this.$message({type:'info',message:'手机号已注册'})
+          }else{
+            this.$post( '/home/User/send_msg',{
+              m_code: parseInt(this.tel_register.m_code),
+              mobile: this.tel_register.mobile,
+              flag:2
+            }).then(res=>{
+              if(res.data.code == 1){
+                this.tel_register.fobid = 1
                 this.smsTime--
                 this.tel_register.sms = '重新发送（'+this.smsTime+ '）'
-                if(this.smsTime <= 0){
-                  this.smsTime = 60
-                  this.tel_register.fobid = 0
-                  this.tel_register.sms = '重新发送'
-                  clearInterval(this.changeTime)
-                }
-              },1000)
-            }
-          })
+                this.changeTime = setInterval(()=>{
+                  this.smsTime--
+                  this.tel_register.sms = '重新发送（'+this.smsTime+ '）'
+                  if(this.smsTime <= 0){
+                    this.smsTime = 60
+                    this.tel_register.fobid = 0
+                    this.tel_register.sms = '重新发送'
+                    clearInterval(this.changeTime)
+                  }
+                },1000)
+              }else if(res.data.cdoe == 3){
+                this.sendSms()
+              }else if(res.data.code == 0){
+                this.$message({type:'error',message:res.data.msg})
+              }
+            })
+          }
+          
+        }
       },
 
       onloginSmS(){
-        this.$http.post(this.api + '/home/User/send_msg',{
-          token: localStorage.getItem('token'),
-          m_code: parseInt(this.tel_onlogin.m_code),
-          mobile: this.tel_onlogin.lmobile,
-          flag:3
-        })
-          .then(res=>{
-            if(res.data.code == 1){
-
-              this.tel_onlogin.fobid = 1
-              this.changeTime = setInterval(()=>{
-                this.smsTime--
-                this.tel_onlogin.sms = '重新发送（'+this.smsTime+ '）'
-                if(this.smsTime <= 0){
-                  this.smsTime = 60
-                  this.tel_onlogin.fobid = 0
-                  this.tel_onlogin.sms = '重新发送'
-                  clearInterval(this.changeTime)
+        if(!this.tel_onlogin.lmobile){
+          this.$message({type:'info',message:'请填写手机号!'})
+        }else if(!this.tel_onlogin.m_code){
+          this.$message({type:'info',message:'请选择区号!'})
+        }else{
+          this.$post('/home/User/send_msg',{
+            m_code: parseInt(this.tel_onlogin.m_code),
+            mobile: this.tel_onlogin.lmobile,
+            flag:3
+          }).then(res=>{
+                if(res.data.code == 1){
+                  this.tel_onlogin.fobid = 1
+                  this.smsTime--
+                  this.tel_onlogin.sms = '重新发送('+this.smsTime+ ')'
+                  this.changeTime = setInterval(()=>{
+                    this.smsTime--
+                    this.tel_onlogin.sms = '重新发送('+this.smsTime+ ')'
+                    if(this.smsTime <= 0){
+                      this.smsTime = 60
+                      this.tel_onlogin.fobid = 0
+                      this.tel_onlogin.sms = '重新发送'
+                      clearInterval(this.changeTime)
+                    }
+                  },1000)
+                }else if(res.data.code == 3){
+                  this.onloginSmS()
+                }else if(res.data.code == 0){
+                  this.$message({type:'error',message:res.data.msg})
                 }
-              },1000)
-            }else if(res.data.code == 3){
-              this.$http.post(this.api + '/home/Index/token')
-                .then(res=>{
-                  if(res.data.code == 1){
-                    localStorage.setItem('token',res.data.data)
-                    this.onloginSmS()
-                  }
-                })
-            }else if(res.data.code == 0){
-              this.$alert(res.data.msg)
-            }
-          })
+            })
+        }
       },
       resetSendSmS(){
-        this.$http.post(this.api + '/home/User/send_msg',{
-          token: localStorage.getItem('token'),
-          m_code: parseInt(this.resetPhone.m_code),
-          mobile: this.resetPhone.lmobile,
-          flag:1
-        })
-          .then(res=>{
+        if(!this.resetPhone.lmobile){
+          this.$message({type:'info',message:'请填写手机号'})
+        }else{
+          this.$post('/home/User/send_msg',{
+            m_code: parseInt(this.resetPhone.m_code),
+            mobile: this.resetPhone.lmobile,
+            flag:1
+          }).then(res=>{
             if(res.data.code == 1){
               this.resetPhone.fobid = 1
+              this.smsTime--
+              this.resetPhone.sms = '重新发送（'+this.smsTime+ '）'
               this.changeTime = setInterval(()=>{
                 this.smsTime--
                 this.resetPhone.sms = '重新发送（'+this.smsTime+ '）'
@@ -803,69 +794,65 @@
                 }
               },1000)
             }else if(res.data.code == 3) {
-              this.$http.post(this.api + '/home/Index/token')
-                .then(res=>{
-                  if(res.data.code == 1){
-                    localStorage.setItem('token',res.data.data)
-                    this.resetSendSmS()
-                  }
-                })
+              this.resetSendSmS()
             }else if(res.data.code == 0){
-              alert(res.data.msg)
+              this.$message({type:'error',message:res.data.msg})
             }
           })
+        }
       },
       resetPhone_login(){
-			  this.$http.post(this.api + '/home/User/find_pwd',{
-			    token: localStorage.getItem('token'),
-			    m_code: parseInt(this.resetPhone.m_code),
-          mobile: this.resetPhone.lmobile,
-          sms_code: this.resetPhone.sms_code,
-          password: this.resetPhone.password,
-        })
-          .then(res=>{
-            if(res.data.code == 1){
-              this.resetPhone.m_code = ''
-              this.resetPhone.lmobile = ''
-              this.resetPhone.sms_code = ''
-              this.resetPhone.password =''
-              localStorage.setItem('isLogin',true)
+        if(!this.resetPhone.lmobile){
+          this.$message({type:'info',message:'请填写手机号码'})
+        }else if(!this.resetPhone.password){
+          this.$message({type:'info',message:'请填写密码'})
+        }else if(!this.resetPhone.sms_code){
+          this.$message({type:'info',message:'请填写手机验证码'})
+        }else{
+          this.$post('/home/User/find_pwd',{
+            m_code: parseInt(this.resetPhone.m_code),
+            mobile: this.resetPhone.lmobile,
+            sms_code: this.resetPhone.sms_code,
+            password: this.resetPhone.password,
+          }).then(res=>{
+             if(res.data.code == 1){
+              this.delDialog()
+              sessionStorage.setItem('isLogin',true)
               this.$emit('onLogin',res)
             }else if(res.data.code == 3){
-              this.$http.post(this.api + '/home/Index/token')
-                .then(res=>{
-                  if(res.data.code == 1){
-                    localStorage.setItem('token',res.data.data)
-                    this.resetPhone_login()
-                  }
-                })
+              this.resetPhone_login()
             }else if(res.data.code == 0){
-              alert(res.data.msg)
+              this.$message({type:'error',message:res.data.msg})
             }
           })
+        }
       },
       toEmailL(){
-        this.$http.post(this.api + '/FindEmailPwd',{
-          token: localStorage.getItem('token'),
-          email: this.emailForm.email,
-          sms_code: this.emailForm.smsEmail,
-          password: this.emailForm.emailPass,
-          re_password: this.emailForm.emailRePass
-        })
-          .then(res=>{
+        if(!this.emailForm.email){
+          this.$message({type:'info',message:'请填写邮箱地址'})
+        }else if(!this.emailForm.smsEmail){
+          this.$message({type:'info',message:'请填写邮箱验证码'})
+        }else if(!this.emailForm.emailPass){
+          this.$message({type:'info',message:'请填写邮箱密码'})
+        }else if(!this.emailForm.emailRePass){
+          this.$message({type:'info',message:'请重复填写邮箱密码'})
+        }else{
+          this.$post('/FindEmailPwd',{
+            email: this.emailForm.email,
+            sms_code: this.emailForm.smsEmail,
+            password: this.emailForm.emailPass,
+            re_password: this.emailForm.emailRePass
+          }).then(res=>{
             if(res.data.code == 1){
-              localStorage.setItem('isLogin',true)
+              this.delDialog()
               this.$emit('onLogin',res)
             }else if(res.data.code == 3){
-              this.$http.post(this.api + '/home/index/token')
-                .then(res=>{
-                  localStorage.setItem('token',res.data.data)
-                  this.toEmailL()
-                })
+              this.toEmailL()
             }else if(res.data.code == 0){
-              alert(res.data.msg)
+              this.$message({type:'error',message:res.data.msg})
             }
           })
+        }
       }
 		},
     mounted(){

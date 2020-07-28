@@ -360,7 +360,8 @@
             marker.addEventListener("click", function(){
               map.openInfoWindow(infoWindow,pp); //开启信息窗口
             });
-            _this.point = [pp.lng,pp.lat]
+             var bd09togcj02 = coordtransform.bd09togcj02(pp.lng,pp.lat);
+            _this.point = bd09togcj02
           }
           var local = new BMap.LocalSearch(map, { //智能搜索
             onSearchComplete: myFun
@@ -421,7 +422,7 @@
               }
               this.createMap()
                 this.aboutMe = res.data.data.set_address
-                 console.log(this.aboutMe)
+          
   
             }else if(res.data.code == 3){
               this.getActives()

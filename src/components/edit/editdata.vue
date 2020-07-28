@@ -492,7 +492,6 @@
         }).then(res=>{
           if(res.data.code == 1){
             let data = res.data.data[0]
-            console.log(data)
             this.dataForm.family_name = data.family_name
             this.dataForm.middle_name = data.middle_name
             this.dataForm.name = data.name

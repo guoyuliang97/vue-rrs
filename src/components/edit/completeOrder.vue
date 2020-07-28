@@ -25,7 +25,7 @@
             <div style="line-height:45px;font-size:14px;margin-left:20px;position: relative">
               <p >支付价格：<b style="font-size:15px;">{{item.total_price}}</b></p>
                <div @click="item.isevaluate == 1?discuss(item,index):''">
-                  <span style="padding:10px;color:#fff;border-radius: 5px;cursor: pointer;" :style="{backgroundColor:item.isevaluate == 1?'green':'#A8A8A8'}"><b>{{item.isevaluate == 1? '立即评价':'已评价'}}</b></span>
+                  <span style="padding:10px;color:#fff;border-radius: 5px;cursor: pointer;" :style="{backgroundColor:item.isevaluate == 1?'#14C5CA':'#A8A8A8'}"><b>{{item.isevaluate == 1? '立即评价':'已评价'}}</b></span>
                </div>
             </div>
           </div>

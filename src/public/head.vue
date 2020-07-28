@@ -5,15 +5,15 @@
 				<div v-if="type!='home'&&type!='help'&&type!='activeStep'" @click="toHome" style="width:42px;"><img src="../../static/img/static/logo1.png" width="100%"></div>
 				<div v-if="type=='home'||type=='activeStep'||type=='help'" @click="toHome" style="width:42px;"><img src="../../static/img/static/logo.png" width="100%"></div>
 				<div v-if="type == 'moreActive'||type == 'experienceCentre'||type=='fenleiPage'||type=='classification'||type=='edit'||type=='help'||type=='home'" style="margin-left: 20px;">
-					<el-input :style="{width:inputWidth+'px',transition:'all .2s linear'}" :placeholder="content"  @keyup.enter.native="search" v-model="aeditSearch" >
+					<el-input :style="{width:inputWidth+'px',transition:'all .2s linear'}"  :placeholder="content"  @keyup.enter.native="search" v-model="aeditSearch" >
 						<el-button @click="search" slot="append" icon="el-icon-search"></el-button>
 					</el-input>
 				</div>
 			</div>
-			<div v-if="type=='myWant'||type == 'fenleiPage'||type == 'classification'||type == 'refundDescirbe'||type=='invitVolunter'||type=='translation'||type=='myPlay'||type=='transaction'||type=='experienceCentre'||type=='activeStep'||type=='moreActive'||type=='publishList'||type=='storyList'||type=='Disputes'||type=='story'||type=='message'||type=='storyPublish'||type=='privacyS'||type=='jouerney'||type=='wish'||type=='storyPage'||type=='publishPage'||type=='home'||type=='edit'||type=='help'||type=='helphome'||type=='about'||type=='activities'||type=='hospitality'||type=='whyVolunteer' || type=='siteMap'||type=='volunteerList'">
+			<div  v-if="type=='myWant'||type == 'fenleiPage'||type == 'classification'||type == 'refundDescirbe'||type=='invitVolunter'||type=='translation'||type=='myPlay'||type=='transaction'||type=='experienceCentre'||type=='activeStep'||type=='moreActive'||type=='publishList'||type=='storyList'||type=='Disputes'||type=='story'||type=='message'||type=='storyPublish'||type=='privacyS'||type=='jouerney'||type=='wish'||type=='storyPage'||type=='publishPage'||type=='home'||type=='edit'||type=='help'||type=='helphome'||type=='about'||type=='activities'||type=='hospitality'||type=='whyVolunteer' || type=='siteMap'||type=='volunteerList'">
 				<div style="width: 45px;float: right;">
 					<div class="head_user" v-if="isLogin" @click="isLoginMess=!isLoginMess">
-            <LoadingImg type="6" :src="userImg"  style="width:100%;height:100%"></LoadingImg></div>
+            <LoadingImg type="user" :src="userImg"  style="width:100%;height:100%"></LoadingImg></div>
 					<div v-if="isLoginMess" style="width: 280px;margin-top: 20px;padding: 0;margin-left:-206px;background-color:#fff;border:1px solid #eee" >
 						<ul class="head_drop">
 							<li @click="toEdit">{{allText[0].login[0][getLan]}}</li>
@@ -32,8 +32,8 @@
 					<li class="fontweight headList" @click="toVolunteers" :style="{borderBottom: type == 'volunteerList'?'2px solid #14C5CA':''}" >{{allText[0].title[1][getLan]}}</li>
 					<li class="fontweight headList" :style="{borderBottom: type == 'story'?'2px solid #14C5CA':''}" >
             <el-popover placement="bottom" width="100" trigger="click">
-              <div @click="toStory" style="width:150px;text-align:center;cursor: pointer"><i class="el-icon-view">查看故事</i></div>
-              <div @click="toStoryPublish" style="width:150px;text-align:center;margin-top:10px;cursor: pointer;"><i class="el-icon-edit">创建故事</i></div>
+              <div @click="toStory" style="width:150px;text-align:center;cursor: pointer"><i class="el-icon-view">{{allText[0].click[0][getLan]}}</i></div>
+              <div @click="toStoryPublish" style="width:150px;text-align:center;margin-top:10px;cursor: pointer;"><i class="el-icon-edit">{{allText[0].click[1][getLan]}}</i></div>
               <span slot="reference" >{{allText[0].title[2][getLan]}}</span>
           </el-popover></li>
           <li class="fontweight headList"  @click="toWish" v-show="isLogin" :style="{borderBottom: type == 'wish'?'2px solid #14C5CA':''}">{{allText[0].title[3][getLan]}}</li>
@@ -75,8 +75,7 @@
 				model:"0",
 				showSlider:false,
 				isLogin:false,
-				inputWidth:300,
-        api:this.GLOBAL.baseURL,
+				inputWidth:250,
         userImg:'',
         isMesage:false,
         someThing:false,
@@ -172,6 +171,18 @@
                 'en':'quit',
                 'ja':'脱落'
               }
+            ],
+            click:[
+              {
+                'zh':'查看故事',
+                'en':'View story',
+                'ja':'ストーリーを見る'
+              },
+              {
+                'zh':'创建故事',
+                'en':'Create a story',
+                'ja':'ストーリーを作成する'
+              }
             ]
 
           }
@@ -208,10 +219,10 @@
 				this.$router.push('/travelfunds')
 			},
 			editFocus(){
-				this.inputWidth=350
+				this.inputWidth=  270
 			},
 			editBlur(){
-				this.inputWidth=300
+				this.inputWidth= 150
 			},
 			toEdit(){
 				this.$router.push('/edit')
@@ -223,7 +234,6 @@
 				this.showSlider=true
 			},
 			toExperience(){
-				/*this.$router.push('/volunteers')*/
         this.pageIndex = '1'
         this.$router.push('/publishList')
 
@@ -265,23 +275,11 @@
 				this.showDialog=true;
 				this.model="1"
 				this.height="300"
-/*        this.$router.push({
-          name: 'logion',
-          query:{
-            information: '2'
-          }
-        })*/
 			},
 			toLogin(){
 				this.showDialog=true;
 				this.model="0"
 				this.height="380"
-/*			this.$router.push({
-        name: 'logion',
-        query:{
-          information: '1'
-        }
-      })*/
 			},
 			registerView(){
 				this.model="1";
@@ -331,26 +329,21 @@
       regist(res) {
         this.isLogin = true
         this.showDialog = false
-
-     
-          this.userImg = res.data.data.headimage? res.data.data.headimage.domain + res.data.data.headimage.image_url :this.userDefult
-
+        this.userImg = res.data.data.headimage? res.data.data.headimage.domain + res.data.data.headimage.image_url :this.userDefult
         if(res.data.data.audit_face == 2 && res.data.data.isplanner == 1){
           this.someThing = true
         }
         if(res.data.data.isvolunteer == 1 && res.data.data.audit_idcard == 1 ){
           this.volunteer = true
         }
-        localStorage.setItem('userImg',this.userImg)
-        this.$emit('reload')
+        sessionStorage.setItem('userImg',this.userImg)
+        this.$emit('reload',res)
       },
       exitAccount(){
-        this.$http.post(this.api+'/home/User/quit',{
-          token:localStorage.getItem('token'),
-        }).then(res=>{
+        this.$post('/home/User/quit',{}).then(res=>{
           if(res.data.code == 1){
-            localStorage.removeItem('isLogin')
-            localStorage.removeItem('userImg')
+            sessionStorage.removeItem('isLogin')
+            sessionStorage.removeItem('userImg')
             localStorage.removeItem('token')
             this.isLogin = false
             this.isLoginMess = false
@@ -360,39 +353,22 @@
             this.$router.push('/')
           }else if(res.data.code == 3){
             this.exitAccount()
-          }else if(res.data.code == 0){
-            alert(res.data.msg)
           }
         })
+
+
       },
       onLogin(res){
+        this.getToken()
         this.showDialog = false
-        this.isLogin = true
-        if(res.data.data.headimage){
-          this.userImg = res.data.data.headimage.domain + res.data.data.headimage.image_url
-          localStorage.setItem('userImg',this.userImg)
-        }else{
-          this.userImg = '../../static/img/static/user.png'
-          localStorage.setItem('userImg',this.userImg)
-        }
-        if(res.data.data.isplanner == 1 && res.data.data.audit_face == 2 ){
-          this.someThing = true
-        }
-        if(res.data.data.isvolunteer == 1 && res.data.data.audit_idcard == 1){
-          this.volunteer = true
-        }
-        this.$emit('reload',res)
-        this.$emit('onreload',res)
+        this.$router.push('/')
       },
       quitExperience(){
 			  this.$router.push('/publishList')
       },
       getMesage(){
-			  this.$http.post(this.api +'/home/Sysmsg/noread',{
-			    token: localStorage.getItem('token')
-        })
-          .then(res=>{
-            if(res.data.code == 1){
+        this.$post('/home/Sysmsg/noread',{}).then(res=>{
+          if(res.data.code == 1){
               let data = res.data.data
               if(data.chat_count === 0&&data.notice_count === 0&&data.sys_count === 0&& data.praise_count === 0 && data.comment_count === 0){
                 this.isMesage = false
@@ -400,15 +376,9 @@
                 this.isMesage = true
               }
             }else if(res.data.code == 3){
-              this.$http.post(this.api + '/home/index/token')
-                .then(res=>{
-                  localStorage.setItem('token',res.data.data)
-                  this.getMesage()
-                })
-            }else if(res.data.code == 0){
-              alert(res.data.msg)
+              this.getMesage()
             }
-          })
+        })
       },
       toCehua(){
 			  this.$router.push('/myPlay')
@@ -417,89 +387,40 @@
 			  this.$router.push('/myWant')
       },
       getToken(){ 
-        if(localStorage.getItem('token')){
-          if(localStorage.getItem('isLogin')){
-            this.getMesage()
-            this.isLogin = localStorage.getItem('isLogin')
-            this.$http.post(this.api + '/home/User/get_user',{
-              token: localStorage.getItem('token')
-            })
-              .then(res=>{
-                if(res.data.code == 1){
-                  if(res.data.data.length > 0){
-                    if(res.data.data[0].headimage){
-                      this.userImg = res.data.data[0].headimage.domain + res.data.data[0].headimage.image_url
-                    }else{
-                      this.userImg = '../../static/img/static/user.png'
-                    }
-                    if(res.data.data[0].isplanner == 1 && res.data.data[0].audit_face == 2 ){
-                      this.someThing = true
-                    }
-                    if(res.data.data[0].isvolunteer == 1 && res.data.data[0].audit_idcard == 1){
-                      this.volunteer = true
-                    }
-                    this.$emit('reload',res)
-                    this.getNoReadAll()
-                  }
-                }else if(res.data.code == 3){
-                  this.$http.post(this.api + '/home/Index/token')
-                    .then(res=>{
-                      localStorage.setItem('token',res.data.data)
-                      this.$emit('reload')
-                      localStorage.removeItem('isLogin')
-                      localStorage.removeItem('userImg')
-                    })
-                }else{
-                  this.$emit('reload')
-                  localStorage.removeItem('isLogin')
-                  localStorage.removeItem('userImg')
-                }
-              })
-          }else{
-            this.$http.post(this.api + '/home/User/get_user',{
-              token: localStorage.getItem('token')
-            })
-              .then(res=>{
-                if(res.data.code == 1){
-                  this.isLogin = true
-                    if(res.data.data[0].headimage){
-                      this.userImg = res.data.data[0].headimage.domain + res.data.data[0].headimage.image_url
-                    }else{
-                      this.userImg = '../../static/img/static/user.png'
-                    }
-                    
-                    if( res.data.data[0].isplanner == 1 && res.data.data[0].audit_face == 2){
-                      this.someThing = true
-                    }
-                    if(res.data.data[0].isvolunteer == 1 && res.data.data[0].audit_idcard == 1){
-                      this.volunteer = true
-                    }
-                   localStorage.setItem('isLogin',true)
-                    this.$emit('reload',res)
-                    this.getNoReadAll()
-                }else if(res.data.code == 3 || res.data.code == 2){
-                  this.$http.post(this.api + '/home/Index/token')
-                    .then(res=>{
-                      localStorage.setItem('token',res.data.data)
-                      this.$emit('reload')
-                      localStorage.removeItem('isLogin')
-                      localStorage.removeItem('userImg')
-                    })
-                }else{
-                  this.$emit('reload')
-                  localStorage.removeItem('isLogin')
-                  localStorage.removeItem('userImg')
-                }
-              })
-          }
+        var token = localStorage.getItem('token')
+        var isLogin = sessionStorage.getItem('isLogin')
+        var userImg = sessionStorage.getItem('userImg')
+        if(token){
+          this.isLogin = isLogin? true:false
+          this.userImg = isLogin? userImg: ''
+          this.$post('/home/User/get_user',{}).then(res=>{
+            if(res.data.code == 1){
+              this.isLogin = true
+              let img = res.data.data[0].headimage? res.data.data[0].headimage.domain + res.data.data[0].headimage.image_url:this.userDefult
+              if(!userImg){
+                this.userImg = img
+              }
+              if(res.data.data[0].isplanner == 1 && res.data.data[0].audit_face == 2 ){
+                this.someThing = true
+              }
+              if(res.data.data[0].isvolunteer == 1 && res.data.data[0].audit_idcard == 1){
+                this.volunteer = true
+              }
+              this.getMesage()
+              sessionStorage.setItem('userImg',img)
+              sessionStorage.setItem('isLogin',true)
+            }else if(res.data.cdoe == 3){
+              this.getToken()
+            }
+            this.$emit('reload',res)
+            this.getNoReadAll()
+          })
         }else{
-          this.isLogin = false
-          this.$http.post(this.api + '/home/Index/token')
-            .then(res=>{
-              localStorage.setItem('token',res.data.data)
-              this.$emit('reload')
-              this.getNoReadAll()
-            })
+          this.$post( '/home/Index/token',{}).then(res=>{
+            localStorage.setItem('token',res.data.data)
+             this.$emit('reload')
+             this.getNoReadAll()
+          })
         }
       },
       getLang(){
@@ -510,24 +431,19 @@
           var lang = navigator.userLanguage;//获取浏览器配置语言，支持IE5+ == navigator.systemLanguage
         }
         var lang = lang.substr(0, 2);//获取浏览器配置语言前两位
-        alert(lang)
+     
       },
       getNoReadAll(){
-        this.$http.post(this.api + '/PlannerNoRead',{
-          token: localStorage.getItem('token'),
-        })
-          .then(res=>{
-            if(res.data.code == 1){
-              let data = res.data.data
-              if(data.complete_num != 0 || data.enroll_num != 0||data.order_num != 0 || data.refund_num != 0){
-                this.isPlayer = true
-              }
-            }else if(res.data.code == 3){
-              this.getNoReadAll()
-            }else if(res.data.code == 0){
-              alert(res.data.msg)
+        this.$post('/PlannerNoRead',{}).then(res=>{
+          if(res.data.code == 1){
+            let data = res.data.data
+            if(data.complete_num != 0 || data.enroll_num != 0||data.order_num != 0 || data.refund_num != 0){
+              this.isPlayer = true
             }
-          })
+          }else if(res.data.code == 3){
+            this.getNoReadAll()
+          }
+        })
       },
 		},
     mounted(){

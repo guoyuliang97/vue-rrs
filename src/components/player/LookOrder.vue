@@ -5,12 +5,12 @@
       <h4 style="display: flex;justify-content: space-between;margin:20px 0;">我的策划&gt;查看预定({{volunList.length}})<span style="cursor: pointer" @click="goBack"><i class="el-icon-arrow-left"></i>返回</span></h4>
       <div style="display:flex;justify-content: space-between">
         <div style="font-size: 13px;display: flex;justify-content: flex-start">
-          <span @click="changeClickList(items,indexs)" v-for="(items,indexs) in serchList" class="aras" :style="{backgroundColor: ListIndex == indexs? '#008489':'#F1F1F1',color:ListIndex == indexs?'#fff':'#000'}">{{items.name}}</span>
+          <span @click="changeClickList(items,indexs)" v-for="(items,indexs) in serchList" class="aras" :style="{backgroundColor: ListIndex == indexs? '#14C5CA':'#F1F1F1',color:ListIndex == indexs?'#fff':'#000'}">{{items.name}}</span>
         </div>
         <div  style="font-size: 13px;position: relative">
           <span @click="orderClick" style="cursor: pointer">排序<i :class=" Isorder ? 'el-icon-arrow-up':'el-icon-arrow-down'"></i></span>
           <div v-if="Isorder" style="position: absolute;background-color: #F3F3F3;padding:10px 20px;width:100px;left:-100px;">
-            <p v-for="(items,indexs) in orderList" @click="changeOrder(items,indexs)" style="padding:10px 0;font-size: 12px;font-weight: bold;cursor: pointer" :style="{color:orderIndex == indexs?'#008489':'#000'}">{{items.name}}</p>
+            <p v-for="(items,indexs) in orderList" @click="changeOrder(items,indexs)" style="padding:10px 0;font-size: 12px;font-weight: bold;cursor: pointer" :style="{color:orderIndex == indexs?'#14C5CA':'#000'}">{{items.name}}</p>
           </div>
         </div>
       </div>
@@ -34,7 +34,7 @@
             <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.activ_begin_time}}-{{item.activ_end_time}}</el-button>
           </el-popover></div>
           <div style="width:150px;height: 70px;">
-            <el-button  style="border:none;padding:0;margin-top:30px;" :style="{color:item.house.length?'#008489':'#000'}" slot="reference"  plain>{{item.house.length?'已预定':'无'}}</el-button>
+            <el-button  style="border:none;padding:0;margin-top:30px;" :style="{color:item.house.length?'#14C5CA':'#000'}" slot="reference"  plain>{{item.house.length?'已预定':'无'}}</el-button>
             <p @click="lookXq(item,index)" style="margin-top:5px;font-weight:bold;cursor:pointer;" v-if="item.house.length">查看详情&gt;</p>
           </div>
           <div>
@@ -46,10 +46,10 @@
             >
             <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.user.mobile}}</el-button>
           </el-popover></div>
-          <div class="width" style="color:#008489">
+          <div class="width" style="color:#14C5CA">
             <span>{{item.ispay == 1?'￥'+item.total_price:'￥'+item.total_price +'(未)'}}</span>
           </div>
-          <div class="width" style="color:#008489">
+          <div class="width" style="color:#14C5CA">
             {{item.create_time}}
           </div>
           <div class="width" v-if="item.status == 0 && item.ispay == 1" >
@@ -62,7 +62,7 @@
             <span style="cursor: pointer"   @click="changeErollA(item,3)" plain>查看详情</span>
           </div>
           <div class="width" v-if="item.status">
-            <el-button type="primary" size="mini" :style="{backgroundColor:item.status == 2? '#fff':'#008489',color:item.status == 2? 'red':'#fff',borderColor:item.audit==2?'red':'#008489'}">{{item.audit == 1?'申请中':'已退款'}}</el-button>
+            <el-button type="primary" size="mini" :style="{backgroundColor:item.status == 2? '#fff':'#14C5CA',color:item.status == 2? 'red':'#fff',borderColor:item.status==2?'red':'#14C5CA'}">{{item.status == 1?'申请中':'已退款'}}</el-button>
             <span  @click="toRefundDes(item,1)" style="margin-left:10px;cursor: pointer">查看详情</span>
           </div>
         </div>

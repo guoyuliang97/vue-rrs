@@ -21,31 +21,57 @@
         this.$nextTick(function () {
           var th = this
           // 创建Map实例
+          //百度经纬度坐标转国测局坐标
+          //  var bd09togcj02 = coordtransform.bd09togcj02(116.404, 39.915);
+          //国测局坐标转百度经纬度坐标
+          // //wgs84转国测局坐标
+          // var wgs84togcj02 = coordtransform.wgs84togcj02(116.404, 39.915);
+          // //国测局坐标转wgs84坐标
+          // var gcj02towgs84 = coordtransform.gcj02towgs84(116.404, 39.915);
           var map = new BMap.Map("allmap");
-          var point = new BMap.Point(th.jionDress[0],th.jionDress[1])
-          var marker = new BMap.Marker(point)
-          map.centerAndZoom(point, 15);
-          map.addOverlay(marker);
-          if(th.type == 1){
-            var opts = {
-              width : 200,     // 信息窗口宽度
-              height: 100,     // 信息窗口高度
-              title : '标识地点' , // 信息窗口标题
-              enableMessage:true,//设置允许信息窗发送短息
-              enableMapClick:true
-            }
-            var infoWindow = new BMap.InfoWindow("集合地点", opts);  // 创建信息窗口对象
-            marker.addEventListener("click", function() {
-              map.openInfoWindow(infoWindow, point); //开启信息窗口
-            })
-          }
+          var gcj02tobd09 = coordtransform.gcj02tobd09(th.jionDress[0],th.jionDress[1]);
 
-          var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
-          var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
-          var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL}); //右上角，仅包含平移和缩放按钮
-          map.addControl(top_left_control)
-          map.addControl(top_left_navigation)
-          map.addControl(top_right_navigation)
+          // var point = ''
+          // var poinArr = []
+          // poinArr.push(new BMap.Point(th.jionDress[0],th.jionDress[1]))
+          // var convertor = new BMap.Convertor();
+          // convertor.translate(poinArr, 3, 5, function (data){
+          //   if(data.status === 0) {
+          //     console.log(data)
+          //     for (var i = 0; i < data.points.length; i++) {
+          //         point = data.points[i]
+          //         tst()
+          //     }
+          //   }
+          // })
+          tst()
+          function tst(){
+            var point = new BMap.Point(gcj02tobd09[0],gcj02tobd09[1])
+              var marker = new BMap.Marker(point)
+                map.centerAndZoom(point, 15);
+                map.addOverlay(marker);
+            if(th.type == 1){
+              var opts = {
+                width : 200,     // 信息窗口宽度
+                height: 100,     // 信息窗口高度
+                title : '标识地点' , // 信息窗口标题
+                enableMessage:true,//设置允许信息窗发送短息
+                enableMapClick:true
+              }
+              var infoWindow = new BMap.InfoWindow("集合地点", opts);  // 创建信息窗口对象
+              marker.addEventListener("click", function() {
+                map.openInfoWindow(infoWindow, point); //开启信息窗口
+              })
+            }
+
+            var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+            var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+            var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL}); //右上角，仅包含平移和缩放按钮
+            map.addControl(top_left_control)
+            map.addControl(top_left_navigation)
+            map.addControl(top_right_navigation)
+            }
+          
         })
       }
     },

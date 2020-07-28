@@ -30,7 +30,7 @@
                 placement="top"
                 width="160"
                 v-model="item.visible">
-                <p>这是一段内容这是一段内容确定删除吗？</p>
+                <p>确定狠心删除这个故事？</p>
                 <div style="text-align: right; margin: 0">
                   <el-button size="mini" type="text" @click="abolish(item,index)">取消</el-button>
                   <el-button type="primary" size="mini" @click="delet(item,index)">确定</el-button>

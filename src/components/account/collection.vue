@@ -163,7 +163,6 @@
               this.card = v.replace(/\s/g, '').replace(/(.{4})/g, '$1 ');
             }
         }
-
     },
     methods:{
       sendSms(){
@@ -171,31 +170,27 @@
           this.$message({type:'info',message:'请输入正确电话'})
         }else{
             if(this.fobid){
-              this.$http.post(this.api + '/home/User/send_msg',{
-              token: localStorage.getItem('token'),
-              m_code: parseInt(this.m_code),
-              flag: 7,
-              mobile: this.tel
-            })
-            .then(res=>{
-              if(res.data.code == 1){
-                this.fobid = false
-                  this.changeTime = setInterval(()=>{
-                    this.smsTime--
-                    this.sms = '重新发送（'+this.smsTime+ '）'
-                    if(this.smsTime <= 0){
-                      this.smsTime = 60
-                      this.fobid = true
-                      this.sms = '重新发送'
-                      clearInterval(this.changeTime)
-                    }
-                  },1000)
-              }else if(res.data.code == 3){
-                this.sendSms()
-              }else if(res.data.code == 0){
-                this.$message({type:'error',message:res.data.msg})
-              }
-            })
+              this.$post('/home/User/send_msg',{
+                m_code: parseInt(this.m_code),
+                flag: 7,
+                mobile: this.tel
+              }).then(res=>{
+                 if(res.data.code == 1){
+                    this.fobid = false
+                      this.changeTime = setInterval(()=>{
+                        this.smsTime--
+                        this.sms = '重新发送（'+this.smsTime+ '）'
+                        if(this.smsTime <= 0){
+                          this.smsTime = 60
+                          this.fobid = true
+                          this.sms = '重新发送'
+                          clearInterval(this.changeTime)
+                        }
+                      },1000)
+                  }else if(res.data.code == 3){
+                    this.sendSms()
+                  }
+              })
           }
         }
       },
@@ -210,18 +205,16 @@
         }else if( !this.sms_code){
             this.$message({type:'info',message:'请填写验证码'})
         }else{
-            this.$http.post(this.api + '/BankSTwo',{
-            token: localStorage.getItem('token'),
-            bank_name: this.bank.bankName,
-            card_number: this.bankCard,
-            user_name: this.name,
-            idcard: this.idCard,
-            mobile: this.tel,
-            m_code: parseInt(this.m_code) ,
-            sms_code: this.sms_code
-          })
-          .then(res=>{
-            if(res.data.code == 1){
+          this.$post('/BankSTwo',{
+              bank_name: this.bank.bankName,
+              card_number: this.bankCard,
+              user_name: this.name,
+              idcard: this.idCard,
+              mobile: this.tel,
+              m_code: parseInt(this.m_code) ,
+              sms_code: this.sms_code
+          }).then(res=>{
+             if(res.data.code == 1){
               this.$message({type:'success',message:'保存成功!'})
               this.isAddcard = false
               this.isFalse = false
@@ -236,9 +229,6 @@
               this.getBank()
             }else if(res.data.code == 3){
               this.sendBank()
-            }else if(res.data.code == 0){
-              this.isFalse = true
-              this.errorM = res.data.msg 
             }
           })
         }
@@ -257,12 +247,8 @@
       },
       getBank(){
         var logo,arrl;
-		    this.$http.post(this.api + '/bankl',{
-		      token: localStorage.getItem('token'),
-        })
-          .then(res=>{
-            if(res.data.code == 1){
-            //  this.saveList = res.data.data
+        this.$post('/bankl',{}).then(res=>{
+          if(res.data.code == 1){
             let data = res.data.data
             var arr = []
             if(data.length){
@@ -272,16 +258,13 @@
                    logo = this.getLogo(arrl.bankCode)
                    arr.push({name:data[i].name,img:logo,card_number:data[i].card_number,cardTypeName:arrl.cardTypeName})
                 }
-               
               }
             }
             this.saveList = arr
             }else if(res.data.code == 3){
               this.getBank()
-            }else if(res.data.code == 0){
-              this.$message({type:'error',message:res.data.msg})
             }
-          })
+        })
       },
       bankCarAtrribut(val){
          let _this = this
@@ -323,23 +306,15 @@
         });
       },
       deleteAllA(item,index){
-        this.$http.post(this.api + '/bankd',{
-          token: localStorage.getItem('token'),
+        this.$post('/bankd',{
           bank_id: item.bank_id
-        })
-          .then(res=>{
-            if(res.data.code == 1){
+        }).then(res=>{
+           if(res.data.code == 1){
               this.saveList.splice(index,1)
             }else if(res.data.code == 3){
-              this.$http.post(this.api + '/home/index/token')
-                .then(res=>{
-                  localStorage.setItem('token',res.data.data)
-                  this.deleteAllA(item,index)
-                })
-            }else if(res.data.code == 0){
-              alert(res.data.msg)
+              this.deleteAllA(item,index)
             }
-          })
+        })
       }
     },
     mounted() {

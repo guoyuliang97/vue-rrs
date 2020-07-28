@@ -41,8 +41,8 @@
                       {{item.type =='1'?'亲子':item.name}}<span class="marginLeft"></span>{{item.adult}}成人<span v-if="item.type == '1'">{{item.kids}}儿童</span>	<span class="marginLeft"></span>¥{{item.price}}
                     </div>
                     <div v-if="item.type == '0'">
-                      <div class="marginTop">标准<span class="marginLeft"></span>{{item.adult}}人<span class="marginLeft"></span>¥{{item.adult_price}}</div>
-                      <div >儿童<span class="marginLeft"></span>{{item.kids}}人<span class="marginLeft"></span>¥{{item.kids_price}}</div>	
+                      <div v-if="item.adult" class="marginTop">标准<span class="marginLeft"></span>{{item.adult}}人<span class="marginLeft"></span>¥{{item.adult_price}}</div>
+                      <div v-if="item.kids" >儿童<span class="marginLeft"></span>{{item.kids}}人<span class="marginLeft"></span>¥{{item.kids_price}}</div>	
                     </div>
                   </div>
                 </div>
@@ -401,7 +401,7 @@
         this.returnFace = this.$route.query.returnFace
         if(this.returnFace){
           this.disabled = true
-          this.value = 2
+          this.value = 0
         }else{
           this.disabled = false
           this.value = 1

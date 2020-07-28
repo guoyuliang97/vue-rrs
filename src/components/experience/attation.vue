@@ -68,7 +68,7 @@
           }else if(!this.notice){
             this.$message({type:'info',message: '请填写注意事项'})
           }else{
-              this.$http.post(this.api + '/home/Activity/save_activity',{
+              this.$http.post(this.api + '/ActivitSaveTwo',{
                 token: localStorage.getItem('token'),
                 activity_id: this.active_id,
                 return_policy: this.value,

@@ -4,11 +4,13 @@
       <div style="width:1080px;margin:106px auto 0;text-align: left">
         <div style="border-bottom: 1px solid #eee;padding:10px 0;display: flex;justify-content: space-between">
           <span v-for="(item,index) in clickArr">
-            <span @click="changeClick(item.index)" style="padding:10px 20px;cursor: pointer;font-weight: bold" :style="{borderBottom:clickIndex == item.index? '2px solid #14C5CA':'',color:clickIndex == item.index? '#14C5CA':'#000'}">{{item.name}}</span>
-            <span style="color:#14C5CA" v-if="index == 1">({{order_num}})</span>
-            <span style="color:#14C5CA" v-if="index == 2">({{enroll_num}})</span>
-            <span style="color:#14C5CA" v-if="index == 3">({{refund_num}})</span>
-            <span style="color:#14C5CA" v-if="index == 4">({{complete_num}})</span></span>
+           
+              <span @click="changeClick(item.index)" style="padding:10px 20px;cursor: pointer;font-weight: bold" :style="{borderBottom:clickIndex == item.index? '2px solid #14C5CA':'',color:clickIndex == item.index? '#14C5CA':'#000'}">{{item.name}}</span>
+              <span style="color:#14C5CA" v-if="index == 1">({{order_num}})</span>
+              <span style="color:#14C5CA" v-if="index == 2">({{enroll_num}})</span>
+              <span style="color:#14C5CA" v-if="index == 3">({{refund_num}})</span>
+              <span style="color:#14C5CA" v-if="index == 4">({{complete_num}})</span></span>
+         
         </div>
         <div style="margin-top:30px;" v-show="clickIndex == 1">
           <h2>活动日历</h2>
@@ -77,7 +79,7 @@
                           <div style="display: flex;justify-content: flex-start;border-bottom: 1px solid #E8E8E8;padding: 10px 0;">
                             <div @click="toPublish(item,index)" style="position: relative;width:200px;height:120px;">
                               <loadingImg type="2"  :src="item.cover.domain+ item.cover.image_url" style="width:200px;height:120px;"></loadingImg>
-                              <span v-if="item.online == 0" style="padding:5px 10px;color:#fff;position: absolute;font-size:12px;top:0" :style="{backgroundColor:item.is_doing ==0? '#008489':'#FA9F00'}">
+                              <span v-if="item.online == 0" style="padding:5px 10px;color:#fff;position: absolute;font-size:12px;top:0" :style="{backgroundColor:item.is_doing ==0? '#14c5ca':'#FA9F00'}">
                                 {{item.is_doing == 0? '已发布':'进行中'}}
                               </span>
                               <span v-if="item.online == 1" style="z-index:996;padding:5px 10px;color:#fff;position: absolute;font-size:12px;top:0;left:0;right:0;bottom:0;background-color: rgba(102,102,102,.5);display: flex;justify-content: center;align-items: center">
@@ -89,9 +91,9 @@
                             <p><b>{{item.title}}</b></p>
                             <div style="display: flex;justify-content: space-between;margin-top:20px;">
                               <div>
-                                <span>￥{{item.price}}每人</span><span style="margin-left:10px;" :style="{color:item.online == 0?'#008489':'#999999'}">{{item.sale_num}}人预定</span>
+                                <span>￥{{item.price}}每人</span><span style="margin-left:10px;" :style="{color:item.online == 0?'#14c5ca':'#999999'}">{{item.sale_num}}人预定</span>
                               </div>
-                              <div @click="item.online == 1?'':lookOrder(item,index)" :style="{cursor:item.online == 1?'':'pointer',color:item.online == 0?'#008489':'#999999',borderColor:item.online==0?'#008489':'#999999'}" style="border:2px solid;padding: 0 10px;border-radius: 3px;font-weight: bold">
+                              <div @click="item.online == 1?'':lookOrder(item,index)" :style="{cursor:item.online == 1?'':'pointer',color:item.online == 0?'#14c5ca':'#999999',borderColor:item.online==0?'#14c5ca':'#999999'}" style="border:2px solid;padding: 0 10px;border-radius: 3px;font-weight: bold">
                                 查看预定
                               </div>
                             </div>
@@ -99,14 +101,14 @@
                       </div>
                       <div style="display: flex;justify-content: space-between;margin-top:15px;">
                       <div style="display: flex;justify-content: flex-start;cursor: pointer">
-                        <span @click="deleteActive(item,index)" style="color:#000;" >删除</span>
+                        <span @click="delateChoose(item,index)" style="color:#000;" >删除</span>
                         <span  style="margin: 0 10px;color:#000;" @click="item.online == 1?restore(item,index):abolish(item,index)">{{item.online == 1?'恢复':'取消'}}</span>
-                        <span>修改</span>
+                        <span  @click="toRemake(item,index)">修改</span>
                       </div>
                       <div style="display: flex;justify-content: space-between;width:300px;">
                         <span  :style="{cursor:item.online == 1?'':'pointer',}" @click="item.online == 1?'':backMoney(item,index)"><b>退款申请({{item.refund_num}})</b></span>
-                        <span @click="toApplication(item,index)"  :style="{color:item.online == 0?'#008489':'#999999',cursor:item.online == 1?'':'pointer',}"><b>志愿者申请({{item.enroll_count}})</b></span>
-                        <span :style="{color:item.online == 0?'#008489':'#999999',cursor:item.online == 1?'':'pointer',}" @click="item.online == 1?'':toInvite(item,index)"><b>邀请志愿者</b></span>
+                        <span @click="toApplication(item,index)"  :style="{color:item.online == 0?'#14c5ca':'#999999',cursor:item.online == 1?'':'pointer',}"><b>志愿者申请({{item.enroll_count}})</b></span>
+                        <span :style="{color:item.online == 0?'#14c5ca':'#999999',cursor:item.online == 1?'':'pointer',}" @click="item.online == 1?'':toInvite(item,index)"><b>邀请志愿者</b></span>
                       </div>
                     </div>
                     </div>
@@ -128,7 +130,7 @@
                     <div style="display: flex;justify-content: flex-start;border-bottom: 1px solid #E8E8E8;padding: 10px 0;">
                       <div @click="toPublish(item,index)" style="position: relative;width:200px;height:120px;">
                         <loadingImg type="2"  :src="item.cover.domain+ item.cover.image_url" style="width:200px;height:120px;"></loadingImg>
-                        <span  style="padding:5px 10px;color:#fff;position: absolute;font-size:12px;top:0" :style="{backgroundColor:item.is_doing ==0? '#008489':'#FA9F00'}">
+                        <span  style="padding:5px 10px;color:#fff;position: absolute;font-size:12px;top:0" :style="{backgroundColor:item.is_doing ==0? '#14c5ca':'#FA9F00'}">
                   {{item.is_doing == 0? '已发布':'进行中'}}
                   </span>
                     </div>
@@ -137,9 +139,9 @@
                       <p><b>{{item.title}}</b></p>
                       <div style="display: flex;justify-content: space-between;margin-top:20px;">
                         <div>
-                          <span v-if="item.price">￥{{item.price}}每人</span><span style="margin-left:10px;color:#008489">{{item.sale_num}}人预定</span>
+                          <span v-if="item.price">￥{{item.price}}每人</span><span style="margin-left:10px;color:#14c5ca">{{item.sale_num}}人预定</span>
                         </div>
-                        <div @click="lookOrder(item,index)"  style="color:#008489;cursor:pointer;border:2px solid #008489;padding: 0 10px;border-radius: 3px;font-weight: bold">
+                        <div @click="lookOrder(item,index)"  style="color:#14c5ca;cursor:pointer;border:2px solid #14c5ca;padding: 0 10px;border-radius: 3px;font-weight: bold">
                           查看预定
                         </div>
                       </div>
@@ -147,14 +149,14 @@
                   </div>
                   <div style="display: flex;justify-content: space-between;margin-top:15px;">
                     <div style="display: flex;justify-content: flex-start;cursor: pointer">
-                      <span style="color:#000;" @click="deleteActive(item,index)">删除</span>
+                      <span style="color:#000;" @click="delateChoose(item,index)">删除</span>
                       <span  style="margin: 0 10px;color:#000;" @click="abolish(item,index)">取消</span>
                       <span @click="toRemake(item,index)">修改</span>
                     </div>
                     <div style="display: flex;justify-content: space-between;width:300px;">
                       <span  style="cursor: pointer" @click="backMoney(item,index)"><b>退款申请({{item.refund_num}})</b></span>
-                      <span  style="color:#008489;cursor: pointer"  @click="toApplication(item,index)"><b>志愿者申请({{item.enroll_count}})</b></span>
-                      <span style="color:#008489;cursor: pointer" @click="toInvite(item,index)"><b>邀请志愿者</b></span>
+                      <span  style="color:#14c5ca;cursor: pointer"  @click="toApplication(item,index)"><b>志愿者申请({{item.enroll_count}})</b></span>
+                      <span style="color:#14c5ca;cursor: pointer" @click="toInvite(item,index)"><b>邀请志愿者</b></span>
                     </div>
                   </div>
                 </div>
@@ -208,12 +210,12 @@
         <div style="margin-top:30px;" v-show="clickIndex == 2">
           <div style="display:flex;justify-content: space-between">
             <div style="font-size: 13px;display: flex;justify-content: flex-start">
-              <span @click="changeClickList(items,indexs)" v-for="(items,indexs) in serchList" class="aras" :style="{backgroundColor: ListIndex == indexs? '#008489':'#F1F1F1',color:ListIndex == indexs?'#fff':'#000'}">{{items.name}}</span>
+              <span @click="changeClickList(items,indexs)" v-for="(items,indexs) in serchList" class="aras" :style="{backgroundColor: ListIndex == indexs? '#14c5ca':'#F1F1F1',color:ListIndex == indexs?'#fff':'#000'}">{{items.name}}</span>
             </div>
             <div  style="font-size: 13px;position: relative">
               <span @click="orderClick" style="cursor: pointer">排序<i :class=" Isorder ? 'el-icon-arrow-up':'el-icon-arrow-down'"></i></span>
               <div v-if="Isorder" style="position: absolute;background-color: #F3F3F3;padding:10px 20px;width:100px;left:-100px;">
-                <p v-for="(items,indexs) in orderList" @click="changeOrder(items,indexs)" style="padding:10px 0;font-size: 12px;font-weight: bold;cursor: pointer" :style="{color:orderIndex == indexs?'#008489':'#000'}">{{items.name}}</p>
+                <p v-for="(items,indexs) in orderList" @click="changeOrder(items,indexs)" style="padding:10px 0;font-size: 12px;font-weight: bold;cursor: pointer" :style="{color:orderIndex == indexs?'#14c5ca':'#000'}">{{items.name}}</p>
               </div>
             </div>
           </div>
@@ -226,7 +228,8 @@
                 <loadingImg type="user" :src="item.user.head_image?item.user.headimage.domain + item.user.headimage.image_url:''"  style="width:32px;height:32px;"></loadingImg>
                 <div style="line-height:32px;margin-left:10px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{(item.user.family_name+item.user.middle_name+ item.user.name)?(item.user.name):'匿名用户'}}</div>
               </div>
-              <div><el-popover
+              <div>
+                <el-popover
                 placement="top-start"
                 trigger="click"
                 width="120"
@@ -234,7 +237,7 @@
               >
                 <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.title}}</el-button>
               </el-popover></div>
-              <div class="width">{{item.num}}</div>
+               <div class="width">{{item.num}}</div>
               <div><el-popover
                 placement="top-start"
                 trigger="click"
@@ -245,7 +248,7 @@
                 <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.activ_begin_time}}-{{item.activ_end_time}}</el-button>
               </el-popover></div>
               <div style="width:120px;height: 70px;">
-                <el-button  style="border:none;padding:0;margin-top:30px;" :style="{color:item.house.length?'#008489':'#000'}" slot="reference"  plain>{{item.house.length?'已预定':'无'}}</el-button>
+                <el-button  style="border:none;padding:0;margin-top:30px;" :style="{color:item.house.length?'#14c5ca':'#000'}" slot="reference"  plain>{{item.house.length?'已预定':'无'}}</el-button>
                 <p @click="lookXq(item,index)" style="margin-top:5px;font-weight:bold;cursor:pointer;" v-if="item.house.length">查看详情&gt;</p>
               </div>
               <div><el-popover
@@ -256,10 +259,10 @@
               >
               <el-button class="width" style="border:none;padding:0;" slot="reference"  plain>{{item.user.mobile}}</el-button>
               </el-popover></div>
-              <div class="width" style="color:#008489">
+              <div class="width" style="color:#14c5ca">
                 <span >{{item.ispay == 1? '￥'+item.total_price:'￥'+item.total_price+'(未)' }}</span>
               </div>
-              <div class="width" style="color:#008489">
+              <div class="width" style="color:#14c5ca">
                 {{item.create_time}}
               </div>
               <div class="width" v-if="item.status == 0 && item.ispay == 1" >
@@ -272,7 +275,7 @@
                 <span style="cursor: pointer"   @click="changeErollA(item,3)" plain>查看详情</span>
               </div>
               <div class="width" v-if="item.status">
-                <el-button type="primary" size="mini" :style="{backgroundColor:item.status == 2? '#fff':'#008489',color:item.status == 2? 'red':'#fff',borderColor:item.audit==2?'red':'#008489'}">{{item.audit == 1?'申请中':'已退款'}}</el-button>
+                <el-button type="primary" size="mini" :style="{backgroundColor:item.status == 2? '#fff':'#14c5ca',color:item.status == 2? 'red':'#fff',borderColor:item.audit==2?'red':'#14c5ca'}">{{item.audit == 1?'申请中':'已退款'}}</el-button>
                 <span  @click="toRefundDes(item,1)" style="margin-left:10px;cursor: pointer">查看详情</span>
               </div>
             </div>
@@ -325,8 +328,8 @@
                   v-bind="parseInt(item.score)"
                   disabled
                   show-score
-                  :colors="['#008489','#008489','#008489']"
-                  text-color="#008489"
+                  :colors="['#14c5ca','#14c5ca','#14c5ca']"
+                  text-color="#14c5ca"
                   score-template="{value}">
                 </el-rate></div>
               <div class="volunwidth" v-if="item.audit == 0">
@@ -334,7 +337,7 @@
                 <el-button type="primary" size="mini" @click="changeVolunErollA(item,2)" plain>谢绝</el-button>
               </div>
               <div class="volunwidth" v-if="item.audit">
-                <el-button type="primary" size="mini" :style="{backgroundColor:item.audit == 2? '#fff':'#008489',color:item.audit == 2? 'red':'#fff',borderColor:item.audit==2?'red':'#008489'}">{{item.audit == 1?'已同意':'已谢绝'}}</el-button>
+                <el-button type="primary" size="mini" :style="{backgroundColor:item.audit == 2? '#fff':'#14c5ca',color:item.audit == 2? 'red':'#fff',borderColor:item.audit==2?'red':'#14c5ca'}">{{item.audit == 1?'已同意':'已谢绝'}}</el-button>
               </div>
             </div>
           </div>
@@ -348,104 +351,104 @@
             <el-pagination  @current-change="handlevolunChange" :current-page="index" :page-size="10" layout="total, prev, pager, next" :total="voluntotal"></el-pagination>
           </div>
         </div>
-      <div style="margin-top: 30px;" v-show="clickIndex == 4">
-        <div style="display: flex;justify-content: space-between;background-color:#F4F6F9;color:#A8A8A8;font-size:12px;margin-top:20px;text-align: center;line-height:25px;padding:10px 0;">
-          <div class="refundWidth">退款用户</div><div class="refundWidth">预定时间</div><div class="refundWidth">退款方式</div><div class="refundWidth">退款人数</div><div class="refundWidth">退款住宿</div><div class="refundWidth">退款金额</div><div class="refundWidth">操作</div>
-        </div>
-        <div v-for="(item,index) in refundList" :key="index" style="border-bottom: 1px solid #E6E6E6">
-          <div style="display: flex;justify-content: space-between;font-size:12px;text-align: center;">
-            <div style="display: flex;justify-content:flex-start;width:150px;padding:19px 0;">
-              <loadingImg type="user" :src="item.domain?item.domain + item.image_url:''"  style="width:32px;height:32px;margin-left:40px;"></loadingImg>
-              <div style="line-height:32px;margin-left:10px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{(item.family_name+item.middle_name+ item.name)?(item.family_name+item.middle_name+ item.name):'匿名用户'}}</div>
-            </div>
-            <div><el-popover
-              placement="top-start"
-              trigger="click"
-              width="200"
-              @show="takeUp(item,index)"
-              :content="content"
-            >
-              <el-button class="refundMiniwidth" style="border:none;padding:0;" slot="reference"  plain>{{item.activ_begin_time}}-{{item.activ_end_time}}</el-button>
-            </el-popover></div>
-            <div class="refundMiniwidth">{{item.flag? '全退':'非全退'}}</div>
-            <div class="refundMiniwidth">
-              {{item.person_num}}
-            </div>
-            <div class="refundMiniwidth">
-              <p v-if="!item.house.length" >无</p>
-              <p @click="lookXqB(item,index)"  v-if="item.house.length">查看详情&gt;</p>
-            </div>
-            <div class="refundMiniwidth" style="color:#008489">
-              {{'￥'+item.total_price}}
-            </div>
-            <div style="display: flex;justify-content: center;align-items: center;width:150px;cursor: pointer" v-if="item.audit == 0">
-              <span style="margin: 0 10px;"  @click="changeErollAB(item,3)" >查看详情</span>
-            </div>
-            <div  style="display: flex;justify-content: center;align-items: center;width:150px;cursor: pointer" v-if="item.audit != 0">
-              <el-button size="mini" type="primary">{{item.audit == 1? '已同意':'已拒绝'}}</el-button>
-              <span style="margin: 0 10px;"  @click="changeErollAB(item,3)" >查看详情</span>
-            </div>
-            <div class="refundMiniwidth" v-if="item.status">
-              <el-button type="primary" size="mini" :style="{backgroundColor:item.status == 2? '#fff':'#008489',color:item.status == 2? 'red':'#fff',borderColor:item.audit==2?'red':'#008489'}">{{item.audit == 1?'已同意':'已拒绝'}}</el-button>
+        <div style="margin-top: 30px;" v-show="clickIndex == 4">
+          <div style="display: flex;justify-content: space-between;background-color:#F4F6F9;color:#A8A8A8;font-size:12px;margin-top:20px;text-align: center;line-height:25px;padding:10px 0;">
+            <div class="refundWidth">退款用户</div><div class="refundWidth">预定时间</div><div class="refundWidth">退款方式</div><div class="refundWidth">退款人数</div><div class="refundWidth">退款住宿</div><div class="refundWidth">退款金额</div><div class="refundWidth">操作</div>
+          </div>
+          <div v-for="(item,index) in refundList" :key="index" style="border-bottom: 1px solid #E6E6E6">
+            <div style="display: flex;justify-content: space-between;font-size:12px;text-align: center;">
+              <div style="display: flex;justify-content:flex-start;width:150px;padding:19px 0;">
+                <loadingImg type="user" :src="item.domain?item.domain + item.image_url:''"  style="width:32px;height:32px;margin-left:40px;"></loadingImg>
+                <div style="line-height:32px;margin-left:10px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{(item.family_name+item.middle_name+ item.name)?(item.family_name+item.middle_name+ item.name):'匿名用户'}}</div>
+              </div>
+              <div><el-popover
+                placement="top-start"
+                trigger="click"
+                width="200"
+                @show="takeUp(item,index)"
+                :content="content"
+              >
+                <el-button class="refundMiniwidth" style="border:none;padding:0;" slot="reference"  plain>{{item.activ_begin_time}}-{{item.activ_end_time}}</el-button>
+              </el-popover></div>
+              <div class="refundMiniwidth">{{item.flag? '全退':'非全退'}}</div>
+              <div class="refundMiniwidth">
+                {{item.person_num}}
+              </div>
+              <div class="refundMiniwidth">
+                <p v-if="!item.house.length" >无</p>
+                <p @click="lookXqB(item,index)"  v-if="item.house.length">查看详情&gt;</p>
+              </div>
+              <div class="refundMiniwidth" style="color:#14c5ca">
+                {{'￥'+item.total_price}}
+              </div>
+              <div style="display: flex;justify-content: center;align-items: center;width:150px;cursor: pointer" v-if="item.audit == 0">
+                <span style="margin: 0 10px;"  @click="changeErollAB(item,3)" >查看详情</span>
+              </div>
+              <div  style="display: flex;justify-content: center;align-items: center;width:150px;cursor: pointer" v-if="item.audit != 0">
+                <el-button size="mini" type="primary">{{item.audit == 1? '已同意':'已拒绝'}}</el-button>
+                <span style="margin: 0 10px;"  @click="changeErollAB(item,3)" >查看详情</span>
+              </div>
+              <div class="refundMiniwidth" v-if="item.status">
+                <el-button type="primary" size="mini" :style="{backgroundColor:item.status == 2? '#fff':'#14c5ca',color:item.status == 2? 'red':'#fff',borderColor:item.audit==2?'red':'#14c5ca'}">{{item.audit == 1?'已同意':'已拒绝'}}</el-button>
+              </div>
             </div>
           </div>
+          <div v-show="!refundList.length">
+            <none type='refundPage'></none>
+          </div>
+          <div style="margin:20px 0;">
+            <el-pagination  @current-change="handleRefundChange"  :current-page="index" :page-size="10" layout="total, prev, pager, next" :total="refundtotal"></el-pagination>
+          </div>
+          <div v-if="isLoading" style="position: fixed;top:0;left:0;right:0;bottom:0;z-index:999;background-color: rgba(255,255,255,.8);display: flex;justify-content: center;align-items: center">
+            <Loading></Loading>
+          </div>
         </div>
-        <div v-show="!refundList.length">
-          <none type='refundPage'></none>
-        </div>
-        <div style="margin:20px 0;">
-          <el-pagination  @current-change="handleRefundChange"  :current-page="index" :page-size="10" layout="total, prev, pager, next" :total="refundtotal"></el-pagination>
-        </div>
-        <div v-if="isLoading" style="position: fixed;top:0;left:0;right:0;bottom:0;z-index:999;background-color: rgba(255,255,255,.8);display: flex;justify-content: center;align-items: center">
-          <Loading></Loading>
+        <div style="margin-top:30px;" v-show="clickIndex == 5">
+          <div style="display: flex;justify-content: flex-start">
+            <div @click="changeLook(1)" :style="{backgroundColor: lookIndex == 1? '#14c5ca':'#F1F1F1',color:lookIndex == 1? '#fff':'#000'}" style="padding: 5px 20px;cursor: pointer">全部</div>
+            <div @click="changeLook(2)" :style="{backgroundColor: lookIndex == 2? '#14c5ca':'#F1F1F1',color:lookIndex == 2? '#fff':'#000'}" style="padding: 5px 20px;margin:0 20px;cursor: pointer">待评价</div>
+            <div @click="changeLook(3)" :style="{backgroundColor: lookIndex == 3? '#14c5ca':'#F1F1F1',color:lookIndex == 3? '#fff':'#000'}" style="padding: 5px 20px;cursor: pointer">已评价</div>
+          </div>
+          <div style="display: flex;justify-content: space-around;padding: 10px 020px;margin-top:20px;background-color:#F4F6F9 ">
+            <div class="conpletewidth">用户</div>
+            <div class="conpletewidth">参与体验</div>
+            <div class="conpletewidth">参与人数</div>
+            <div class="conpletewidth">参与时间</div>
+            <div class="conpletewidth">已支付</div>
+            <div class="conpletewidth">操作</div>
+          </div>
+          <div  v-for="(item,index) in completList" style="display: flex;justify-content: space-around;padding:20px 0px;font-size:12px;border-bottom: 1px solid #E6E6E6;">
+            <div class="conpletewidth" style="display: flex;justify-content:center;">
+              <loadingImg type="user" :src="item.user.head_image?item.user.headimage.domain+item.user.headimage.image_url:''" style="width:40px;height:40px;margin-top:10px;"></loadingImg>
+              <div style="margin-left:10px;line-height: 60px;">{{item.user.family_name+item.user.middle_name+item.user.name?item.user.family_name+item.user.middle_name+item.user.name:'匿名用户'}}</div>
+            </div>
+            <div class="conpletewidth" style="display: flex;justify-content: flex-start">
+              <loadingImg type="2" :src="item.cover?item.cover.domain + item.cover.image_url:''" style="width:60px;height:60px;overflow: hidden"></loadingImg>
+              <div style="text-align: left;line-height: 60px;margin-left:5px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap">{{item.title}}</div>
+            </div>
+            <div class="conpletewidth" style="line-height: 60px;">
+              {{item.num}}
+            </div>
+            <div class="conpletewidth" style="line-height: 30px;">
+              {{item.activ_begin_time}}—{{item.activ_end_time}}
+            </div>
+            <div class="conpletewidth" style="line-height: 60px;color:#14c5ca">
+              <span>￥</span><span>{{item.total_price}}</span>
+            </div>
+            <div class="conpletewidth" >
+              <span style="cursor: pointer;color:#14c5ca" @click="lookMore(item)"><b>查看详情</b></span>
+              <span style="margin-left:20px;font-weight: bold" @click="item.isevaluate_planner == 1?toDiscuss(item):''" :style="{color:item.isevaluate_planner == 1?'#14c5ca':'',cursor:item.isevaluate_planner == 1?'pointer':''}">{{item.isevaluate_planner == 1? '评价他':'已评价'}}</span>
+              <div style="margin-top:10px;color:#4570B1;width:180px;word-break:break-all;" v-if="item.isevaluate_planner == 2">({{item.comment.content}})</div>
+            </div>
+          </div>
+          <div v-show="!completList.length">
+            <none type="myPlay2"></none>
+          </div>
+          <div style="margin:20px 0;">
+            <el-pagination  @current-change="handleCurrentChange" :current-page="index"  :page-size="10" layout="total, prev, pager, next" :total="total"></el-pagination>
+          </div>
         </div>
       </div>
-      <div style="margin-top:30px;" v-show="clickIndex == 5">
-        <div style="display: flex;justify-content: flex-start">
-          <div @click="changeLook(1)" :style="{backgroundColor: lookIndex == 1? '#008489':'#F1F1F1',color:lookIndex == 1? '#fff':'#000'}" style="padding: 5px 20px;cursor: pointer">全部</div>
-          <div @click="changeLook(2)" :style="{backgroundColor: lookIndex == 2? '#008489':'#F1F1F1',color:lookIndex == 2? '#fff':'#000'}" style="padding: 5px 20px;margin:0 20px;cursor: pointer">待评价</div>
-          <div @click="changeLook(3)" :style="{backgroundColor: lookIndex == 3? '#008489':'#F1F1F1',color:lookIndex == 3? '#fff':'#000'}" style="padding: 5px 20px;cursor: pointer">已评价</div>
-        </div>
-        <div style="display: flex;justify-content: space-around;padding: 10px 020px;margin-top:20px;background-color:#F4F6F9 ">
-          <div class="conpletewidth">用户</div>
-          <div class="conpletewidth">参与体验</div>
-          <div class="conpletewidth">参与人数</div>
-          <div class="conpletewidth">参与时间</div>
-          <div class="conpletewidth">已支付</div>
-          <div class="conpletewidth">操作</div>
-        </div>
-        <div  v-for="(item,index) in completList" style="display: flex;justify-content: space-around;padding:20px 0px;font-size:12px;border-bottom: 1px solid #E6E6E6;">
-          <div class="conpletewidth" style="display: flex;justify-content:center;">
-            <loadingImg type="user" :src="item.user.head_image?item.user.headimage.domain+item.user.headimage.image_url:''" style="width:40px;height:40px;margin-top:10px;"></loadingImg>
-            <div style="margin-left:10px;line-height: 60px;">{{item.user.family_name+item.user.middle_name+item.user.name?item.user.family_name+item.user.middle_name+item.user.name:'匿名用户'}}</div>
-          </div>
-          <div class="conpletewidth" style="display: flex;justify-content: flex-start">
-            <loadingImg type="2" :src="item.cover?item.cover.domain + item.cover.image_url:''" style="width:60px;height:60px;overflow: hidden"></loadingImg>
-            <div style="text-align: left;line-height: 60px;margin-left:5px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap">{{item.title}}</div>
-          </div>
-          <div class="conpletewidth" style="line-height: 60px;">
-            {{item.num}}
-          </div>
-          <div class="conpletewidth" style="line-height: 30px;">
-            {{item.activ_begin_time}}—{{item.activ_end_time}}
-          </div>
-          <div class="conpletewidth" style="line-height: 60px;color:#008489">
-            <span>￥</span><span>{{item.total_price}}</span>
-          </div>
-          <div class="conpletewidth" >
-            <span style="cursor: pointer;color:#008489" @click="lookMore(item)"><b>查看详情</b></span>
-            <span style="margin-left:20px;font-weight: bold" @click="item.isevaluate_planner == 1?toDiscuss(item):''" :style="{color:item.isevaluate_planner == 1?'#008489':'',cursor:item.isevaluate_planner == 1?'pointer':''}">{{item.isevaluate_planner == 1? '评价他':'已评价'}}</span>
-            <div style="margin-top:10px;color:#4570B1;width:180px;word-break:break-all;" v-if="item.isevaluate_planner == 2">({{item.comment.content}})</div>
-          </div>
-        </div>
-        <div v-show="!completList.length">
-          <none type="myPlay2"></none>
-        </div>
-        <div style="margin:20px 0;">
-          <el-pagination  @current-change="handleCurrentChange" :current-page="index"  :page-size="10" layout="total, prev, pager, next" :total="total"></el-pagination>
-        </div>
-      </div>
-    </div>
       <div v-if="isLoading" style="position: fixed;top:0;left:0;right:0;bottom:0;z-index:990;background-color: rgba(255,255,255,.8);display: flex;justify-content: center;align-items: center">
         <Loading></Loading>
       </div>
@@ -456,7 +459,7 @@
           </div>
           <div v-for="(item,index) in houseList" style="display:flex;justify-content:flex-start;margin-top:20px;">
             <div >
-              <loadingImg type="2" :src="item.image[0].domain + item.image[0].image_url" style="width:230px;;height:150px;overflow: hidden;"></loadingImg>
+              <loadingImg type="2" :src="item.image.length?item.image[0].domain + item.image[0].image_url:''" style="width:230px;;height:150px;overflow: hidden;"></loadingImg>
             </div>
             <div style="line-height:50px;margin-left:20px;">
               <p><b>{{item.title}}</b></p>
@@ -492,14 +495,13 @@
           <el-input style="margin-top:15px;" type="textarea" v-model="content" placeholder="写下你对他的印象吧" rows="4"></el-input>
           <div style="margin-top:15px;text-align: right">
             <el-button plain @click="closeDiscus" style="border:1px solid rgba(102,102,102,1);color:#000">取消</el-button>
-            <el-button @click="saveDiscuss" style="border:1px solid #008489;background-color: #E1FFFD;color:#008489">评价</el-button>
+            <el-button @click="saveDiscuss" style="border:1px solid #14c5ca;background-color: #E1FFFD;color:#14c5ca">评价</el-button>
           </div>
         </div>
       </div>
-      <div>
-      </div>
       <Chat v-if="isChat" v-on:chat="chat" :userUrl="imgUrl" :to_user_id="to_user_id" :isOwer="userid" :userName="userName" :other_img="other_img"></Chat>
     </div>
+
 </template>
 
 <script>
@@ -550,8 +552,8 @@
             index:1,
             isADate:true,
             clickArr:[
-              {name:'活动日历',index:1},
-              {name:'活动预定',index:2},
+              {name:'活动日历',index:1,},
+              {name:'活动预定',index:2,},
               {name:'志愿者申请',index:3},
               {name:'退款申请',index:4},
               {name:'已完成',index:5},
@@ -939,6 +941,24 @@
             }
           })
         },
+        delateChoose(item,index){
+          this.$confirm('请选择想要执行的操作?', '提示', {
+              distinguishCancelAndClose: true,
+              confirmButtonText: '删除时间',
+              cancelButtonText: '删除活动',
+              type: 'warning'
+            }).then(() => {
+              this.deleteActive(item,index)
+            }).catch(() => {
+              this.$router.push({
+                path:'/publishList',
+                query:{
+                  information: '3'
+                }
+              })
+            });  
+        },
+
         deleteActive(item,index){
           if(!this.chooseTime.length){
             this.isInvite = true
@@ -1098,6 +1118,11 @@
         changeClick(val){
          if(this.clickIndex != val){
            this.clickIndex = val
+           this.$router.push({
+            query:{
+              chooseIndex: val
+            }
+          })
          }
         },
         toApplication(item,index){
@@ -1109,14 +1134,14 @@
           })
         },
           getMonth(){
-            console.log(this.time)
+       
             let lastDay = this.getLastDay(this.year,this.month)
             let day = this.getFirtDay(this.year,this.month -1)
             let temp = []
             let dayCount = []
             let color = []
             let b = []
-            console.log(day,lastDay)
+      
             for(let i =1;i<day;i++){
               temp.push(' ')
               color.push({index:0})
@@ -1511,7 +1536,7 @@
                 }
          
                 this.dateActive = a
-                console.log(a)
+       
                 this.isADate = false
                 this.isLoading = false
               }else if(res.data.code == 3){

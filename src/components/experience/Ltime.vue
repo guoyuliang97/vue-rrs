@@ -1422,7 +1422,6 @@
                      }
                   }
                    this.timeNumber = timeAll
-                   console.log(this.timeNumber)
               }else if(res.data.code == 3){
                     this.getActive()
               }else if(res.data.code == 0){

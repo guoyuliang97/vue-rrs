@@ -249,7 +249,7 @@
         this.getEWM()
       },
       handleAvatarSuccess(res, file) {
-		    console.log(res)
+	
         this.imageUrl = res.data.domain + res.data.image_url
       },
       beforeAvatarUpload(file) {
@@ -457,7 +457,7 @@
       getHeight(){
         let a = document.documentElement.clientHeight 
         this.height = a
-        console.log(a)
+   
       },
     },
     mounted() {

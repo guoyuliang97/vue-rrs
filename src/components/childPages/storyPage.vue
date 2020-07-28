@@ -1,7 +1,7 @@
 <template>
     <div>
       <el-container>
-        <el-header><Head type="storyPage"></Head></el-header>
+        <el-header><Head type="storyPage" @reload="reload"></Head></el-header>
         <el-main>
           <div style="width:660px;margin:30px auto;">
             <div style="display:flex;justify-content: space-between;">
@@ -26,7 +26,7 @@
                 <el-button type="text" @click="getLove">{{loveList.length}}人已点赞</el-button>
               </div>
               <div>
-                <el-button type="text" @click="openInform(1)">{{is_report?'已举报':'举报'}}</el-button>
+                <el-button v-if="user.user_id != isOwer " type="text" @click="openInform(1)">{{is_report?'已举报':'举报'}}</el-button>
               </div>
             </div>
             <div style="text-align:left;margin:30px 0;">
@@ -63,7 +63,6 @@
                   <Detail type="2" v-on:toperson="toperson(item,index)" v-on:toStory="toStory(item,index)" :data="item" v-on:addZan="addZan(item,index)"></Detail>
                 </div>
               </div>
-
             </div>
             <div v-if="isChat" style="z-index:999;position:fixed;top:0;left:0;right:0;bottom:0;display: flex;justify-content: center;align-items: center;background-color: rgba(255,255,255,.7)">
               <div style="box-shadow:0px 0px 21px 0px rgba(232,235,238,1);width:500px;padding: 30px;background-color: #fff;border-radius: 10px;">
@@ -172,18 +171,9 @@
       methods:{
         sendBuidu(){
           if(window.location.href.indexOf('.top') == -1 && window.location.href.indexOf('localhost') == -1){
-            this.$http.post(this.api + '/BaiduPush',{
-              token: localStorage.getItem('token'),
+            this.$post('/BaiduPush',{
               url: encodeURIComponent(window.location.href)
             })
-              .then(res=>{
-                if(res.data.code == 1){
-                }else if(res.data.code == 3){
-                  this.sendBuidu()
-                }else if(res.data.code == 0){
-                  alert(res.data.msg)
-                }
-              })
           }
         },
         toPerson(item,index){
@@ -196,27 +186,19 @@
         },
         toAllLeave(a){
           localStorage.setItem('leave',JSON.stringify(a))
-          this.$http.post(this.api + '/LeaveL',{
-            token: localStorage.getItem('token'),
-            flag: 5,
+          this.$post( '/LeaveL',{
+             flag: 5,
             order:1,
             page: 1,
             table_id: a.msg_id
-          })
-            .then(res=>{
-              if(res.data.code == 1){
+          }).then(res=>{
+             if(res.data.code == 1){
                 a.leavemsg = res.data.data.data
                 this.replayChoose = true
               }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.toAllLeave(a)
-                  })
-              }else if(res.data.code == 0){
-                alert(res.data.msg)
+                this.toAllLeave(a)
               }
-            })
+          })
         },
         toStory(item,index){
           this.storyId = item.story_id
@@ -225,46 +207,33 @@
           this.isLove = false
         },
         zan(){
-          if(localStorage.getItem('isLogin')){
+          if(sessionStorage.getItem('isLogin')){
             let type= ''
-            if(this.is_praise){
-              type = 2
-            }else{
-              type = 1
-            }
-            this.$http.post(this.api + '/home/Comment/praise',{
-              token: localStorage.getItem('token'),
+            type = this.is_praise? 2:1
+            this.$post('/home/Comment/praise',{
               flag: 1,
               table_id: this.storyId,
               type: type
-            })
-              .then(res=>{
-                if(res.data.code == 1){
+            }).then(res=>{
+               if(res.data.code == 1){
                   this.is_praise = type == 2? 0:1
                   this.onLoading()
                 }else if(res.data.code == 3){
-                  this.$http.post(this.api + '/home/index/token')
-                    .then(res=>{
-                      localStorage.setItem('token',res.data.data)
-                      this.zan()
-                    })
-                }else if(res.data.code == 0){
-                  alert(res.data.msg)
+                  this.zan()
                 }
-              })
+            })
           }else{
             this.$message({
               type: 'error',
               message: '您还没有登陆！'
             })
           }
-
           },
         closeWish(){
           this.isLike = false
         },
         openInform(item,index){
-          if(localStorage.getItem('isLogin')){
+          if(sessionStorage.getItem('isLogin')){
             if(item != 1){
               if(item.is_report){
                 alert('您已经举报了！')
@@ -291,48 +260,18 @@
         },
         //点赞
         addZan(item,index){
-          if(item.is_praise == 0){
-            this.$http.post(this.api + '/home/Comment/praise',{
-              token: localStorage.getItem('token'),
-              flag: 1,
-              table_id: item.story_id,
-              type: 1
-            })
-              .then(res=>{
-                if(res.data.code == 1){
-                  item.is_praise = 1
-                  item.zan = item.zan + 1
-                }else if(res.data.code == 3){
-
-                     this.addZan(item,index)
-      
-                }else if(res.data.code == 0){
-                  alert(res.data.msg)
-                }
-              })
-
-          }else{
-            this.$http.post(this.api + '/home/Comment/praise',{
-              token: localStorage.getItem('token'),
-              flag: 1,
-              table_id: item.story_id,
-              type: 2
-            })
-              .then(res=>{
-                if(res.data.code == 1){
-                  item.zan = item.zan - 1
-                  item.is_praise = 0
-                }else if(res.data.code == 3){
-                  this.$http.post(this.api + '/home/index/token')
-                    .then(res=>{
-                      localStorage.setItem('token',res.data.data)
-                      this.addZan(item,index)
-                    })
-                }else if(res.data.code == 0){
-                  alert(res.data.msg)
-                }
-              })
-          }
+          this.$post('/home/Comment/praise',{
+            flag: 1,
+            table_id: item.story_id,
+            type:item.is_praise == 0? 1:2
+          }).then(res=>{
+              if(res.data.code == 1){
+                item.is_praise = item.is_praise == 0? 1:0
+                item.zan = item.is_praise == 0? item.zan + 1 :   item.zan - 1
+              }else if(res.data.code == 3){
+                this.addZan(item,index)
+              }
+          })
         },
         firsttextareaFocus(){
           this.firstheight = 'auto'
@@ -356,46 +295,30 @@
           this.onLoading()
         },
         onLoading(){
-          this.$http.post(this.api + '/storyp',{
-            token: localStorage.getItem('token'),
+          this.$post('/storyp',{
             story_id: this.storyId
-          })
-            .then(res=>{
-              if(res.data.code == 1){
+          }).then(res=>{
+            if(res.data.code == 1){
                 this.loveList = res.data.data
               }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.onLoading()
-                  })
-              }else if(res.data.code == 0){
-                alert(res.data.msg)
+                this.onLoading()
               }
-            })
+          })
         },
         deleteLeave(a,b){
-          this.$http.post(this.api + '/home/Comment/del_leavemsg',{
-            token: localStorage.getItem('token'),
+          this.$post('/home/Comment/del_leavemsg',{
             msg_id: a.msg_id
-          })
-            .then(res=>{
-              if(res.data.code == 1){
+          }).then(res=>{
+            if(res.data.code == 1){
                 this.$message({
                   type: 'success',
                   message:'删除评论成功！'
                 })
                 this.getComment(this.pager)
               }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/Index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.deleteLeave(a,b)
-                  })
-              }else if(res.data.code == 0){
-                alert(res.data.msg)
+                this.deleteLeave(a,b)
               }
-            })
+          })
         },
         talk(a,b){
           if(a.user_id == this.isOwer){
@@ -424,14 +347,12 @@
               message: '请填写评论内容'
             })
           }else{
-            this.$http.post(this.api + '/home/Comment/save_leavemsg',{
-              token: localStorage.getItem('token'),
-              flag: 2,
+            this.$post('/home/Comment/save_leavemsg',{
+               flag: 2,
               table_id: this.storyId,
               content:  this.review.text
-            })
-              .then(res=>{
-                if(res.data.code == 1){
+            }).then(res=>{
+              if(res.data.code == 1){
                   this.review.text = ''
                   this.$message({
                     message:'评论成功',
@@ -439,15 +360,9 @@
                   })
                   this.getComment(1)
                 }else if(res.data.code == 3){
-                  this.$http.post(this.api + '/home/index/token')
-                    .then(res=>{
-                      localStorage.setItem('token',res.data.data)
-                      this.firstdiscuss()
-                    })
-                }else if(res.data.code == 0){
-                  alert(res.data.msg)
+                  this.firstdiscuss()
                 }
-              })
+            })
           }
         },
         discuss(){
@@ -457,32 +372,24 @@
               message: '请填写评论内容'
             })
           }else{
-              this.$http.post(this.api + '/home/Comment/save_leavemsg',{
-                token: localStorage.getItem('token'),
-                flag: 5,
-                content: this.review.text,
-                table_id: localStorage.getItem('msg_id')
-              })
-                .then(res=>{
-                  if(res.data.code == 1){
-                    localStorage.removeItem('msg_id')
-                    this.isChat = false
-                    this.review.text = ''
-                    this.$message({
-                      message:'评论成功',
-                      type:'success'
-                    })
-                    this.getComment(this.pager)
-                  }else if(res.data.code == 3){
-                    this.$http.post(this.api + '/home/index/token')
-                      .then(res=>{
-                        localStorage.setItem('token',res.data.data)
-                        this.discuss()
-                      })
-                  }else if(res.data.code == 0){
-                    alert(res.data.msg)
-                  }
-                })
+            this.$post('/home/Comment/save_leavemsg',{
+              flag: 5,
+              content: this.review.text,
+              table_id: localStorage.getItem('msg_id')
+            }).then(res=>{
+              if(res.data.code == 1){
+                  localStorage.removeItem('msg_id')
+                  this.isChat = false
+                  this.review.text = ''
+                  this.$message({
+                    message:'评论成功',
+                    type:'success'
+                  })
+                  this.getComment(this.pager)
+                }else if(res.data.code == 3){
+                  this.discuss()
+                }
+            })
           }
         },
         changeForm(){
@@ -493,13 +400,11 @@
         },
         lookStory(){
           this.isLoading = true
-          this.$http.post(this.api + '/home/Story/get_story',{
-            token: localStorage.getItem('token'),
+          this.$post('/home/Story/get_story',{
             story_id: this.storyId,
             visit: 1
-          })
-            .then(res=>{
-              if(res.data.code == 1){
+          }).then(res=>{
+            if(res.data.code == 1){
                 let data = res.data.data
                 let b = [];
                 for(let i =0;i<data.image.length;i++){
@@ -512,214 +417,131 @@
                 this.content = data.content
                 this.title = data.title
                 this.is_collection = data.is_collection
-                if(data.user.is_attention){
-                  this.attation = 1
-                }else{
-                  this.attation = 0
-                }
+                this.attation = data.user.is_attention? 1:0
                 this.is_report = data.is_report
                 this.isLoading = false
               }else if(res.data.code == 3){
-                this.$http.post(this.api + '/hoem/index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.lookStory()
-                  })
-              }else if(res.data.code == 0){
-                alert(res.data.msg)
+                this.lookStory()
               }
-            })
+          })
         },
         addAtention(){
-          if(localStorage.getItem('isLogin')){
-            let type = ''
-            if(this.attation){
-              type = 2
-            }else{
-              type = 1
-            }
-            this.$http.post(this.api + '/home/Comment/attention',{
-              token: localStorage.getItem('token'),
+          if(sessionStorage.getItem('isLogin')){
+            this.$post('/home/Comment/attention',{
               att_user_id: this.user.user_id,
-              type: type,
-            })
-              .then(res=>{
-                if(res.data.code == 1){
+              type: this.attation?2:1,
+            }).then(res=>{
+               if(res.data.code == 1){
                   this.attation = type == 2? 0:1
                 }else if(res.data.code == 3){
-                  this.$http.post(this.api + '/home/index/token')
-                    .then(res=>{
-                      localStorage.setItem('token',res.data.data)
-                      this.addAtention()
-                    })
-                }else if(res.data.code == 0){
-                  alert(res.data.msg)
+                  this.addAtention()
                 }
-              })
+            })
           }else{
-            alert('您还没有登陆')
+            this.$message({type:'info',message:'您还没有登陆!'})
           }
         },
         like(){
-          if(localStorage.getItem('isLogin')){
+          if(sessionStorage.getItem('isLogin')){
             this.isLike = !this.isLike
             this.getRevie()
           }else{
             this.$message({
-              type: 'error',
+              type: 'info',
               message: '您还没有登陆！'
             })
           }
         },
         getRevie(){
-          this.$http.post(this.api + '/home/Comment/collegroup_list',{
-            token: localStorage.getItem('token'),
+          this.$post('/home/Comment/collegroup_list',{
             table_id: this.storyId,
             flag: 2
-          })
-            .then(res=>{
-              if(res.data.code == 1){
+          }).then(res=>{
+             if(res.data.code == 1){
                 this.wishList = res.data.data
               }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.getRevie()
-                  })
-              }else if(res.data.code == 0){
-                alert(res.data.msg)
+                this.getRevie()
               }
-            })
-
+          })
         },
         addwish(){
-          if(this.wishIndex == 0){
-            this.newWish = true
-            this.wishIndex = -1
-          }else{
-            this.newWish = false
-            this.wishIndex = 0
-          }
+            this.newWish = this.wishIndex == 0? true:false
+            this.wishIndex = this.wishIndex == 0? -1:0
         },
         addWishName(){
           if(this.wishNamea == ' '||this.wishNamea.split(' ').join("").length == 0){
             this.$message({
-              type:'error',
-              message: '保存心愿单的过程中遇到了问题，请重试。'
+              type:'info',
+              message: '请填写心愿单名称1'
             })
           }else{
-            this.$http.post(this.api + '/home/Comment/add_collegroup',{
-              token: localStorage.getItem('token'),
+            this.$post('/home/Comment/add_collegroup',{
               group_name: this.wishNamea
-            })
-              .then(res=>{
-                if(res.data.code == 1){
+            }).then(res=>{
+               if(res.data.code == 1){
                   this.wishNamea = ''
                   this.getRevie();
                 }else if(res.data.code == 3){
-                  this.$http.post(this.api + '/home/index/token')
-                    .then(res=>{
-                      localStorage.setItem('token',res.data.data)
-                      this.addWishName()
-                    })
-                }else if(res.data.code == 0){
-                  alert(res.data.msg)
+                  this.addWishName()
                 }
-              })
-
+            })
           }
         },
         save(item,index){
-          if(item.is_this_colle == 1){
-            this.$http.post(this.api + '/home/Comment/collection',{
-              token: localStorage.getItem('token'),
+            this.$post('/home/Comment/collection',{
               flag: 2,
               table_id: this.storyId,
               group_id: item.group_id,
-              type: 2
-            })
-              .then(res=>{
-                if(res.data.code == 1){
-                  let a=[]
-                  item.is_this_colle = 0
-                  for(let i =0;i<this.wishList.length;i++){
-                    if(this.wishList[i].is_this_colle == 0){
-                      a.push(i)
-                      if(a.length == this.wishList.length){
-                        this.is_collection = 0
+              type: item.is_this_colle == 1? 2:1
+            }).then(res=>{
+               if(res.data.code == 1){
+                  if(item.is_this_colle == 1){
+                    let a=[]
+                    item.is_this_colle = 0
+                    for(let i =0;i<this.wishList.length;i++){
+                      if(this.wishList[i].is_this_colle == 0){
+                        a.push(i)
+                        if(a.length == this.wishList.length){
+                          this.is_collection = 0
+                        }
                       }
                     }
+                  }else{
+                    item.is_this_colle = 1
+                    this.is_collection = 1
                   }
-                }else if(res.data.code == 1){
-                  this.$http.post(this.api + '/home/index/token')
-                    .then(res=>{
-                      localStorage.setItem('token',res.data.data)
-                      this.save(item,index)
-                    })
-                }else if(res.data.code == 0){
-                  alert(res.data.msg)
+                }else if(res.data.code == 3){
+                    this.save(item,index)
                 }
-              })
-          }else{
-            this.$http.post(this.api + '/home/Comment/collection',{
-              token: localStorage.getItem('token'),
-              flag: 2,
-              table_id: this.storyId,
-              group_id: item.group_id,
-              type: 1
             })
-              .then(res=>{
-                if(res.data.code == 1){
-                  item.is_this_colle = 1
-                  this.is_collection = 1
-                }else if(res.data.code == 1){
-                  this.$http.post(this.api + '/home/index/token')
-                    .then(res=>{
-                      localStorage.setItem('token',res.data.data)
-                    })
-                }else if(res.data.code == 0){
-                  alert(res.data.msg)
-                }
-              })
-          }
         },
         getName(data){
           this.wishNamea = data
         },
         getInform(){
-          this.$http.post(this.api + '/home/Activity/question',{
-            token: localStorage.getItem('token'),
+          this.$post( '/home/Activity/question',{
             flag: 6
-          })
-            .then(res=>{
-              if(res.data.code == 1){
+          }).then(res=>{
+            if(res.data.code == 1){
                 this.informList = []
                 for(let i = 0;i<res.data.data[0].option.length;i++){
                   let a = res.data.data[0].option[i].name.split('/')
                   this.informList.push({name: a[0],content:a[1],option_id:res.data.data[0].option[i].option_id})
                 }
               }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.getInform()
-                  })
-              }else if(res.data.code == 0){
-                alert(res.data.msg)
+                this.getInform()
               }
-            })
+          })
         },
         closeInform(item){
           let a = localStorage.getItem('msg_id')
           if(a){
             if(item){
-              this.$http.post(this.api + '/ReportU',{
-                token: localStorage.getItem('token'),
-                flag: 4,
+              this.$post('/ReportU',{
+                 flag: 4,
                 table_id: a,
                 option_id: item.option_id
-              })
-                .then(res=>{
+              }).then(res=>{
                   if(res.data.code == 1){
                     this.isInform = false
                     this.$message({
@@ -729,29 +551,21 @@
                     this.getComment(this.pager)
                     localStorage.removeItem('msg_id')
                   }else if(res.data.code == 3){
-                    this.$http.post(this.api + '/home/index/token')
-                      .then(res=>{
-                        localStorage.setItem('token',res.data.data)
-                        this.closeInform(item)
-                      })
-                  }else if(res.data.code == 0){
-                    alert(res.data.msg)
+                    this.closeInform(item)
                   }
-                })
+              })
             }else{
               this.isInform = false
               localStorage.removeItem('msg_id')
             }
           }else{
             if(item){
-              this.$http.post(this.api + '/ReportU',{
-                token: localStorage.getItem('token'),
+              this.$post('/ReportU',{
                 flag: 3,
                 table_id: this.storyId,
                 option_id: item.option_id
-              })
-                .then(res=>{
-                  if(res.data.code == 1){
+              }).then(res=>{
+                if(res.data.code == 1){
                     this.isInform = false
                     this.$message({
                       type:'success',
@@ -759,15 +573,9 @@
                     })
                     this.is_report = '1'
                   }else if(res.data.code == 3){
-                    this.$http.post(this.api + '/home/index/token')
-                      .then(res=>{
-                        localStorage.setItem('token',res.data.data)
-                        this.closeInform(item)
-                      })
-                  }else if(res.data.code == 0){
-                    alert(res.data.msg)
+                    this.closeInform(item)
                   }
-                })
+              })
             }else{
               this.isInform = false
             }
@@ -775,21 +583,18 @@
         },
         informSend(){
           let a = localStorage.getItem('msg_id')
-          if(a){
             if(this.informReason.text.trim().length <= 0){
               this.$message({
                 type:'error',
                 message: '请填写您的理由'
               })
             }else{
-              this.$http.post(this.api + '/ReportU',{
-                token: localStorage.getItem('token'),
-                flag: 4,
-                table_id: a,
+              this.$post('/ReportU',{
+                flag: a?4:3,
+                table_id: a? a:this.storyId,
                 content: this.informReason.text
-              })
-                .then(res=>{
-                  if(res.data.code == 1){
+              }).then(res=>{
+                 if(res.data.code == 1){
                     this.isInform = false
                     this.informReason.text = ''
                     this.changeReason = true
@@ -799,107 +604,45 @@
                     })
                     localStorage.removeItem('msg_id')
                   }else if(res.data.code == 3){
-                    this.$http.post(this.api + '/home/index/token')
-                      .then(res=>{
-                        localStorage.setItem('token',res.data.data)
-                        this.informSend()
-                      })
-                  }else if(res.data.code == 0){
-                    alert(res.data.msg)
+                    this.informSend()
                   }
-                })
-            }
-          }else{
-            if(this.informReason.text.trim().length <= 0){
-              this.$message({
-                type:'error',
-                message: '请填写您的理由'
               })
-            }else{
-              this.$http.post(this.api + '/ReportU',{
-                token: localStorage.getItem('token'),
-                flag: 3,
-                table_id: this.storyId,
-                content: this.informReason.text
-              })
-                .then(res=>{
-                  if(res.data.code == 1){
-                    this.isInform = false
-                    this.informReason.text = ''
-                    this.changeReason = true
-                    this.$message({
-                      type:'success',
-                      message:'提交成功'
-                    })
-                  }else if(res.data.code == 3){
-                    this.$http.post(this.api + '/home/index/token')
-                      .then(res=>{
-                        localStorage.setItem('token',res.data.data)
-                        this.informSend()
-                      })
-                  }else if(res.data.code == 0){
-                    alert(res.data.msg)
-                  }
-                })
             }
-          }
 
         },
         takeAttention(item,index){
-          if(localStorage.getItem('isLogin')){
-            let type = ''
-            if(item.is_attention){
-              type = 2
-            }else{
-              type = 1
-            }
-            this.$http.post(this.api + '/home/Comment/attention',{
-              token: localStorage.getItem('token'),
+          if(sessionStorage.getItem('isLogin')){
+            this.$post('/home/Comment/attention',{
               att_user_id: item.user_id,
-              type: type,
-            })
-              .then(res=>{
-                if(res.data.code == 1){
-                  item.is_attention = type == 2? 0:1
+              type:item.is_attention? 2:1,
+            }).then(res=>{
+              if(res.data.code == 1){
+                  item.is_attention = item.is_attention? 0:1
                   if(this.user.user_id == item.user_id){
-                    this.attation = type == 2? 0:1
+                    this.attation = item.is_attention? 0:1
                   }
                 }else if(res.data.code == 3){
-                 this.$http.post(this.api + '/home/index/token')
-                   .then(res=>{
-                     localStorage.setItem('token',res.data.data)
-                     this.takeAttention(item,index)
-                   })
-                }else if(res.data.code == 0){
-                  alert(res.data.msg)
+                  this.takeAttention(item,index)
                 }
-              })
+            })
           }
         },
         //获取评论
         getComment(val){
-          this.$http.post(this.api + '/LeaveL',{
-            token: localStorage.getItem('token'),
+          this.$post('/LeaveL',{
             table_id:this.storyId,
             flag: 2,
             order: 1,
             page: val
-          })
-            .then(res=>{
-              if(res.data.code == 1){
+          }).then(res=>{
+            if(res.data.code == 1){
                 let data = res.data.data.data
                 this.personList = data
                 this.total = res.data.data.total
               }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.getComment(val)
-                  })
-              }else if(res.data.cdoe == 0){
-                alert(res.data.msg)
+                this.getComment(val)
               }
-            })
+          })
         },
         handleCurrentChange(val){
           this.pager = val
@@ -907,74 +650,41 @@
         },
         //相似故事
         getStory(){
-          this.$http.post(this.api + '/storys',{
-            token: localStorage.getItem('token'),
+          this.$post('/storys',{
             story_id: this.storyId
-          })
-            .then(res=>{
+          }).then(res=>{
               if(res.data.code == 1){
                 let data = res.data.data
                 this.storyList = data
               }else if(res.data.code == 3){
-
-         
-                    this.getStory()
- 
-              }else if(res.data.code == 0){
-                alert(res.data.msg)
+                this.getStory()
               }
-            })
-
+          })
         },
         //评论点赞
         parise(item,index){
-          let type=''
-          if(item.is_praise){
-            type = 2
-          }else{
-            type = 1
-          }
-          this.$http.post(this.api + '/home/Comment/praise',{
-            token: localStorage.getItem('token'),
+          this.$post('/home/Comment/praise',{
             flag: 4,
             table_id: item.msg_id,
-            type: type
-          })
-            .then(res=>{
-              if(res.data.code == 1){
-                item.is_praise = type == 2? 0 : 1
-                item.praise_num = type == 2? item.praise_num - 1 : item.praise_num +1
+            type: item.is_praise? 2: 1
+          }).then(res=>{
+            if(res.data.code == 1){
+                item.is_praise = item.is_praise? 0 : 1
+                item.praise_num = item.is_praise? item.praise_num - 1 : item.praise_num +1
               }else if(res.data.code == 3){
-               this.$http.post(this.api + '/home/index/token')
-                 .then(res=>{
-                   localStorage.setItem('token',res.data.data)
-                   this.parise(item,index)
-                 })
-              }else if(res.data.code == 0){
-                alert(res.data.msg)
+                this.parise(item,index)
               }
-            })
+          })
         },
         //查询用户
-        getOwer(){
-          this.$http.post(this.api + '/home/User/get_user',{
-            token: localStorage.getItem('token')
-          })
-            .then(res=>{
-              if(res.data.code == 1){
-                let data = res.data.data[0]
-                this.imgUrl = data.head_image? data.headimage.domain + data.headimage.image_url : '../../../static/img/static/user.png'
-                this.isOwer = data.user_id
-              }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/Index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.getOwer()
-                  })
-              }else if(res.data.code == 0){
-                alert(res.data.msg)
-              }
-            })
+        reload(res){
+          if(res.data.code == 1){
+            let data = res.data.data[0]
+            this.imgUrl = data.head_image? data.headimage.domain + data.headimage.image_url : '../../../static/img/static/user.png'
+            this.isOwer = data.user_id
+            this.isLogin = true
+          }
+          
         },
         toperson(item,index){
           this.$router.push({
@@ -995,13 +705,7 @@
       },
       mounted(){
           window.scroll(0,0)
-          let _this = this
-          if(localStorage.getItem('isLogin')){
-            _this.isLogin = true
-            _this.getOwer()
-          }else{
-            _this.isLogin = false
-          }
+
       },
       created() {
 

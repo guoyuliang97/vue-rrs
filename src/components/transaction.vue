@@ -9,7 +9,12 @@
                 <LoadingImg type="user" :src="imgUrl"  style="width:72px;height:72px;margin: 0 auto;padding-top:17px;"></LoadingImg>
                
                 <p style="margin:10px 0;font-size:14px;">总额&nbsp;￥{{ parseFloat(due_balance,2)+parseFloat(unpaid_amount,2)?(parseFloat(due_balance,2)+parseFloat(unpaid_amount,2)).toFixed(2):0}}</p>
-                <p><span style="font-size:12px;color">可用余额：{{due_balance}} &nbsp;&nbsp;|&nbsp;&nbsp;未到账：￥{{unpaid_amount?unpaid_amount:0}}</span></p>
+                <p><span style="font-size:12px;color">可用余额：{{due_balance}} &nbsp;&nbsp;|&nbsp;&nbsp;未到账：￥{{unpaid_amount?unpaid_amount:0}}</span><el-tooltip content="bottom" placement="bottom" effect="light">
+                          <div slot="content" style="width:300px;line-height:30px;">
+                            <p class="fontweight">小贴士：为保障游客们的资金安全，在游客们预定体验活动时间结束时对应的资金才会变为可用余额。</p>
+                          </div>
+                          <i class='el-icon-question' style="color:#999" ></i>
+                        </el-tooltip></p>
                 <div style="margin:10px auto;width:37px;padding:1px 2px;font-size:12px;color:#14C5CA;cursor: pointer;border:1px solid rgba(20,197,202,1);" ><span @click="withdrawal" >提现</span></div>
               </div>
               <div style="margin-top:20px;width:230px;background-color:#fff;border-radius:10px;padding:10px 10px;font-size:14px;">

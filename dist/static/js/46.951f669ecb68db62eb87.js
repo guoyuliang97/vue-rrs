@@ -1,2 +1,0 @@
-webpackJsonp([46],{"61hl":function(e,t){},Rmsr:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var i={render:function(){this.$createElement;this._self._c;return this._m(0)},staticRenderFns:[function(){var e=this.$createElement,t=this._self._c||e;return t("div",[t("h2",[this._v("获得房客高度评价")]),this._v(" "),t("p",[this._v("我们发现，获得好评的策划人通常注重4个方面：必要的活动设施、准确的活动信息、愉快的体验过程、积极沟通。")])])}]};var s=n("VU/8")({name:"evaluation"},i,!1,function(e){n("61hl")},"data-v-b4f9d6e8",null);t.default=s.exports}});
-//# sourceMappingURL=46.951f669ecb68db62eb87.js.map

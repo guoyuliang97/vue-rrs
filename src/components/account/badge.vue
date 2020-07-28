@@ -27,24 +27,15 @@
 		},
     methods:{
 		  getUse(){
-		    this.$http.post(this.api + '/home/User/get_user',{
-		      token: localStorage.getItem('token')
-        })
-          .then(res=>{
-            if(res.data.code == 1){
+        this.$post('/home/User/get_user',{}).then(res=>{
+          if(res.data.code == 1){
               let data =res.data.data[0]
               this.isvolunteer = data.isvolunteer
               this.isplanner = data.isplanner
             }else if(res.data.code == 3){
-              this.$http.post(this.api + '/home/index/token')
-                .then(res=>{
-                  localStorage.setItem('token',res.data.data)
-                  this.getUse()
-                })
-            }else if(res.data.code == 0){
-              alert(res.data.msg)
+              this.getUse()
             }
-          })
+        })
       }
     },
     mounted() {

@@ -51,7 +51,7 @@
           </div>
           <div style="bottom:0;background-color: #fff;padding: 20px;max-width: 400px;min-width: 360px;" :style="{width:swidtd}">
             <div style="text-align:left;">
-                <textarea  style="width:100%;border:none;outline:none;font-size: 15px;" rows="5" placeholder="请输入您的评论" @keydown="enterL" id='textarea' v-model="review"></textarea>
+                <textarea  style="width:100%;border:none;outline:none;font-size: 15px;" rows="5" placeholder="请输入" @keydown="enterL" id='textarea' v-model="review"></textarea>
             </div>
             <div style="text-align: right;width:100%;">
               <el-button style="background-color: #E8E8E8;color:#000;" :disabled="review == ''? true:false" @click="discuss">发送</el-button>

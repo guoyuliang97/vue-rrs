@@ -134,7 +134,7 @@
           })
             .then(res=>{
               if(res.data.code == 1){
-                console.log(res)
+              
                 this.replayList = res.data.data.data
               }else if(res.data.code == 3){
                 this.$http.post(this.api + '/home/index/token')

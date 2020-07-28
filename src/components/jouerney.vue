@@ -214,7 +214,6 @@
                   this.takeMore = false
                 }
                 this.isGoIng = false
-                console.log(this.overList)
               }else if(res.data.code == 3){
                this.$http.post(this.api + '/home/index/token')
                  .then(res=>{

@@ -143,7 +143,7 @@ export default {
             if(res.data.code == 1){
               this.orderInformation = res.data.data
               this.order_id = res.data.data.order_id
-              console.log(this.orderInformation)
+             
             }else if(res.data.code == 3){
             
                 this.getRefund()

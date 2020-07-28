@@ -9,7 +9,7 @@
             <div v-for="(item,index) in volunList" :key="index" style="border-bottom: 1px solid #E6E6E6">
                 <div style="display: flex;justify-content: space-between;font-size:12px;text-align: center;">
                 <div style="display: flex;justify-content:flex-start;width:150px;padding:19px 0;">
-                    <img :src="item.domain?item.domain + item.image_url:'../../../static/img/static/user.png'" width="32px" height="32px" style="border-radius: 50%;margin-left:40px;">
+                    <LoadingImg type="user" :src="item.domain?item.domain + item.image_url:'../../../static/img/static/user.png'"  style="width:32px;height:32px;margin-left:40px;"></LoadingImg>
                     <div style="line-height:32px;margin-left:10px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis">{{(item.family_name+item.middle_name+ item.name)?(item.family_name+item.middle_name+ item.name):'匿名用户'}}</div>
                 </div>
                 <div><el-popover

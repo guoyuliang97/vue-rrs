@@ -1,7 +1,7 @@
 <template>
     <div>
       <el-container>
-        <el-header><Head type="publishList"></Head></el-header>
+        <el-header><Head type="publishList" @reload="reload"></Head></el-header>
         <el-main style="width:900px;margin: 20px auto;text-align: left">
           <div style="display: flex;justify-content: space-between">
             <div >
@@ -38,6 +38,8 @@
           <Loading v-show="loadingState" style="text-align: center"></Loading>
           <div v-for="(item,index) in publishList" style="display: flex;justify-content: space-around;padding:20px 0;border-bottom: 1px solid #E6E6E6" v-if="item.status == 0" >
             <div style="width:300px;height:200px;background-size: 100% 100%;font-size:14px;" :style="{backgroundImage: item.backUrl?'url('+item.backUrl+')':'url(../../../static/img/static/defult.png)'}">
+              
+              
               <div v-if="item.complete == 1 && item.audit == 0" class="experienceState" style="backgroundColor:rgba(	255,255,255,1);width:90px;color:#000;">体验已提交</div>
               <div v-if="item.complete == 0 && item.audit == 0" class="experienceState" style="backgroundColor:rgba(255,165,0,.8);width:60px;">进行中</div>
               <div v-if="item.complete == 1 && item.audit == 2" class="experienceState" style="backgroundColor:rgba(255,0,0,.5);width:60px;">已拒绝</div>
@@ -59,7 +61,7 @@
                 placement="top"
                 width="160"
                 v-model="item.visible">
-                <p>这是一段内容这是一段内容确定删除吗？</p>
+                <p>确定狠心删除这个活动？</p>
                 <div style="text-align: right; margin: 0">
                   <el-button size="mini" type="text" @click="abolish(item,index)">取消</el-button>
                   <el-button type="primary" size="mini" @click="deelActive(item,index)">确定</el-button>
@@ -80,6 +82,7 @@
 </template>
 
 <script>
+  import LoadingImg from '../../public/loadingImg'
   import Loading from '../../public/Loading'
   import Head from '../../public/head.vue'
   import None from '../../public/noNumber'
@@ -103,7 +106,8 @@
       components:{
         Head,
         Loading,
-        None
+        None,
+        LoadingImg
       },
       methods:{
         handleClick(val){
@@ -113,21 +117,13 @@
           this.$router.push('/experience')
         },
         deelActive(item,index){
-          this.$http.post(this.api + '/home/Activity/del_activity',{
-            token: localStorage.getItem('token'),
+          this.$post('/home/Activity/del_activity',{
             activity_id: item.active_id
-          })
-            .then(res=>{
-              if(res.data.code == 1){
-                this.$message({
-                  type: 'success',
-                  message: '删除成功!'
-                })
+          }).then(res=>{
+               if(res.data.code == 1){
                 this.getPublish()
               }else if(res.data.code == 3){
-                alert(res.data.msg)
-              }else{
-                this.$alert(res.data.msg)
+                this.deelActive(item,index)
               }
             })
         },
@@ -144,18 +140,15 @@
           item.visible = false
         },
         getPublish(){
-          this.$http.post(this.api + '/home/Activity/complete',{
-            token:localStorage.getItem('token'),
+          this.$post('/home/Activity/complete',{
             flag:this.activeName
-          })
-            .then(res=>{
-              if(res.data.code == 1){
+          }).then(res=>{
+            if(res.data.code == 1){
                 let data = res.data.data
                 let a = []
                 for(let i = 0;i<data.length;i++){
-                  if(data[i].cover_image){
                     a.push({
-                      backUrl: data[i].cover.domain + data[i].cover.themb_url,
+                      backUrl: data[i].cover_image? data[i].cover.domain + data[i].cover.themb_url:'../../../static/img/static/defult.png',
                       complete:data[i].complete,
                       active_id: data[i].activity_id,
                       title:data[i].title,
@@ -165,71 +158,36 @@
                       visible:false,
                       reason: data[i].reason
                     })
-                  }else{
-                    a.push({
-                      backUrl: '../../../static/img/static/defult.png',
-                      complete:data[i].complete,
-                      active_id: data[i].activity_id,
-                      title:data[i].title,
-                      step:15-data[i].step.replace(/[^0-9]/ig,' ').trim().split(/\s+/).length,
-                      audit: data[i].audit,
-                      status: data[i].status,
-                      visible:false,
-                      reason: data[i].reason
-                    })
-                  }
               }
                 this.publishList = a
               }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.getPublish()
-                  })
+                this.getPublish()
               }
-            })
+          })
         },
         tocheck(){
           this.$router.push('/authentication')
         },
-        getUser(){
-          this.$http.post(this.api + '/home/User/get_user',{
-            token: localStorage.getItem('token')
-          })
-            .then(res=>{
-              if(res.data.code == 1){
-                console.log(res)
-                let data = res.data.data[0]
-                this.audit_face =  data.audit_face
-                this.name = data.family_name + data.middle_name + data.name
-                this.idCard = data.idcard_n.slice(0,5)
-                this.refuse_reason = data.refuse_reason
-                this.isLoading = false
-              }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.getUser()
-                  })
-              }else if(res.data.code == 0){
-                alert(res.data.msg)
-              }
-            })
+        reload(res){
+            if(res.data.code == 1){
+              let data = res.data.data[0]
+              this.audit_face =  data.audit_face
+              this.name = data.family_name + data.middle_name + data.name
+              this.idCard = data.idcard_n.slice(0,5)
+              this.refuse_reason = data.refuse_reason
+            }
         },
         lookYan(){
           this.isLook = !this.isLook
         }
       },
       mounted(){
-          localStorage.removeItem('active_id')
-          let _this = this
-        _this.isLoading = true
-        _this.handleClick()
-        _this.getUser()
+        localStorage.removeItem('active_id')
+        let _this = this
         if(this.$route.query.information){
           this.activeName = this.$route.query.information
         }
-
+        _this.handleClick()
       }
     }
 </script>

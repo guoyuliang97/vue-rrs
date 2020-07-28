@@ -205,7 +205,7 @@
           <p style="color:#333333"><b>密码设置安全验证</b></p>
           <p style="margin-top: 10px;">已向<span> {{ mobile.substr(0,3)+'*****'+mobile.substr(8,3)}}</span>发送验证码</p>
           <div style="display: flex;justify-content: space-around;margin-top:20px;">
-            <el-input placeholder="验证码" v-model="smsCode"></el-input>
+            <el-input type="text" placeholder="验证码" v-model="smsCode"></el-input>
             <el-button @click="takeSave" :disabled="forbid == 1? true:false" style="font-size:12px;background-color: #14c5ca;color:#fff;margin-left:10px;width:200px">{{sms}}</el-button>
           </div>
           <div style="display: flex;justify-content: space-between;margin-top:20px;">
@@ -217,7 +217,7 @@
           <p style="color:#333333"><b>密码设置安全验证</b></p>
           <p style="margin-top: 10px;">已向<span> {{ email.substr(0,3)+'*************'}}</span>发送验证码</p>
           <div style="display: flex;justify-content: space-around;margin-top:20px;">
-            <el-input placeholder="验证码" v-model="smsCode"></el-input>
+            <el-input type="text" placeholder="验证码" v-model="smsCode"></el-input>
             <el-button @click="takeSave" :disabled="forbid == 1? true:false" style="font-size:12px;background-color: #14c5ca;color:#fff;margin-left:10px;width:200px">{{sms}}</el-button>
           </div>
           <div style="display: flex;justify-content: space-between;margin-top:20px;">
@@ -335,14 +335,12 @@
             message: '请绑定手机号'
           })
         }else{
-          this.$http.post(this.api + '/home/User/send_msg',{
-            token: localStorage.getItem('token'),
+          this.$post('/home/User/send_msg',{
             m_code: parseInt(this.mobileCode),
             mobile: (this.mobile),
             flag:6
-          })
-            .then(res=>{
-              if(res.data.code == 1){
+          }).then(res=>{
+             if(res.data.code == 1){
                 this.rePassword.fobid = 1
                 this.changeTime = setInterval(()=>{
                   this.smsTime--
@@ -355,26 +353,18 @@
                   }
                 },1000)
               }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.returnSave()
-                  })
-              }else if(res.data.code == 0){
-                alert(res.data.msg)
+                this.returnSave()
               }
-            })
+          })
         }
       },
       //换绑邮箱发送验证码
       newSendEmail(){
-        this.$http.post(this.api + '/email',{
-          token: localStorage.getItem('token'),
+        this.$post('/email',{
           toemail: this.emailChick.newEmail,
           flag: 4
-        })
-          .then(res=>{
-            if(res.data.code == 1){
+        }).then(res=>{
+          if(res.data.code == 1){
               this.emailChick.forbid = 1
               this.changeTime = setInterval(()=>{
                 this.overTime--
@@ -387,15 +377,9 @@
                 }
               },1000)
             }else if(res.data.code == 3){
-              this.$http.post(this.api + '/home/index/token')
-                .then(res=>{
-                  localStorage.setItem('token',res.data.data)
-                  this.newSendEmail()
-                })
-            }else if(res.data.code == 0){
-              this.$alert(res.data.msg)
+              this.newSendEmail()
             }
-          })
+        })
       },
 		  //手机登录发送验证码
       sendMobile(){
@@ -405,14 +389,12 @@
             message: '你不是手机登录的哟！'
           })
         }else{
-          this.$http.post(this.api + '/home/User/send_msg',{
-            token: localStorage.getItem('token'),
+          this.$post('/home/User/send_msg',{
             m_code: this.mobileCode,
             mobile: this.mobile,
             flag: 1
-          })
-            .then(res=>{
-              if(res.data.code == 1){
+          }).then(res=>{
+            if(res.data.code == 1){
                 this.mobileForm.forbid = 1
                 this.changeTime = setInterval(()=>{
                   this.smsTime --
@@ -425,27 +407,21 @@
                   }
                 },1000)
               }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.sendMobile()
-                  })
+                this.sendMobile()
               }
-            })
+          })
         }
       },
 		  //手机登录修改密码
       checkMobile(){
-        this.$http.post(this.api + '/FindMobilePwd',{
-          token: localStorage.getItem('token'),
+        this.$post('/FindMobilePwd',{
           m_code: this.loginm_code,
           mobile: this.loginMobile,
           sms_code: this.mobileForm.smsCode,
           password: this.mobileForm.password,
           re_password: this.mobileForm.rePassword
-        })
-          .then(res=>{
-            if(res.data.code == 1){
+        }).then(res=>{
+          if(res.data.code == 1){
               this.$message({
                 type: 'success',
                 message: '修改成功！'
@@ -455,13 +431,9 @@
               localStorage.removeItem('token')
               this.$router.push('/')
             }else if(res.data.code == 3){
-              this.$http.post(this.api + '/home/index/token')
-                .then(res=>{
-                  localStorage.setItem('token',res.data.data)
-                  this.checkMobile()
-                })
+              this.checkMobile()
             }
-          })
+        })
       },
 		  //邮箱登陆修改密码发送验证码
       sendEmailFor(){
@@ -471,13 +443,11 @@
             message: '您不是邮箱登陆!'
           })
         }else{
-          this.$http.post(this.api + '/email',{
-            token: localStorage.getItem('token'),
+          this.$post('/email',{
             toemail: this.email,
             flag:2
-          })
-            .then(res=>{
-              if(res.data.code == 1){
+          }).then(res=>{
+            if(res.data.code == 1){
                 this.emailForm.forbid = 1
                 this.changeTime = setInterval(()=>{
                   this.smsTime --
@@ -490,28 +460,20 @@
                   }
                 },1000)
               }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.sendEmailFor()
-                  })
-              }else{
-
+                this.sendEmailFor()
               }
-            })
+          })
         }
       },
       //邮箱登陆修改密码
       checkEmail(){
-        this.$http.post(this.api + '/FindLoginPwd',{
-          token: localStorage.getItem('token'),
+        this.$post('/FindLoginPwd',{
           email: this.loginEmail,
           sms_code: this.emailForm.smsCode,
           password: this.emailForm.password,
           re_password: this.emailForm.rePassword
-        })
-          .then(res=>{
-            if(res.data.code == 1){
+        }).then(res=>{
+          if(res.data.code == 1){
               this.$message({
                 type:'success',
                 message: '修改成功!'
@@ -521,22 +483,16 @@
               localStorage.removeItem('token')
               this.$router.push('/')
             }else if(res.data.code == 3){
-              this.$http.post(this.api + '/home/index/token')
-                .then(res=>{
-                  localStorage.setItem('token',res.data.data)
-                  this.checkEmail()
-                })
+              this.checkEmail()
             }
-          })
+        })
       },
       sendEmail(){
-        this.$http.post(this.api + '/email',{
-          token: localStorage.getItem('token'),
+        this.$post('/email',{
           toemail: this.email_link == 1? this.email:this.emailChick.emailUrl,
           flag: this.email_link == 1? 3:4
-        })
-          .then(res=>{
-            if(res.data.code == 1){
+        }).then(res=>{
+           if(res.data.code == 1){
               this.emailChick.forbid = 1
               this.changeTime = setInterval(()=>{
                 this.smsTime--
@@ -549,15 +505,10 @@
                 }
               },1000)
             }else if(res.data.code == 3){
-              this.$http.post(this.api + '/home/index/token')
-                .then(res=>{
-                  localStorage.setItem('token',res.data.data)
-                  this.sendEmail()
-                })
-            }else if(res.data.code == 0){
-              this.$alert(res.data.msg)
+              this.sendEmail()
             }
-          })
+        })
+       
       },
       mekdeEmail(){
         if(this.email_link == 1){
@@ -577,15 +528,13 @@
               message: '请输入新邮箱验证码!'
             })
           }else{
-            this.$http.post(this.api + '/BindEditEmail',{
-              token: localStorage.getItem('token'),
+            this.$post('/BindEditEmail',{
               email_original: this.email,
               sms_code_original: this.emailChick.sms_code,
               email: this.emailChick.newEmail,
               sms_code: this.emailChick.newSms_code
-            })
-              .then(res=>{
-                if(res.data.code == 1){
+            }).then(res=>{
+              if(res.data.code == 1){
                   clearInterval(this.changeTime)
                   clearInterval(this.overChange)
                   this.smsTime = '60'
@@ -602,19 +551,14 @@
                   this.Account=[]
                   this.getUser()
                 }else if(res.data.code == 3){
-                  this.$http.post(this.api + '/home/index/token')
-                    .then(res=>{
-                      localStorage.setItem('token',res.data.data)
-                      this.mekdeEmail()
-                    })
+                  this.mekdeEmail()
                 }else if(res.data.code == 0){
                   clearInterval(this.changeTime)
                   clearInterval(this.overChange)
                   this.smsTime = '60'
                   this.overTime = '60'
-                  alert(res.data.msg)
                 }
-              })
+            })
           }
         }else{
          if(!this.emailChick.emailUrl){
@@ -628,13 +572,11 @@
              message: '请输入验证码！'
            })
          }else{
-           this.$http.post(this.api + '/BindEmail',{
-             token: localStorage.getItem('token'),
+           this.$post('/BindEmail',{
              email: this.emailChick.emailUrl,
              sms_code: this.emailChick.sms_code
-           })
-             .then(res=>{
-               if(res.data.code == 1){
+           }).then(res=>{
+              if(res.data.code == 1){
                  clearInterval(this.changeTime)
                  clearInterval(this.overChange)
                  this.smsTime = '60'
@@ -646,33 +588,26 @@
                  this.Account=[]
                  this.getUser()
                }else if(res.data.code == 3){
-                 this.$http.post(this.api + '/home/index/token')
-                   .then(res=>{
-                     localStorage.setItem('token',res.data.data)
-                     this.mekdeEmail()
-                   })
+                 this.mekdeEmail()
                }else if(res.data.code == 0){
                  clearInterval(this.changeTime)
                  clearInterval(this.overChange)
                  this.smsTime = '60'
                  this.overTime = '60'
-                 this.$alert(res.data.msg)
                }
-             })
+           })
          }
         }
       },
       //设置安全验证验证码
       takeSave(){
         if(this.mobile){
-          this.$http.post(this.api + '/home/User/send_msg',{
-            token: localStorage.getItem('token'),
+          this.$post('/home/User/send_msg',{
             m_code: parseInt(this.mobileCode),
             mobile: this.mobile,
             flag: 6
-          })
-            .then(res=>{
-              if(res.data.code == 1){
+          }).then(res=>{
+            if(res.data.code == 1){
                 this.forbid = 1
                 this.changeTime = setInterval(()=>{
                   this.smsTime--
@@ -685,13 +620,9 @@
                   }
                 },1000)
               }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.takeSave()
-                  })
+                this.takeSave()
               }
-            })
+          })
         }else{
           this.$http.post(this.api + '/email',{
             token: localStorage.getItem('token'),
@@ -712,13 +643,7 @@
                   }
                 },1000)
               }else if(res.data.code == 3){
-                this.$http.post(this.api + '/home/index/token')
-                  .then(res=>{
-                    localStorage.setItem('token',res.data.data)
-                    this.takeSave()
-                  })
-              }else if(res.data.code == 0){
-                this.$alert(res.data.msg)
+                this.takeSave()
               }
             })
         }
@@ -1096,7 +1021,7 @@
                 }
                 this.$message({
                   type: 'success',
-                  message:'找回成功！快去旅行吧1'
+                  message:'找回成功！快去旅行吧!'
                 })
               }else if(res.data.code == 3){
                 this.$http.post(this.api + '/home/index/token')

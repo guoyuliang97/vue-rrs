@@ -154,7 +154,6 @@ import LoadingImg from '../public/loadingImg'
 			changenavf(msg){
         this.navindex=msg;
         localStorage.setItem('navIndex',msg)
-        console.log(this.navindex)
 			},
 			changeRouter(msg){
           this.navindex=msg.id;
@@ -262,7 +261,6 @@ import LoadingImg from '../public/loadingImg'
       if(localStorage.getItem('navIndex')){
         this.navindex = localStorage.getItem('navIndex')
       }
-       console.log(this.navindex == 12) 
 			_this.step()
       _this.getConfig()
 		},

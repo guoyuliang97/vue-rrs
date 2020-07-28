@@ -111,9 +111,9 @@
             <li> <el-select v-model="value" @change="chooseLan" placeholder="语言(language)" style="width:150px;border: 2px solid #008489;border-radius:5px">
               <el-option v-for="item in language" :key="item.value" :label="item.label" :value="item.name"></el-option>
             </el-select></li>
-            <li style="margin:20px 0;"><el-select v-model="value2" @change="chooseCurr" placeholder="货币(currency)" style="width:150px;border: 2px solid #008489;border-radius:5px">
+            <!-- <li style="margin:20px 0;"><el-select v-model="value2" @change="chooseCurr" placeholder="货币(currency)" style="width:150px;border: 2px solid #008489;border-radius:5px">
               <el-option v-for="item in curren" :key="item.value" :label="item.label" :value="item.sT"></el-option>
-            </el-select></li>
+            </el-select></li> -->
           </ul>
         </div>
         <Foot type="home" style="width:880px;"></Foot>
@@ -141,7 +141,6 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
-      api: this.GLOBAL.baseURL,
       LoadingState: false,
       LoadingState2:false,
       home:true,
@@ -296,43 +295,32 @@ export default {
       },
     // 新增搜索特惠体验折扣
     getDisCount(){
-      this.$http.post(this.api + '/DiscountTwo',{
-        token: localStorage.getItem('token'),
+      this.$post('/DiscountTwo',{
         verson: 2.0
-      })
-      .then(res=>{
+      }).then(res=>{
         if(res.data.code == 1){
           this.price_discount = res.data.data.length?res.data.data[0].price_discount:''
           if(this.price_discount){
             this.getDisAct()
           }
-      
         }else if(res.data.code == 3){
           this.getDisCount()
-        }else if(res.data.code == 0){
-          this.$message({type:'error',messages:res.data.msg})
         }
       })
     },
     getDisAct(){
-      this.$http.post(this.api + '/ActivityListUserTwo',{
-        token: localStorage.getItem('token'),
+      this.$post('/ActivityListUserTwo',{
         page: 1,
         per_page: 9,
         discount: this.price_discount
-      })
-      .then(res=>{
-        if(res.data.code == 1){
-          this.dicountActList = res.data.data.data
-        }else if(res.data.cdoe == 3){
-          this.getDisAct()
-        }else if(res.data.code == 0){
-          this.$message({type:'error',message:res.data.msg})
-        }
-      })
+      }).then(res=>{
+          if(res.data.code == 1){
+            this.dicountActList = res.data.data.data
+          }else if(res.data.cdoe == 3){
+            this.getDisAct()
+          }
+        })
     },
-
-
     toaPublish(item,index){
       this.$router.push({
         path: '/publishPage',
@@ -342,7 +330,6 @@ export default {
       })
     },
     toActive(val){
-      // this.$router.push('/experienceCentre')
       this.$router.push({
         path: '/experienceCentre',
         query: {
@@ -350,24 +337,6 @@ export default {
         }
       })
     },
-    // getHotActive(){
-    //   this.loadingActive = true
-    //   this.$http.post(this.api + '/home/Activity/activ_list',{
-    //     token: localStorage.getItem('token'),
-    //     sort:1,
-    //     page: 1
-    //   })
-    //     .then(res=>{
-    //       if(res.data.code == 1){
-    //         this.activeList = res.data.data.data
-    //         this.loadingActive = false
-    //       }else if(res.data.code == 3){
-    //         this.getHotActive()
-    //       }else if(res.data.code == 0){
-    //         alert(res.data.msg)
-    //       }
-    //     })
-    // },
     getVal(msg){
       this.content = msg
     },
@@ -378,11 +347,8 @@ export default {
     },
     getKind(){
       this.isserchRry = true
-      this.$http.post(this.api + '/home/Kind/kindlist',{
-        token: localStorage.getItem('token')
-      })
-        .then(res=>{
-          if(res.data.code == 1){
+      this.$post('/home/Kind/kindlist',{}).then(res=>{
+        if(res.data.code == 1){
             let data = res.data.data
             let a = []
             let b = []
@@ -394,13 +360,10 @@ export default {
             }
             this.searchList = b
             this.isserchRry = false
-          }else if(res.data.code == 3){
-            this.getKind()
-          }else if(res.data.code == 0){
-            alert(res.data.msg)
-            this.isserchRry = false
-          }
-        })
+        }else if(res.data.code == 3){
+          this.getKind()
+        }
+      })
     },
     searchHome(){
       this.$router.push({
@@ -509,56 +472,27 @@ export default {
     },
     //点赞
     addZan(item,index){
-      if(item.is_praise == 0){
-        this.$http.post(this.api + '/home/Comment/praise',{
-          token: localStorage.getItem('token'),
+        this.$post('/home/Comment/praise',{
           flag: 1,
           table_id: item.story_id,
-          type: 1
-        })
-          .then(res=>{
-           if(res.data.code == 1){
-             item.is_praise = 1
-             item.zan = item.zan + 1
-           }else if(res.data.code == 3){
-             this.addZan(item,index)
-           }else if(res.data.code == 0){
-             alert(res.data.msg)
-           }
-          })
-
-      }else{
-        this.$http.post(this.api + '/home/Comment/praise',{
-          token: localStorage.getItem('token'),
-          flag: 1,
-          table_id: item.story_id,
-          type: 2
-        })
-          .then(res=>{
+          type: item.is_praise == 0? 1:2
+        }).then(res=>{
             if(res.data.code == 1){
-              item.zan = item.zan - 1
-              item.is_praise = 0
+              item.praise_num = item.is_praise == 0? item.praise_num + 1: item.praise_num - 1
+              item.is_praise = item.is_praise == 0? 1:0
             }else if(res.data.code == 3){
               this.addZan(item,index)
-            }else if(res.data.code == 0){
-              alert(res.data.msg)
             }
           })
-      }
     },
     serchHistory(){
-      if(localStorage.getItem('isLogin')){
+      if(sessionStorage.getItem('isLogin')){
         this.isSerch = true
-        this.$http.post(this.api + '/home/Index/search_lately',{
-          token: localStorage.getItem('token')
-        })
-          .then(res=>{
-            if(res.data.code == 1){
+        this.$post('/home/Index/search_lately',{}).then(res=>{
+             if(res.data.code == 1){
               this.serchList = res.data.data
             }else if(res.data.code == 3){
               this.serchHistory()
-            }else if(res.data.code == 0){
-              alert(res.data.msg)
             }
           })
       }
@@ -588,24 +522,24 @@ export default {
     },
    getVist(){
      this.islookRecent = true
-      if(localStorage.getItem('isLogin')){
-        this.$http.post(this.api + '/VisitListTwo',{
-          token: localStorage.getItem('token'),
-          page: 1,
-          per_page:3
-        })
-          .then(res=>{
-            if(res.data.code == 1){
-              let data = res.data.data.data
-              this.recentlyList = data
-              this.islookRecent = false
-            }else if(res.data.code == 3){
-              this.getVist()
-            }else if(res.data.code == 0){
-              alert(res.data.msg)
-              this.islookRecent = false
-            }
-          })
+      if(sessionStorage.getItem('isLogin')){
+          this.$post('/VisitListTwo',{
+            page: 1,
+            per_page:3
+          }).then(res=>{
+              if(res.data.code == 1){
+                let data = res.data.data.data
+                this.recentlyList = data
+                this.islookRecent = false
+              }else if(res.data.code == 3){
+                this.getVist()
+              }else if(res.data.code == 0){
+                this.islookRecent = false
+              }
+            })
+            .catch(error=>{
+                this.islookRecent = false
+              })
       }else{
         this.recentlyList = []
         this.islookRecent = false
@@ -614,47 +548,45 @@ export default {
     getActive(){
       this.hotActive = []
       this.LoadingState = true
-      this.$http.post(this.api + '/ActivityListUserTwo',{
-        token: localStorage.getItem('token'),
+      this.$post('/ActivityListUserTwo',{
         sort: 1,
         page:1,
         city: this.hotIndex,
         per_page:9
-      })
-        .then(res=>{
-          if(res.data.code == 1){
+      }).then(res=>{
+        if(res.data.code == 1){
             let data = res.data.data.data
             this.hotActive = data
             this.LoadingState = false
           }else if(res.data.code == 3){
             this.getActive()
           }else if(res.data.code == 0){
-            alert(res.data.msg)
+            this.LoadingState = false
           }
+      })
+      .catch(error=>{
+          this.LoadingState = false
         })
-
+      
     },
     getStory(){
       this.LoadingState2 = true
-      this.$http.post(this.api + '/home/Story/story_list',{
-        token: localStorage.getItem('token'),
+      this.$post('/home/Story/story_list',{
         sort: 2,
         page: 1
-      })
-        .then(res=>{
-          if(res.data.code == 1){
+      }).then(res=>{
+            if(res.data.code == 1){
             let data = res.data.data.data
-
-            if(data.length){
-             
-              this.wonderfulList = data
-            }
+            this.wonderfulList = data.length?data:[]
             this.LoadingState2 = false
           }else if(res.data.code == 3){
             this.getStory()
           }else if(res.data.code == 0){
-            alert(res.data.msg)
+            this.LoadingState2 = false
           }
+        })
+        .catch(error=>{
+          this.LoadingState2 = false
         })
     },
     reload(){
@@ -667,16 +599,11 @@ export default {
     },
     sendBuidu(){
       if(window.location.href.indexOf('.top') == -1 && window.location.href.indexOf('localhost') == -1){
-        this.$http.post(this.api + '/BaiduPush',{
-          token: localStorage.getItem('token'),
+          this.$post('/BaiduPush',{
           url: encodeURIComponent(window.location.href)
-        })
-          .then(res=>{
-            if(res.data.code == 1){
-            }else if(res.data.code == 3){
+          }).then(res=>{
+            if(res.data.code == 3){
               this.sendBuidu()
-            }else if(res.data.code == 0){
-              alert(res.data.msg)
             }
           })
       }
@@ -684,20 +611,17 @@ export default {
     //首页轮播
     getBanner(){
       this.isLoading = true
-      this.$http.post(this.api + '/home/Banner/bannerlist',{
-        token: localStorage.getItem('token'),
+      this.$post('/home/Banner/bannerlist',{
         flag: 0
-      })
-        .then(res=>{
-          if(res.data.code == 1){
-            this.bannerList = res.data.data
-            this.isLoading = false
-          }else if(res.data.code == 3){
-            this.getBanner()
-          }else if(res.data.code == 0){
-            alert(res.data.msg)
-            this.isLoading = false
-          }
+      }).then(res=>{
+            if(res.data.code == 1){
+              this.bannerList = res.data.data
+              this.isLoading = false
+            }else if(res.data.code == 3){
+              this.getBanner()
+            }else if(res.data.code == 0){
+              this.isLoading = false
+            }
         })
         .catch(error=>{
           this.isLoading = false
@@ -705,12 +629,8 @@ export default {
     },
     getHotLocal(){
       this.LoadingState = true
-      this.$http.post(this.api + '/PopularCity',{
-        token: localStorage.getItem('token'),
-        
-      })
-        .then(res=>{
-          if(res.data.code == 1){
+      this.$post('/PopularCity',{}).then(res=>{
+         if(res.data.code == 1){
             if(res.data.data.length){
               this.hotnav = res.data.data
               this.hotIndex = this.hotnav[0].city
@@ -719,15 +639,12 @@ export default {
             this.ishotPlace = false
           }else if(res.data.code == 3){
             this.getHotLocal()
-          }else if(res.data.code == 0){
-            alert(res.data.msg)
           }
-        })
+      })
     },
 
   },
   mounted(){
-
     window.scroll(0,0)
     let _this = this
     window.addEventListener('scroll',this.showHead)
@@ -739,7 +656,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .marginR{
     margin-right:30px;

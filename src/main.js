@@ -14,7 +14,11 @@ import Store from './status/status'
 Vue.prototype.Store = Store
 
 
+//引入统一封装方法 
 
+import {post,get} from './axios/axois'
+Vue.prototype.$get = get
+Vue.prototype.$post = post
 
 
 
@@ -45,6 +49,8 @@ Vue.use(VueDND)
 
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
+
+//路由守卫
 router.beforeEach((to,from,next)=>{
   document.title = to.meta.title || 'Allptp'
   document.querySelector('meta[name="baidu-site-verification"]').setAttribute('content','l1YQyZLrc6')
@@ -60,7 +66,7 @@ router.beforeEach((to,from,next)=>{
         })
       }
     }else{
-      if(JSON.parse(localStorage.getItem('isLogin'))){
+      if(JSON.parse(sessionStorage.getItem('isLogin'))){
         next()
       }else{
         next({
@@ -70,7 +76,6 @@ router.beforeEach((to,from,next)=>{
     }
   }else{
     if(to.meta.isLoginA){
-      console.log(to)
       if(to.query.userId){
         next()
       }else{
@@ -83,7 +88,7 @@ router.beforeEach((to,from,next)=>{
     }
   }
   if(to.fullPath == "/logion"){
-    if(JSON.parse(localStorage.getItem('isLogin'))){
+    if(JSON.parse(sessionStorage.getItem('isLogin'))){
     next({        path:from.fullPath
     });
   }else {
@@ -93,26 +98,7 @@ router.beforeEach((to,from,next)=>{
 })
 
 
-
-/*var name = location.hostname
-var href = location.href
-var pathName = location.pathname
-var newhref = ''
-if(name != 'localhost' && name.indexOf('192') == -1 && href.indexOf('.top') == -1){
-   if(href.indexOf('www') === -1 && href.indexOf('.cn') !== -1){
-      window.location.href = 'www.'+href.slice(8)
-   }
-   if(href.indexOf('.cn') === -1 && href.indexOf('www') !== -1){
-     window.location.href = href.slice(0,18) + '.cn'+pathName
-   }
-    if(href.indexOf('.cn') === -1 && href.indexOf('www') === -1){
-      newhref = href.slice(0,8) + 'www.'+href.slice(8)
-      newhref = newhref.slice(0,18) + '.cn'+pathName
-      window.location.href = newhref
-    }
-}*/
 Vue.use(ElementUI)
-/* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,

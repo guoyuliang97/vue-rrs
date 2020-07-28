@@ -403,7 +403,7 @@
           }
         },
         uploadScecond(file,fileList){
-          console.log(file)
+         
           if(file.status == 'ready'){
             this.isSeccond = true
           }else if(file.status == 'success'){

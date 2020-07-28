@@ -46,7 +46,7 @@
 
         },
         async xunhuan(event){
-          console.log(1)
+      
           let _this = this
           var param = new FormData()
           if(event.target.files.length){
@@ -193,15 +193,15 @@
           this.$http.post(this.api + '/home/Upload/upload_many', this.param)
             .then(res=>{
               if(res.data.code == 1){
-                console.log(res)
+            
                 let data = res.data.data
-                console.log(res)
+            
                   for(let i =0;i< data.length; i++){
                     this.fileAllList.push({url:data[i].domain + data[i].image_url,image_id:data[i].image_id})
                   }
                   this.$refs.file.value = ''
               }else if(res.data.code == 3){
-                console.log(3)
+        
                 this.token = localStorage.getItem('token')
                 this.upload()
                /* this.$http.post(this.api + '/home/index/token')

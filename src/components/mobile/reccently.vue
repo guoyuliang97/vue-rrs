@@ -61,7 +61,7 @@
             })
         },
         toPage(item,index){
-          console.log(item)
+     
           if(item.flag == 1){
             this.$router.push({
               path: '/mPublishPage',

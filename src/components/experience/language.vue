@@ -127,7 +127,6 @@ import test from '../../../static/js/language'
 		  if( this.active_id ){
 		   this.getActive()
       }
-		  console.log(this.active_id)
     },
   }
 </script>

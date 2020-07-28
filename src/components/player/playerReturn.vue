@@ -3,7 +3,10 @@
     <Head type='refundDescirbe'></Head>
     <div v-if="house" class="fontweight " style="background-color: #fff;font-size:16px;padding:20px;width:1080px;margin: 85px auto">
       <p class="contentTitle">我的活动  > 查看预订>主动退款</p>
-      <p class="marginT" style="font-size:18px;">我退款给</p>
+      <div class="flexBetween">
+                <p class="fontweight marginT" >我退款给</p>
+                <el-button icon="el-icon-arrow-left" style="width:50px;height:50px;" @click="goBack"  circle></el-button>
+              </div>
       <div class="flexStart marginT">
         <LoadingImg type="user" :src="house.user.head_image?house.user.headimage.domain + house.user.headimage.image_url:''" style="width:92.04px;height:92.04px;" ></LoadingImg>
         <div style="margin-left:10px;line-height:92px;font-size:29px;">
@@ -58,13 +61,16 @@
       </div>
       <hr class="lineS">
       <div class=" marginT">
+        <p>基金抵扣&nbsp;&nbsp;&nbsp;{{house.balance}}</p>
+      </div>
+      <div class=" marginT">
         <p>支付总额&nbsp;&nbsp;&nbsp;￥{{house.pay_price}}</p>
       </div>
-      <div class=" marginT"  >
+      <!-- <div class=" marginT"  >
         <p>退款总额&nbsp;&nbsp;&nbsp;<span style="color:#F73D3D">￥{{house.total_price}}</span></p>
-      </div>
+      </div> -->
       <div class="marginT">
-        <p>退款时间'&nbsp;&nbsp;&nbsp;{{house.create_time}}</p>
+        <p>退款时间&nbsp;&nbsp;&nbsp;{{house.create_time}}</p>
       </div>
       <div class="marginT">
         <p>订单编号&nbsp;&nbsp;&nbsp;{{house.order_no}}</p>
@@ -115,9 +121,12 @@
       },
       //提交申请
       sendRefund(){
-        this.isLoading = true
-        if(this.house.is_refund){
-    
+     
+        if(!this.reson){
+          this.$message({type:'error',message:'请填写退款理由!'})
+        }else{
+             this.isLoading = true
+          if(this.house.is_refund){
           var a = [],
             b = [],
             c=0,
@@ -183,6 +192,8 @@
               }
             })
         }
+        }
+      
       },
       getOrder(){
         this.isLoading = true
@@ -198,11 +209,8 @@
               this.isLoading = false
           
             }else if(res.data.code == 3){
-              this.$http.post(this.api + '/home/index/token')
-                .then(res=>{
-                  localStorage.setItem('token',res.data.data)
                   this.getOrder()
-                })
+
             }else if(res.data.code == 0){
               alert(res.data.msg)
               this.isLoading =false

@@ -1,6 +1,6 @@
 <template>
     <div style="text-align:left; ">
-       <Head type="moreActive" v-on:getVal="getVal"  :content="editSearch"   v-on:search="searchHome"></Head>
+      <Head type="moreActive" v-on:getVal="getVal"  :content="editSearch"   v-on:search="searchHome"></Head>
       <div style="width:98%;background-color:#fff;border-top:1px solid #eee;padding:10px 1%;position:fixed;top:82px;z-index: 99;display:flex;justify-content:space-between;border-bottom: 1px solid #eee">
         <div style="display:flex;justify-content:flex-start">
           <el-popover
@@ -89,7 +89,7 @@
           </el-popover>
         </div>
         <div style="display:flex;justify-content:flex-end;">
-          <div style="margin-right: 10px;line-height: 40px;">
+          <div style="margin-right: 10px;line-height: 40px;width:70px">
             显示地图
           </div>
           <div style="width:70px;margin-top: 5px;" >
@@ -105,13 +105,13 @@
        <!-- 第一版本活动内容-->
        <div v-show="!mapIndex">
         <div style="margin-top:142px;">
-                <div style="position:relative;height:380px; padding:50px 0;display: flex;align-items: center;justify-content: center">
-                    <loadingImg style="width:100%;height:100%" :src="cityData.top_image_url?cityData.top_image_url:''" type="2"></loadingImg>
-                    <div style="position:absolute;color:#fff;text-align: center;">
-                      <div style="font-size:60px;padding:10px 0;">{{adress}}</div>
-                      <div style="font-size:20px;">选择让您觉得不错的体验</div>
-                    </div>
-                </div>
+              <div style="position:relative;height:380px; padding:50px 0;display: flex;align-items: center;justify-content: center">
+                  <loadingImg style="width:100%;height:100%" :src="cityData.top_image_url?cityData.top_image_url:''" type="2"></loadingImg>
+                  <div style="position:absolute;color:#fff;text-align: center;">
+                    <div style="font-size:60px;padding:10px 0;">{{adress}}</div>
+                    <div style="font-size:20px;">选择让您觉得不错的体验</div>
+                  </div>
+              </div>
             </div>
             <div  style="width:1080px;margin: 0 auto;">
               <h2 style="margin: 20px 0;">{{adress}}有{{activeList.length}}处可订的人人游体验</h2>
@@ -144,16 +144,14 @@
        
 
       <!--第二版本添加地图-->
-     
-      <div v-show="mapIndex" style="display:flex;">
+      <div v-show="mapIndex" class="flexBetween">
         <div  class="activeList">
            <div class="title">有{{total}}个活动</div>
           <div v-for="(item,index) in activeList " @click="toPublish(item,index)" @mouseenter="changeColorIndex(item,index)" class="active_child">
-            <Detail type="mapActive" :data="item"></Detail>
+            <Detail type="mapActive" style="width:100%;height:100%;" :data="item"></Detail>
           </div>
         </div>
         <div class="mapStyle" id="mapStyle">
-        
         </div>
       </div>
       <div v-if="isLoading" style="position: fixed;top:0;left:0;bottom:0;right:0;background-color: rgba(255,255,255,0.8);z-index:999;display: flex;justify-content: center;align-items: center">
@@ -215,6 +213,7 @@
             city:'',
             xian:'',
             xianList:[],
+            priceArr:[]
           }
       },
       components:{
@@ -271,11 +270,13 @@
         selectProvince(msg){
           this.province = msg[1]
           this.getall()
-          this.adress = this.province
-          this.creatMap()
+         
+        
         },
         selectCity(msg){
           this.city = msg[1]
+           this.adress = this.city
+             this.creatMap()
           this.getall()
         },
         selectXian(msg){
@@ -306,8 +307,8 @@
           }
         },
         Mwpchange(){
-             var map = document.getElementsByClassName('mapStyle')[0]
-             var active = document.getElementsByClassName('activeList')[0]
+            var map = document.getElementsByClassName('mapStyle')[0]
+            var active = document.getElementsByClassName('activeList')[0]
            if(this.mapIndex){
              this.mapIndex = 0
              map.style.display = 'none'
@@ -317,7 +318,7 @@
            }else{
              this.mapIndex = 1
              map.style.display = 'block'
-             active.style.width = '48%'
+             active.style.width = '45%'
               window.scroll(0,0)
               this.getActive(1)
            }
@@ -414,10 +415,15 @@
                 this.activeList = res.data.data.data
                 this.isLoading = false
                 var adreeList = [];
+                var priceArr = []
                 this.activeList.forEach(function (item){
-                  adreeList.push({'point':[item.set_address_lng,item.set_address_lat],'text':item.price})
+                  // adreeList.push({'point':[item.set_address_lng,item.set_address_lat],'text':item.price})
+                  adreeList.push([item.set_address_lng,item.set_address_lat])
+                  priceArr.push(item.price)
                 })
+                
                 this.adreeList = adreeList
+                this.priceArr = priceArr
               }else if(res.data.code == 3){             
                   this.getActive(val,price_low,price_high,begin_time,end_time,kind_id,is_volunteen,person)
               }else if(res.data.code == 0){
@@ -452,21 +458,35 @@
           mapHeight.style.height = height - 140 + 'px'
         },
         addMarker(){
-          var markerIndex = this.markerIndex
-          var map = this.map  // 获取地图
-          var defultImg = this.defultImg
-          var data = this.activeList
-          this.adreeList.forEach((item,index) => {   //循环搜索的地点数组
-                takePoint(item.point,item.text,data[index],defultImg)
-          })
+          var that = this
+          var markerIndex = that.markerIndex
+          var map = that.map  // 获取地图
+          var defultImg = that.defultImg
+          var dataArr = that.activeList
+           //坐标转换完之后的回调函数
+    
+            for (var i = 0; i < that.adreeList.length; i++) {
+                var gcj02tobd09 = coordtransform.gcj02tobd09(that.adreeList[i][0],that.adreeList[i][1]);
+                takePoint(gcj02tobd09,that.priceArr[i],dataArr[i],defultImg)
+            }
+          
+         
+              
+          
+          // this.adreeList.forEach((item,index) => {   //循环搜索的地点数组
+          //   takePoint(item.point,item.text,data[index],defultImg)
+          // })
+       
           function takePoint(point,text,item,defultImg){
-             let _this = this
-            var ggPoint = new BMap.Point(point[0],point[1]);
+            let _this = this
+            var ggPoint = new BMap.Point(point[0],point[1])
+
+        
+            
             var marker = new BMap.Marker(ggPoint);
             map.addOverlay(marker);
-             var sContent = new CreatContent(item,defultImg,text)
+            var sContent = new CreatContent(item,defultImg,text)
             var information = new BMap.InfoWindow(sContent);
-          
             marker.addEventListener('click',function(){
               this.openInfoWindow(information);
             })
@@ -484,7 +504,16 @@
               p.innerHTML = text? '价格：'+'￥'+ text +'/人起':'已过期' ;
               div.append(img);
               div.appendChild(h);
-              div.appendChild(p)
+              div.appendChild(p);
+              div.onclick = function(){
+                that.$router.push({
+                  path: '/publishPage',
+                  query: {
+                    information: item.activity_id
+                  }
+                })
+              }
+            
               return div
             }
             //定义自定义覆盖物
@@ -497,7 +526,7 @@
               this._map = map;
               var div = this._div = document.createElement('div');
               div.style.position = 'absolute';
-              // div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
+              div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
               div.style.zIndex = '1';
               div.style.backgroundColor = 'white';
               div.className = 'markerStyle';
@@ -547,6 +576,19 @@
             })
             mp.centerAndZoom(city, 10);
             mp.disableDoubleClickZoom()
+        
+
+            
+            
+       
+
+              //坐标转换完之后的回调函数
+          
+
+              
+           
+
+
             function ZoomControl(){
               // 默认停靠位置和偏移量
               this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
@@ -613,7 +655,8 @@
               var westSouth = bounds.getSouthWest()  // 获取西南角经纬度
               var eastNorth = bounds.getNorthEast()  //获取东北角经纬度
               _this.westSouth = [westSouth.lng,westSouth.lat];
-              _this.eastNorth = [eastNorth.lng,eastNorth.lat]
+              _this.eastNorth = [eastNorth.lng,eastNorth.lat];
+              
             })
             mp.addEventListener('zoomend',function () {
                var bounds = mp.getBounds();
@@ -621,6 +664,7 @@
               var eastNorth = bounds.getNorthEast()  //获取东北角经纬度
               _this.westSouth = [westSouth.lng,westSouth.lat];
               _this.eastNorth = [eastNorth.lng,eastNorth.lat];
+              
             })
             _this.map = mp
         },
@@ -643,9 +687,10 @@
       },
       mounted(){
           window.scroll(0,0)
-          this.creatMap()
-          this.getCityImg()
           this.getActive(1)
+          this.creatMap()
+         
+          this.getCityImg()
           this.getShowHigh()
       },
       created(){
@@ -658,19 +703,21 @@
 <style scoped>
 .activeMargin{
   margin-bottom: 20px;
-  margin-right: 45px
+  margin-right: 45px;
 }
+
 .activeMargin:nth-child(3n){
   margin-right:0
 }
+
 .activeList{
   width: 48%;
   overflow-y:scroll;
   margin-top: 140px;
   float:left;
   padding: 1%;
-  min-width: 700px;
 }
+
 .active_child{
   width: 100%;
   height: 200px;
@@ -680,13 +727,14 @@
   display: flex;
   justify-content: flex-start
 }
+
 .mapStyle{
   position:fixed !important;
   width: 50%;
-  top:140px;
-  float:left;
+  top: 140px;
+  float: left;
   bottom: 0;
-  right:0;
+  right: 0;
 }
 .active_child:hover{
   box-shadow: 0px 0px 2px 2px #eee;

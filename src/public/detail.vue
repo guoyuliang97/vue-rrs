@@ -45,10 +45,10 @@
 		</div>
 		<div v-if="type == 'mapActive'" class="flexStart">
 			<div>
-              <loadingImg type="2" :src="data.domain + data.image_url?data.domain + data.image_url:''" style="width:300px;height:200px;border-radius:10px;overflow:hidden"></loadingImg>
+              <loadingImg type="2" :src="data.domain + data.image_url?data.domain + data.image_url:''" style="width:250px;height:200px;border-radius:10px;overflow:hidden"></loadingImg>
             </div>
-            <div style="display:flex;justify-content:space-between;width:100%;padding: 10px;font-size:14px;font-weight:bold">
-              <div style="width:70%;line-height: 40px;padding: 0 5px;border-right: 1px solid #eee">
+            <div style="display:flex;justify-content:space-between;width:98%;padding:0  1%;font-size:14px;font-weight:bold">
+              <div style="width:60%;line-height: 40px;padding: 0 5px;border-right: 1px solid #eee">
                 <div style="margin: 0 0;">
 					<p>{{data.city}}</p>
 					<p class="hiddenText" style="font-size:15px;margin-top: 4px;">{{data.title}}</p>
@@ -62,16 +62,12 @@
 					<i class="el-icon-star-on" :style="{color:Number( data.score)?'#14C5CA':'#CACBCB'}"></i>
 					{{Number( data.score)?data.score:'暂无评星'}}<span style="margin-left:18px;color:#666666">{{data.comment_num?data.comment_num:'暂无'}}评论</span>
 				</div>
-		
               </div>
-                <div style="width:20%;text-align:center;line-height:200px">
-                  <div>
-                    <h4 :style="{color:data.price?'black':'red'}">{{data.price? data.price + '/人起':'已过期'}}</h4>
-                  </div>
-                  <!-- <div >
-                    <loadingImg type="user" :src="data.user.head_image?data.user.headimage.domain + data.user.headimage.image_url:'' " style="margin-top: 80px;width:30px;height: 30px;"></loadingImg>
-                  </div> -->
-                </div>  
+				<div style="width:40%;text-align:center;line-height:200px">
+					<div>
+					<h4 :style="{color:data.price?'black':'red'}">{{data.price? '￥' + data.price + '/人起':'已过期'}}</h4>
+					</div>
+				</div>  
             </div>
 		</div>
 

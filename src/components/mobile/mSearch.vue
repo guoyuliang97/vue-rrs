@@ -161,7 +161,7 @@
           })
             .then(res=>{
               if(res.data.code == 1){
-                console.log(res)
+             
                 this.serachLate = res.data.data
               }else if(res.data.code == 3){
 

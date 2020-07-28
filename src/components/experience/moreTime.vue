@@ -1359,6 +1359,7 @@
               if(res.data.code == 1){
                 this.$message({type: 'success',message:'修改成功!'})
                 this.getSlotDate(this.reMakeDate)
+                this.getActive()
                 this.abiosh()
               }else if(res.data.code == 3){
                  this.addTimeList(val)
@@ -1400,8 +1401,6 @@
         abiosh(){
           this.isRemake = false
           this.allTimeL = []
-          this.isCreate = false
-          this.isZhemo = false
           // this.longTime = []
           this.activeList = []
           this.activeNum = ''
@@ -1697,6 +1696,8 @@
             this.isShow = false
             this.dateIndex = -1
             this.timeNumber = []
+            this.reMakeDate = ''
+            // this.longTime = []
           }else{
             this.dateIndex = index
             this.dayIndex = index
@@ -1709,7 +1710,8 @@
               m = '0' + m
             }
             let day = this.year + '-' + m + '-'+ d
-            this.longTime = [day,day]
+            this.reMakeDate = day
+            // this.longTime = [day,day]
             this.getSlotDate(day)
           }
         },
@@ -1962,10 +1964,10 @@
            this.asdsad(item,index)
         },
         asdsad(item,index){
+        
           this.discountChose = []
           this.isRemake = true
-          this.reMakeDate = this.longTime[0]
-          this.witchDay = this.longTime[0] +' '+ item.begin_time + '-'+ item.end_time
+          this.witchDay = this.reMakeDate +' '+ item.begin_time + '-'+ item.end_time
           this.remakeIndex = index
           this.slot_id = item.slot_id        
           // this.longTime.push(item.begin_date,item.end_date)
@@ -2031,7 +2033,6 @@
                     this.isZhemo = true
                   }
                 }
-               
               }else if(res.data.code == 3){
                 this.getCombine(val)
               }else if(res.data.cdoe == 0){
@@ -2077,12 +2078,11 @@
           }
         },
         paduanCheck(){
-          if(!this.isCreate){
+      
             this.isCombine('1',this.isQzCombine)
-          }
-          if(!this.isZhemo){
+        
             this.isCombine('2',this.iszhCombo)
-          }
+      
         },
         getActive(){
           this.$http.post(this.api + '/ActivityAllSlotDetailTwo',{

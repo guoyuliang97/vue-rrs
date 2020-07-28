@@ -40,7 +40,7 @@
           </div>
           <div style="width:188px;font-size:12px;line-height:20px;padding:15px 5px 10px 5px;border:1px solid #eee;border-top:none">
             <div style="display: flex;">
-              <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis"><b>{{(item.family_name+item.middle_name+item.name)?(item.family_name+'·'+item.middle_name+'·'+item.name):'匿名用户'}}</b></div>
+              <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis"><b>{{(item.family_name+item.middle_name+item.name)?(item.family_name?item.family_name+' ':'' )+(item.middle_name?item.middle_name+' ':'')+item.name:'匿名用户'}}</b></div>
             </div>
             <div style="display: flex;justify-content: flex-start;margin: 10px 0;">
               <div>{{item.score}}</div>

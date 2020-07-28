@@ -66,52 +66,32 @@
 				this.$router.push('/edit')
 			},
       saveNotice(){
-			  this.$http.post(this.api + '/home/User/config_add',{
-			    token: localStorage.getItem('token'),
-          mes: this.msgData ,
+        this.$post('/home/User/config_add',{
+           mes: this.msgData ,
           remind: this.txData ,
-        })
-          .then(res=>{
-            if(res.data.code == 1){
+        }).then(res=>{
+          if(res.data.code == 1){
               this.$message({
                 type: 'success',
                 message: '保存成功！'
               })
             }else if(res.data.code == 3){
-              this.$http.post(this.api + '/home/index/token')
-                .then(res=>{
-                  localStorage.setItem('token',res.data.data)
-                  this.saveNotice()
-                })
-            }else if(res.data.code == 0){
-              alert(res.data.msg)
+              this.saveNotice()
             }
-          })
+        })
       },
       getInformation(){
-			  this.$http.post(this.api + '/home/User/get_user',{
-			    token: localStorage.getItem('token')
-        })
-          .then(res=>{
-            if(res.data.code == 1){
+        this.$post('/home/User/get_user',{}).then(res=>{
+          if(res.data.code == 1){
               this.userData = res.data.data[0]
             }else if(res.data.code == 3){
-              this.$http.post(this.api + '/home/index/token')
-                .then(res=>{
-                  localStorage.setItem('token',res.data.data)
-                  this.getInformation()
-                })
-            }else if(res.data.code == 0){
-              alert(res.data.msg )
+              this.getInformation()
             }
-          })
+        })
       },
       getNotice(){
-			  this.$http.post(this.api + '/home/User/config_get',{
-			    token: localStorage.getItem('token')
-        })
-          .then(res=>{
-            if(res.data.code == 1){
+        this.$post('/home/User/config_get',{}).then(res=>{
+          if(res.data.code == 1){
               let data = res.data.data
               if(data.mes){
                 var a = []
@@ -128,15 +108,9 @@
                 this.msgData = a
               }
             }else if(res.data.code == 3){
-              this.$http.post(this.api + '/home/index/token')
-                .then(res=>{
-                  localStorage.setItem('token',res.data.data)
-                  this.getNotice()
-                })
-            }else{
-              alert(res.data.msg)
+              this.getNotice()
             }
-          })
+        })
       },
 		},
     mounted(){

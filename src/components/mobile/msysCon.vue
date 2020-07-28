@@ -37,7 +37,7 @@
             })
               .then(res=>{
                 if(res.data.code == 1){
-                  console.log(res)
+          
                   let  data = res.data.data
                   this.title = data.title
                   this.create_time = data.send_time
@@ -56,7 +56,7 @@
       },
       created(){
          this.messId =  this.$route.query.information
-        console.log(this.messId)
+      
       }
     }
 </script>

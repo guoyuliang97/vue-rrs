@@ -1,6 +1,6 @@
 <template>
     <div>
-      <Head type="publishPage" v-on:onreload="reload" ></Head>
+      <Head type="publishPage" v-on:reload="reload" ></Head>
       <hr style="margin-top:82px;border: 1px solid #eee;">
 
       <!-- 第二版本活动详情 -->
@@ -143,13 +143,13 @@
                 </div>
               </div>
             </div>
-              <div v-if="is_volunteen"  class="flexStart" >
+              <div v-if="is_volunteen&&orderNum&&userId != isOwer"  class="flexStart" >
                 <div class="mainFont firstCOntent">
               
                 </div>
                 <div class="flexStart secendWidth"  style="line-height:40px;height:40px;margin-top: 49px;">
                   <span v-if="orderNum&&userId != isOwer"  style="height: 23px;padding: 5px;background: rgba(20,197,202,1);border-radius: 2px;line-height: 23px;text-align: center;color: #fff;"  size="medium"  @click="orderVolunter">{{allText.click[0][Lan]}}></span>
-                  <span  style="color:#666666;font-size: 14px; margin-left:19px;">{{orderNum&&userId != isOwer?'':'自愿者'}}报名需知：需要会<span v-for="(item,index) in needLanguage">{{language[item].label+ '、'}}</span>&nbsp;|&nbsp;其他要求：{{volun_require?volun_require:'无'}}</span>
+                  <span  v-if="orderNum&&userId != isOwer" style="color:#666666;font-size: 14px; margin-left:19px;">{{orderNum&&userId != isOwer?'':'自愿者'}}报名需知：需要会<span v-for="(item,index) in needLanguage">{{language[item].label+ '、'}}</span>&nbsp;|&nbsp;其他要求：{{volun_require?volun_require:'无'}}</span>
                 </div>
               </div>
               <hr class="line">
@@ -159,8 +159,8 @@
                 </div>
                 <div class="secendWidth">
                   <div class="flexStart" v-if="discount.length">
-                    <div style="height:24px;width:50px;background:rgba(243,247,250,1);text-align:center" class="mainColor" >折扣</div>
-                    <div  style="margin-left:15px;width:100%;">
+                    <div style="height:24px;background:rgba(243,247,250,1);text-align:center" class="mainColor" >{{allText.click[1][Lan]}}</div>
+                    <div  style="width:80%;margin-left:15px;">
                       <div class="flexWrap" >
                         <div class="marginRight marginTop" style="" v-for="(item,index) in discount" v-show="isDiscount? index < 4:true">{{item.date}} {{item.begin_time}}—{{item.end_time}}时间内标准价{{Number(item.price_discount)}}折儿童价{{Number(item.kids_price_discount)}}折</div>
                         
@@ -169,7 +169,7 @@
                     </div>
                   </div>
                   <div v-if="Differ.length" class="flexStart">
-                      <div style="height:24px;background:rgba(243,247,250,1);text-align:center;width:80px;" class="mainColor" >返差价
+                      <div style="height:24px;background:rgba(243,247,250,1);text-align:center;" class="mainColor" >{{allText.click[2][Lan]}}
                         <el-tooltip content="bottom" placement="bottom" effect="light">
                           <div slot="content" style="width:300px;line-height:30px;">
                             <p class="fontweight">{{allText.Chajia[0][Lan]}}：</p>
@@ -182,7 +182,7 @@
                           <i class='el-icon-question' style="color:#999" ></i>
                         </el-tooltip>
                       </div>
-                      <div  style="margin-left:15px;">
+                      <div  style="width:80%;margin-left:15px;">
                         <div v-if="Differ.length" class="flexWrap">
                           时间段内体验结束时满
                           <div class="marginTop"  v-for="(item,index) in Differ">
@@ -192,8 +192,8 @@
                       </div>
                     </div>
                     <div v-if="is_combine_qinzi || is_combine_zuhe" class="flexStart">
-                      <div style="height:24px;width:48px;background:rgba(243,247,250,1);font-size:14px;text-align:center" class="mainColor">套餐</div>
-                      <div  style="margin-left:15px;">
+                      <div style="height:24px;padding: 1px 2px;background:rgba(243,247,250,1);font-size:14px;text-align:center" class="mainColor">{{allText.click[3][Lan]}}</div>
+                      <div  style="width:80%;margin-left:15px;">
                         <p v-if="is_combine_qinzi && is_combine_zuhe">该活动包含亲子套餐和组合套餐</p>
                         <p v-if="!is_combine_qinzi && is_combine_zuhe">该活动包组合套餐</p>
                         <p v-if="is_combine_qinzi && !is_combine_zuhe">该活动包含亲子套餐</p>
@@ -206,13 +206,14 @@
                 <div class=" mainFont firstWidth" >
                    {{allText.title[1][Lan]}}
                 </div>
+                
                 <div class="secendWidth">
                   <div style="min-width:150px">
                     <div>
                       <img @click="toPerson(userId)" :src="userImg" width="48px" height="48px" style="object-fit:cover;border-radius:50%;margin-bottom: 10px;">
                       </div>
                     <p style="font-size:18px;font-weight:bold;">{{userName?userName:'匿名用户'}}</p>
-                    <p v-if="userId != isOwer " @click="contactPlanner" style="font-size:14px;color:#000;cursor: pointer;margin-top:15px;">{{allText.click[4][Lan]}}</p>
+                    <p v-if="userId != isOwer " class="sameColor" @click="contactPlanner" style="font-size:14px;color:#000;cursor: pointer;margin-top:15px;">{{allText.click[4][Lan]}}</p>
                   </div>
                   <div>
                     <div style="margin-top:20px;line-height:40px;word-wrap:break-word;white-space:pre-wrap;line-height:30px;" v-html="Xss(userintroduce)"></div>
@@ -222,7 +223,6 @@
               </div>
               <hr class="line">
               <div class="flexStart">
-                
                 <div class=" mainFont firstWidth" >
                    {{allText.title[2][Lan]}}
                 </div>
@@ -237,14 +237,14 @@
                   {{allText.title[3][Lan]}}
                 </div>
                 <div class="secendWidth flexStart" style="text-align:left;">
-                  <div>
-                    <p class="fontweight marginTop">体验地点</p>
+                  <div style="max-width:60%">
+                    <p class="fontweight marginTop">{{allText.location[0][Lan]}}</p>
                     <p class="marginTop">{{province}}</p>
-                    <p class="fontweight marginTop">体验路线</p>
+                    <p class="fontweight marginTop">{{allText.location[1][Lan]}}</p>
                     <div style="word-wrap:break-word;white-space:pre-wrap;">{{goPlace}}</div>
                   </div>
                   <div style="margin-left:100px;">
-                    <p class="fontweight marginTop">集合地点</p>
+                    <p class="fontweight marginTop">{{allText.location[2][Lan]}}</p>
                     <p class="marginTop">{{set_address}}</p>
                   </div>
                 </div>
@@ -262,11 +262,11 @@
               <div>
                 <Person  type="discuss" :isLogin="isLogin"  :replay="replay" :imgUrl="imgUrl" :overflow="overflow" :review="review" :height="height" v-on:textareaFocus="textareaFocus" v-on:abolish="abolish" v-on:discuss="discuss"></Person>
                 <div v-if="personList.length == 0" style="text-align:center;margin:20px 0;border:1px solid #eee;padding:10px;">
-                  暂无评论！期待您的参与！
+                  {{Lan == 'zh'?'暂无评论！期待您的参与！':Lan == 'en'?'no comment yet! Looking forward to your participation!':'まだコメントはありません！ ご参加お待ちしております！'}}
                 </div>
                 <div style="margin:20px 0;" v-show="pager==1? index<4:true" v-for="(item,index) in personList">
                   <Person style="margin-bottom: 35px;" type='2' v-on:toPerson="toPersonA(item,index)" v-on:lookImage="clickImage" :is_report="item.is_report" :image="item.image" :isLogin="isLogin" :isOwer="item.user_id == isOwer? delet:isdelet" :imgUrl="item.user.head_image? item.user.headimage.domain + item.user.headimage.image_url: '../../../static/img/static/user.png'" :name="item.user.name?item.user.name:'匿名用户'" :time="item.create_time" :mess="item.content" :parseNum="item.praise_num" :is_praise="item.is_praise" v-on:parise="parise(item,1)" v-on:talk="talk(item,index)" v-on:openInform="openInform(item,1)"></Person>
-                  <div v-if="item.leavemsg.length" style="background-color:rgba(0,0,0,.05);padding:10px" >
+                  <div v-if="item.leavemsg.length" style="background-color:rgba(0,0,0,.05);padding:10px;margin-left:60px;border-radius:10px;" >
                     <div v-for="(items,indexs) in item.leavemsg" style="border-bottom: 1px solid #000;">
                       <Person type="replay" :isLogin="isLogin" :is_report="items.is_report" :replayChoose="replayChoose" v-on:openInform="openInform(items,2)" v-on:talk="leaveTalk(items,index)"  :name="items.user.name?items.user.name:'匿名用户'" :isOwer="items.user_id == isOwer?delet:isdelet" :otherName="items.topuser.name" :mess="items.content"  :parseNum="items.praise_num"  v-on:parise="parise(items,2)" ></Person>
                     </div>
@@ -275,7 +275,7 @@
                 </div>
               </div>
               <div v-if="(pager*10) < total" >
-                  <span class="mainButton" @click="handleCurrentChange">查看更多评论</span>
+                  <span class="mainButton" @click="handleCurrentChange">{{Lan == 'ch'?'查看更多评论':Lan == 'en'?'View more comments':'コメントをもっと見る'}}</span>
               </div>
             </div>
             <el-dialog v-if="videoIMg" :visible.sync="viedio">
@@ -315,19 +315,19 @@
               <div class="secendWidth">
                 <div class="secendWidth flexStart" style="text-align:left;">
                   <div>
-                    <p class="fontweight marginTop">退订政策</p>
+                    <p class="fontweight marginTop">{{allText.location[3][Lan]}}</p>
                     <p class="marginTop">
                       <span v-if="return_DL == 1||return_DL == 2">活动开始</span>{{return_policy}} 
                       <span v-if="return_DL == 1||return_DL == 2">取消可全额退款</span>
                     </p>
                     <p class="marginTop">{{return_content}}</p>
-                    <p class="fontweight marginTop">年龄要求</p>
+                    <p class="fontweight marginTop">{{allText.location[4][Lan]}}</p>
                     <p class="marginTop" v-if="age_limit">{{age_limit}}岁以上</p>
                     <p class="marginTop" v-if="!age_limit">没有要求</p>
 
                   </div>
                   <div style="margin-left:100px;">
-                    <p class="fontweight marginTop">团体人数</p>
+                    <p class="fontweight marginTop">{{allText.location[5][Lan]}}</p>
                     <p class="marginTop" v-if="orderNum">这个体验最近举办时间活动有<span style="color:#008489">{{orderNum}}</span>个名额。</p>
                     <p class="marginTop" v-if="!orderNum">这个体验最近没有举办时间。</p>
                   </div>
@@ -797,6 +797,38 @@
                 'en':'Example: Xiao Wang purchased the experience of a certain planner. The participation time of this experience is 14:00-18:00. If the planner sets this experience to 10 people, it will be refunded 10%. If the experience ends, 10 people will participate. , Xiao Wang will receive a 10% refund for the payment.',
                 'ja':'例：Xiao Wangが特定のプランナーのエクスペリエンスを購入しました。このエクスペリエンスの参加時間は14：00-18：00です。プランナーがこのエクスペリエンスを10人に設定すると、10％が返金されます。エクスペリエンスが終了すると、10人が参加します。 、Xiao Wangは10％の払い戻しを受け取ります'
               }
+            ],
+            location:[
+              {
+                'zh':'体验地点',
+                'en':'Experience location',
+                'ja':'体験場所'
+              },
+              {
+                'zh':'体验路线',
+                'en':'Experience route',
+                'ja':'体験ルート'
+              },
+              {
+                'zh':'集合地点',
+                'en':'Meeting point',
+                'ja':'ミーティングポイント'
+              },
+              {
+                'zh':'退订政策',
+                'en':'Unsubscription policy',
+                'ja':'サブスクリプション解除ポリシー'
+              },
+              {
+                'zh':'年龄要求',
+                'en':'age requirement',
+                'ja':'年齢要件'
+              },
+              {
+                'zh':'团体人数',
+                'en':'Number of groups',
+                'ja':'グループの数'
+              }
             ]
           }
         }
@@ -815,9 +847,9 @@
       mounted(){
         let _this = this
         _this.nextOver = true
-        if(localStorage.getItem('isLogin')){
-          _this.getOwers()
-        }
+        // if(localStorage.getItem('isLogin')){
+        //   _this.getOwers()
+        // }
         _this.ScrollContent()
         _this.sendBuidu()
         _this.getComment(1)
@@ -877,21 +909,15 @@
       methods:{
         sendBuidu(){
           if(window.location.href.indexOf('.top') == -1 && window.location.href.indexOf('localhost') == -1){
-            this.$http.post(this.api + '/BaiduPush',{
-              token: localStorage.getItem('token'),
+            this.$post('/BaiduPush',{
               url: encodeURIComponent(window.location.href)
+            }).then(res=>{
+              if(res.data.code == 3){
+                this.sendBuidu()
+              }
             })
-              .then(res=>{
-                if(res.data.code == 1){
-                }else if(res.data.code == 3){
-                  this.sendBuidu()
-                }else if(res.data.code == 0){
-                  alert(res.data.msg)
-                }
-              })
           }
-        },
-     
+        },           
         //联系策划人
         chat(){
           this.isChat = false
@@ -934,7 +960,6 @@
         },
         closeLookImg(){
           this.isLooking = false
-
         },
         clickImage(val){
           this.videoIMg = val
@@ -974,16 +999,15 @@
         //分享微信
         toWeixin(){
           var url =window.location.href + '&'+ 'userId' +'='+this.isOwer
-          this.$http.post(this.api + '/home/Upload/getqrcode',{
-            token: localStorage.getItem('token'),
+          this.$post('/home/Upload/getqrcode',{
             url:url
-          })
-            .then(res=>{
-              if(res.data.code == 1){
+          }).then(res=>{
+               if(res.data.code == 1){
                 this.isShare = false
                 this.isWeixin = true
                 this.weixin = res.data.data.src
-               
+              }else if(res.data.code == 3){
+                this.toWeixin()
               }
             })
         },
@@ -1024,54 +1048,43 @@
           if(!reg.test(this.reacetWho)){
             this.$message({type:'info',message:'请输入正确邮箱账号'})
           }else{
-            this.$http.post(this.api + '/EmailShare',{
-              token: localStorage.getItem('token'),
+            this.$post('/EmailShare',{
               toemail: this.reacetWho,
               title: this.emailCenter,
               content: this.shareContent,
               url:window.location.href + '&'+'userId' +'='+this.isOwer,
-            })
-              .then(res=>{
-                if(res.data.code == 1){
+            }).then(res=>{
+              if(res.data.code == 1){
                   this.$message({type:'success',message:'分享成功'})
                   this.isEmail = false
                 }else if(res.data.code == 3){
                   this.toEmail()
-                }else{
-                  this.$message({type:'error',message:res.data.msg})
                 }
-              })
+            })
           }
 
         },
         //保存翻译
         saveTranslate(){
-          this.$http.post(this.api + '/TranslateS',{
-            token: localStorage.getItem('token'),
+          this.$post('/TranslateS',{
             activity_id: this.routerParams,
             t_introduce: this.first.textarea,
             t_descripte: this.first.content,
             user_id: this.isOwer,
             language: this.first.language
-          })
-            .then(res=>{
-              if(res.data.code == 1){
+          }).then(res=>{
+            if(res.data.code == 1){
                 this.tiYan = false
                 this.first = {
-                  textarea:'',
-                  content:'',
-                  language:''
                 }
                 this.$message({
                   type:'success',
                   message: '翻译提交成功！'
                 })
-              }else if(res.data.code == 3 || res.data.code == 4){
+              }else if(res.data.code == 3){
                 this.saveTranslate()
-              }else if(res.data.code == 0){
-                alert(res.data.msg)
               }
-            })
+          })
         },
         //志愿者报名
         orderVolunter(){
@@ -1084,7 +1097,7 @@
               }
             })
           }else{
-            alert('您还没有登陆或者您还不是志愿者！')
+            this.$message({type:'info',message:'您还没有登陆或者您还不是志愿者！'})
           }
         },
         getName(data){
@@ -1093,27 +1106,22 @@
         addWishName(){
           if(this.wishNamea == ' '||this.wishNamea.split(' ').join("").length == 0){
             this.$message({
-              type:'error',
-              message: '保存心愿单的过程中遇到了问题，请重试。'
+              type:'info',
+              message: '请填写心愿单名称'
             })
           }else{
-            this.$http.post(this.api + '/home/Comment/add_collegroup',{
-              token: localStorage.getItem('token'),
+            this.$post('/home/Comment/add_collegroup',{
               group_name: this.wishNamea
+            }).then(res=>{
+              if(res.data.code == 1){
+                this.wishNamea = ''
+                this.getRevie();
+              }else if(res.data.code == 3){
+                this.addWishName()
+              }
             })
-              .then(res=>{
-                if(res.data.code == 1){
-                  this.wishNamea = ''
-                  this.getRevie();
-                }else if(res.data.code == 3 || res.data.code == 4){
-                  this.addWishName()
-                }else if(res.data.code == 0){
-                  alert(res.data.msg)
-                }
-              })
           }
         },
-
         prevIndex(){
           if(this.pageIndex > 0 ){
             this.pageIndex --
@@ -1146,7 +1154,7 @@
               }
             })
           }else{
-            alert('您还没有登陆！')
+            this.$message({type:'info',message:'您还没有登陆！'})
           }
         },
         toChoose(item,index){
@@ -1226,14 +1234,16 @@
               })
             }
           }else{
-            alert('您还没有登陆！')
+            this.$message({type:'info',message:'您还没有登陆！'})
+
           }
         },
         contactPlanner(){
           if(localStorage.getItem('isLogin')){
             this.isChat = true
           }else{
-            alert('你还没有登陆哦!')
+             this.$message({type:'info',message:'您还没有登陆！'})
+
           }
 
         },
@@ -1256,23 +1266,19 @@
         },
         toAllLeave(a){
           localStorage.setItem('leave',JSON.stringify(a))
-          this.$http.post(this.api + '/LeaveL',{
-            token: localStorage.getItem('token'),
+          this.$post('/LeaveL',{
             flag: 4,
             order:1,
             page: 1,
             table_id: a.comment_id
-          })
-            .then(res=>{
-              if(res.data.code == 1){
+          }).then(res=>{
+            if(res.data.code == 1){
                 a.leavemsg = res.data.data.data
                 this.replayChoose = true
-              }else if(res.data.code == 3 || res.data.code == 4){
+              }else if(res.data.code == 3){
                 this.toAllLeave(a)
-              }else if(res.data.code == 0){
-                alert(res.data.msg)
               }
-            })
+          })
         },
         discuss(){
           if(!this.review.text){
@@ -1282,41 +1288,30 @@
             })
           }else{
             if(this.replay == '说点什么...'){
-              this.$http.post(this.api + '/CommentS',{
-                token: localStorage.getItem('token'),
+              this.$post('/CommentS',{
                 flag: 1,
                 table_id: this.routerParams,
                 content:  this.review.text
-              })
-                .then(res=>{
-                  if(res.data.code == 1){
+              }).then(res=>{
+                if(res.data.code == 1){
                     this.review.text = ''
                     this.$message({
                       message:'评论成功',
                       type:'success'
                     })
                     this.getComment(1)
-                  }else if(res.data.code == 3 || res.data.code == 4){
+                  }else if(res.data.code == 3){
                     this.discuss()
-                  }else if(res.data.code == 0){
-                    alert(res.data.msg)
                   }
-                })
+              })
             }else{
-              let flag = ''
-              if(this.saveLeave){
-                flag = 5
-              }else {
-                flag = 4
-              }
-                this.$http.post(this.api + '/home/Comment/save_leavemsg',{
-                  token: localStorage.getItem('token'),
-                  flag: flag,
-                  content: this.review.text,
-                  table_id: localStorage.getItem('comment_id')
-                })
-                  .then(res=>{
-                    if(res.data.code == 1){
+              let flag = this.saveLeave? 5 : 4
+              this.$post('/home/Comment/save_leavemsg',{
+                flag: flag,
+                content: this.review.text,
+                table_id: localStorage.getItem('comment_id')
+              }).then(res=>{
+                  if(res.data.code == 1){
                       localStorage.removeItem('comment_id')
                       this.review.text = ''
                       this.$message({
@@ -1332,12 +1327,10 @@
                         this.getComment(this.pager)
                       }
                       this.saveLeave = false
-                    }else if(res.data.code == 3 || res.data.code == 4){
+                    }else if(res.data.code == 3){
                       this.discuss()
-                    }else if(res.data.code == 0){
-                      alert(res.data.msg)
                     }
-                  })
+                })
               }
           }
         },
@@ -1359,12 +1352,10 @@
           this.getSlot()
         },
         getSlot(){
-          this.$http.post(this.api + '/ActivitySlotUserTwo',{
-            token: localStorage.getItem('token'),
+          this.$post('/ActivitySlotUserTwo',{
             verson: 2.0,
             activity_id: this.routerParams
-          })
-          .then(res=>{
+          }).then(res=>{
             if(res.data.code == 1){
               let data  = res.data.data
               if(data.length){
@@ -1372,92 +1363,68 @@
                   if(data[i].status == 0&& data[i].online != 1){
                     this.orderNum = data[i].max_person_num
                   }
-                }
-                
+                } 
               }
-              
             }else if(res.data.code == 3){
               this.getSlot()
-            }else if(res.data.code == 0){
-              this.$message({type: 'error',message:res.data.msg})
             }
           })
         },
         getHouseImg(){
-          this.$http.post(this.api + '/ActivityHouseImageTwo',{
-            token: localStorage.getItem('token'),
+          this.$post('/ActivityHouseImageTwo',{
             verson: 2.0,
             activity_id: this.routerParams,
-          })
-          .then(res=>{
-            if(res.data.code == 1){
-              let data = res.data.data
-              this.houseImage = data
-            }else if(res.data.code == 3){
-              this.getHouseImg()
-            }else if(res.data.code == 0){
-              this.$message({type: 'error',message:res.data.msg})
-            }
-          })
+          }).then(res=>{
+              if(res.data.code == 1){
+                let data = res.data.data
+                this.houseImage = data
+              }else if(res.data.code == 3){
+                this.getHouseImg()
+              }
+            })
         },
         getDiffer(){
-          this.$http.post(this.api + '/DifferListTwo',{
-            token: localStorage.getItem('token'),
+          this.$post( '/DifferListTwo',{
             verson: 2.0,
             activity_id: this.routerParams
-          })
-          .then(res=>{
-            if(res.data.code == 1){
-             
-              this.Differ = res.data.data
-            }else if(res.data.code == 3){
-              this.getDiffer()
-            }else if(res.data.code == 0){
-              this.$message({type: 'error',message:res.data.msg})
-            }
-          })
+          }).then(res=>{
+              if(res.data.code == 1){
+                this.Differ = res.data.data
+              }else if(res.data.code == 3){
+                this.getDiffer()
+              }
+            })
         },
         getDiscount(){
-          this.$http.post(this.api + '/ActivityDiscountTwo',{
-            token: localStorage.getItem('token'),
+          this.$post('/ActivityDiscountTwo',{
             verson: 2.0,
             activity_id: this.routerParams
-          })
-          .then(res=>{
-            if(res.data.code == 1){
-              this.discount = res.data.data
-            }else if(res.data.code == 3){
-              this.getDiscount()
-            }else if(res.data.code == 0){
-              this.$message({type: 'error',message:res.data.msg})
-            }
+          }).then(res=>{
+              if(res.data.code == 1){
+                this.discount = res.data.data
+              }else if(res.data.code == 3){
+                this.getDiscount()
+              }
           })
         },
         getActive(val){
           this.isLoading = true
-          this.$http.post(this.api + '/ActivityDetailTwo',{
-            token: localStorage.getItem('token'),
+          this.$post('/ActivityDetailTwo',{
             activity_id: this.routerParams,
             translate_id:val,
             language:this.languageID,
             visit: 1,
             verson:2.0
-          })
-            .then(res=>{
-              if(res.data.code == 1){
+          }).then(res=>{
+            if(res.data.code == 1){
                 let data = res.data.data
                 this.imgList.push(data.cover)
-            
                 for(let i =0;i<data.image.length;i++){
                     this.imgList.push(data.image[i])
                 }
                 this.title = data.title
                 document.title = data.title
-                if(data.user.head_image){
-                  this.userImg = data.user.headimage?data.user.headimage.domain + data.user.headimage.themb_url:'../../../static/img/static/user.png'
-                }else{
-                  this.userImg = '../../../static/img/static/user.png'
-                }
+                this.userImg =data.user.headimage?data.user.headimage.domain + data.user.headimage.themb_url:'../../../static/img/static/user.png'
                 this.userintroduce = data.introduce
                 this.content = data.descripte
                 this.attation = data.activ_notice
@@ -1467,7 +1434,7 @@
                 this.province = data.province+' ' +data.city+' '+ data.region
                 this.jionDress = [data.set_address_lng,data.set_address_lat]
                 this.total_time = data.total_time
-                this.userName =data.user.name
+                this.userName =(data.user.family_name?data.user.family_name+' ':'' )+(data.user.middle_name?data.user.middle_name+' ':'')+data.user.name
                 this.activ_provite = data.activ_provite
                 this.main_language = this.language[data.main_laguage].label
                 this.score = parseInt(data.score)
@@ -1497,59 +1464,35 @@
                   this.other_laguage = a
                 }
                 this.volun_require =  data.volun_require
-                if(data.issatay == 2){
-                  this.long_day = '1'
-                  // this.houseImage = data.houseimage
-                  this.isflag = false
-                }else if(data.issatay == 1){
-                  this.isflag = true
-                  this.long_day = '2'
-
-                }else{
-                  this.long_day = ''
-                }
+                this.long_day =data.issatay == 2? '1':data.issatay == 1? '2':''
+                this.isflag = data.issatay == 2? false:data.issatay == 1? true:'' 
                 this.is_collection = data.is_collection
-                if(localStorage.getItem('isLogin')){
-                  if(data.is_order || this.userId == this.isOwer){
-                    this.isLogin = true
-                  }else{
-                    this.isLogin = false
-                  }
-                }else{
-                  this.isLogin = false
-                }
+                this.isLogin = data.is_order || this.userId == this.isOwer? true :false
                 this.isLoading = false
-               
-              }else if(res.data.code == 3 || res.data.code == 4){
+              }else if(res.data.code == 3){
                 this.getParams()
-              }else if(res.data.code == 0 ){
-                alert(res.data.msg)
               }
-            })
+          })
         },
         getRevie(){
-          this.$http.post(this.api + '/home/Comment/collegroup_list',{
-              token: localStorage.getItem('token'),
-              table_id: this.routerParams,
-              flag: 1
-            })
-              .then(res=>{
-                if(res.data.code == 1){
-                this.wishList = res.data.data
-                }else if(res.data.code == 3 || res.data.code == 4){
-                  this.getRevie()
-                }else if(res.data.code == 0){
-                  alert(res.data.msg)
-                }
-              }) 
+          this.$post('/home/Comment/collegroup_list',{
+             table_id: this.routerParams,
+            flag: 1
+          }).then(res=>{
+            if(res.data.code == 1){
+              this.wishList = res.data.data
+            }else if(res.data.code == 3){
+              this.getRevie()
+            }
+          })
         },
         like(){
-          if(localStorage.getItem('isLogin')){
+          if(sessionStorage.getItem('isLogin')){
             this.isLike = !this.isLike
             this.getRevie()
           }else{
             this.$message({
-              type: 'error',
+              type: 'info',
               message: '您还没有登陆！'
             })
           }
@@ -1579,18 +1522,16 @@
         informSend(){
           if(this.informReason.text.trim().length <= 0){
             this.$message({
-              type:'error',
+              type:'info',
               message: '请填写您的理由'
             })
           }else{
-            this.$http.post(this.api + '/ReportU',{
-              token: localStorage.getItem('token'),
+            this.$post('/ReportU',{
               flag: 2,
               table_id: localStorage.getItem('comment_id'),
               content: this.informReason.text
-            })
-              .then(res=>{
-                if(res.data.code == 1){
+            }).then(res=>{
+                 if(res.data.code == 1){
                   this.isInform = false
                   this.informReason.text = ''
                   this.changeReason = true
@@ -1600,10 +1541,8 @@
                   })
                   localStorage.removeItem('comment_id')
                   this.getComment(this.pager)
-                }else if(res.data.code == 3 || res.data.code == 4){
+                }else if(res.data.code == 3){
                   this.informSend()
-                }else if(res.data.code == 0){
-                  alert(res.data.msg)
                 }
               })
           }
@@ -1613,58 +1552,44 @@
         },
         closeInform(item){
           if(item){
-            let flag = ''
-            if(this.saveInfor){
-              flag = 4
-            }else{
-              flag = 2
-            }
-            this.$http.post(this.api + '/ReportU',{
-              token: localStorage.getItem('token'),
+            let flag = this.saveInfor? 4:2 
+            this.$post('/ReportU',{
               flag: flag,
               table_id: localStorage.getItem('comment_id'),
               option_id: item.option_id
+            }).then(res=>{
+              if(res.data.code == 1){
+                this.isInform = false
+                localStorage.removeItem('comment_id')
+                this.getComment(this.pager)
+                this.$message({
+                  type:'success',
+                  message: '您已举报成功！'
+                })
+              }else if(res.data.code == 3){
+                this.closeInform(item)
+              }
             })
-              .then(res=>{
-                if(res.data.code == 1){
-                  this.isInform = false
-                  localStorage.removeItem('comment_id')
-                  this.getComment(this.pager)
-                  this.$message({
-                    type:'success',
-                    message: '您已举报成功！'
-                  })
-                }else if(res.data.code == 3 || res.data.code == 4){
-                  this.closeInform(item)
-                }else if(res.data.code == 0){
-                  alert(res.data.msg)
-                }
-              })
           }else{
             this.isInform = false
             localStorage.removeItem('comment_id')
           }
-
         },
         leaveTalk(a,b){
           if(a.user_id == this.isOwer){
-            this.$http.post(this.api + '/home/Comment/del_leavemsg',{
-              token: localStorage.getItem('token'),
-              msg_id: a.msg_id
+            this.$post('/home/Comment/del_leavemsg',{
+               msg_id: a.msg_id
+            }).then(res=>{
+              if(res.data.code == 1){
+                this.$message({
+                  type: 'success',
+                  message:'删除评论成功！'
+                })
+                this.getComment(this.pager)
+              }else if(res.data.code == 3){
+                this.leaveTalk(a,b)
+              }
             })
-              .then(res=>{
-                if(res.data.code == 1){
-                  this.$message({
-                    type: 'success',
-                    message:'删除评论成功！'
-                  })
-                  this.getComment(this.pager)
-                }else if(res.data.code == 3 || res.data.code == 4){
-                  this.leaveTalk(a,b)
-                }else if(res.data.code == 0){
-                  alert(res.data.msg)
-                }
-              })
           }else{
             this.NowChat = true
             this.replay = '回复给' + a.user.name
@@ -1679,23 +1604,19 @@
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              this.$http.post(this.api + '/home/Comment/del_comment',{
-                token: localStorage.getItem('token'),
+              this.$post('/home/Comment/del_comment',{
                 comment_id: a.comment_id
-              })
-                .then(res=>{
-                  if(res.data.code == 1){
+              }).then(res=>{
+                if(res.data.code == 1){
                     this.personList.splice(b,1)
                     this.$message({
                       type: 'success',
                       message:'删除评论成功！'
                     })
-                  }else if(res.data.code == 3 || res.data.code == 4){
+                  }else if(res.data.code == 3){
                     this.talk(a,b)
-                  }else if(res.data.code == 0){
-                    alert(res.data.msg)
                   }
-                })
+              })
             }).catch(() => {
               this.$message({
                 type: 'info',
@@ -1731,55 +1652,33 @@
           return weekDay[myDate.getDay()]
         },
         save(item,index){
-          if(item.is_this_colle == 1){
-            this.$http.post(this.api + '/home/Comment/collection',{
-              token: localStorage.getItem('token'),
+            this.$post('/home/Comment/collection',{
               flag: 1,
               table_id: this.routerParams,
               group_id: item.group_id,
-              type: 2
-            })
-              .then(res=>{
-                if(res.data.code == 1){
-                  let a=[]
-                  item.is_this_colle = 0
-                  for(let i =0;i<this.wishList.length;i++){
-                    if(this.wishList[i].is_this_colle == 0){
-                      a.push(i)
-                      if(a.length == this.wishList.length){
-                        this.is_collection = 0
-                      }
+              type: item.is_this_colle == 1? 2:1
+            }).then(res=>{
+              if(res.data.code == 1){
+                  if(item.is_this_colle == 1){
+                    let a=[]
+                    item.is_this_colle = 0
+                    for(let i =0;i<this.wishList.length;i++){
+                      if(this.wishList[i].is_this_colle == 0){
+                            a.push(i)
+                            if(a.length == this.wishList.length){
+                              this.is_collection = 0
+                            }
+                        }
                     }
+                  }else{
+                      item.is_this_colle = 1
+                      this.is_collection = 1
                   }
-                }else if(res.data.code == 3 || res.data.code == 4){
+                }else if(res.data.code == 3){
                   this.save(item,index)
-                }else if(res.data.code == 0){
-                  alert(res.data.msg)
                 }
-              })
-          }else{
-            this.$http.post(this.api + '/home/Comment/collection',{
-              token: localStorage.getItem('token'),
-              flag: 1,
-              table_id: this.routerParams,
-              group_id: item.group_id,
-              type: 1
             })
-              .then(res=>{
-                if(res.data.code == 1){
-                  item.is_this_colle = 1
-                  this.is_collection = 1
-                }else if(res.data.code == 1){
-                  this.$http.post(this.api + '/home/Index/token')
-                    .then(res=>{
-                      localStorage.setItem('token',res.data.data)
-                      this.save(item,index)
-                    })
-                }else if(res.data.code == 0){
-                  alert(res.data.msg)
-                }
-              })
-          }
+
         },
         addwish(){
           if(this.wishIndex == 0){
@@ -1791,136 +1690,108 @@
           }
         },
         getComment(val){
-          this.$http.post(this.api + '/home/Comment/comment_list',{
-            token: localStorage.getItem('token'),
+          this.$post('/home/Comment/comment_list',{
             table_id:this.routerParams,
             flag: 1,
             order: 1,
             page: val
-          })
-            .then(res=>{
-              if(res.data.code == 1){
+          }).then(res=>{
+            if(res.data.code == 1){
                 let data = res.data.data.data
                 data.forEach((item,index)=>{
                   this.personList.push(item)
                 })
-                
                 this.total =  res.data.data.total
-              }else if(res.data.code == 3 || res.data.code == 4){
+              }else if(res.data.code == 3){
                 this.getComment(val)
-              }else if(res.data.code == 0){
-                alert(res.data.msg)
               }
-            })
+          })
         },
         parise(a,b){
-          let table_id = ''
-          let flag = ''
-          let type=''
-          if(b == 1){
-            table_id = a.comment_id
-            flag = 3
-          }else{
-            table_id = a.msg_id
-            flag = 4
-          }
-          if(a.is_praise){
-            type = 2
-          }else{
-            type = 1
-          }
-          this.$http.post(this.api + '/home/Comment/praise',{
-            token: localStorage.getItem('token'),
+          
+          let table_id = b == 1? a.comment_id:a.msg_id
+          let flag = b == 1? 3:4
+          let type = a.is_praise? 2:1
+          this.$post('/home/Comment/praise',{
             flag: flag,
             table_id: table_id,
             type: type
-          })
-            .then(res=>{
-              if(res.data.code == 1){
+          }).then(res=>{
+            if(res.data.code == 1){
                 a.is_praise = type == 2? 0 : 1
                 a.praise_num = type == 2? a.praise_num - 1 : a.praise_num +1
                 this.$message({
                   type:'success',
                   message: '点赞成功！'
                 })
-              }else if(res.data.code == 3 || res.data.code == 4){
+              }else if(res.data.code == 3){
                 this.parise(a,b)
-              }else if(res.data.code == 0){
-                alert(res.data.msg)
               }
-            })
+          })
         },
         getInform(){
-          this.$http.post(this.api + '/home/Activity/question',{
-            token: localStorage.getItem('token'),
+          this.$post('/home/Activity/question',{
             flag: 6
-          })
-            .then(res=>{
-              if(res.data.code == 1){
+          }).then(res=>{
+            if(res.data.code == 1){
                 this.informList = []
                for(let i = 0;i<res.data.data[0].option.length;i++){
                  let a = res.data.data[0].option[i].name.split('/')
                  this.informList.push({name: a[0],content:a[1],option_id:res.data.data[0].option[i].option_id})
                }
-              }else if(res.data.code == 3 || res.data.code == 4){
+              }else if(res.data.code == 3){
                 this.getInform()
-              }else if(res.data.code == 0){
-                alert(res.data.msg)
               }
-            })
+          })
         },
+
+        // 修改位置
+
         //查看相似体验
         getActls(){
-          this.$http.post(this.api + '/ActlsTwo',{
-            token: localStorage.getItem('token'),
+          this.$post('/ActlsTwo',{
             activity_id: this.routerParams,
             per_page:2,
             page:1
-          })
-            .then(res=>{
-              if(res.data.code == 1){
+          }).then(res=>{
+            if(res.data.code == 1){
                 let data = res.data.data.data
                 this.listA = data
-              }else if(res.data.code == 3 || res.data.code == 4){
+              }else if(res.data.code == 3){
                 this.getActls()
-              }else if(res.data.code == 0){
-                alert(res.data.msg)
               }
-            })
+          })
         },
         reload(res){
           if(res){
-            let data = res.data.data
-            this.isOwer = res.data.data.user_id
-            this.isvolunteer = res.data.data.isvolunteer
-            if(data.audit_idcard){
-              this.isChoose = true
-            }else{
-              this.isChoose = false
-            }
+            let data = res.data.data[0]
+            this.isOwer = data.user_id
+            this.isvolunteer = data.isvolunteer
+            this.isChoose = data.audit_idcard? true:false
           }
         },
-        getOwers(){
-          this.$http.post(this.api + '/home/User/get_user',{
-            token: localStorage.getItem('token')
-          })
-            .then(res=>{
-              if(res.data.code == 1){
-                let data = res.data.data[0]
-                this.isOwer = data.user_id
-                this.isvolunteer = data.isvolunteer
-                if(data.audit_idcard){
-                  this.isChoose = true
-                }else{
-                  this.isChoose = false
-                }
-              }else if(res.data.code == 3 || res.data.code == 4){
-                this.getOwers()
-              }else if(res.data.code == 0){
-                alert(res.data.msg)
-              }
-            })
-        },
+        // getOwers(){
+        //   this.$post('/home/User/get_user',{}).then()
+        //   this.$http.post(this.api + '/home/User/get_user',{
+        //     token: localStorage.getItem('token')
+        //   })
+        //     .then(res=>{
+        //       if(res.data.code == 1){
+        //         let data = res.data.data[0]
+        //         this.isOwer = data.user_id
+        //         this.isvolunteer = data.isvolunteer
+        //         if(data.audit_idcard){
+        //           this.isChoose = true
+        //         }else{
+        //           this.isChoose = false
+        //         }
+        //       }else if(res.data.code == 3 || res.data.code == 4){
+        //         this.getOwers()
+        //       }else if(res.data.code == 0){
+        //         alert(res.data.msg)
+        //       }
+        //     })
+        // },
         toPublish(item){
           this.$router.push({
             path: '/publishPage',

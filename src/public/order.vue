@@ -42,7 +42,7 @@
                     <div v-if="item != ' '&& color[index].index == '0'" style="cursor:pointer;width:100%;height:100%;display: flex;justify-content: center;align-items: center;background-color: #14C5CA;color:#FFF;">
                       <div :style="{lineHeight:color[index].is_discount?'20px':'40px'}" style="width:40px;height:40px;text-align: center;position: relative;">
                         <p>{{item}}</p>
-                        <p class="contentTitle" v-if="color[index].is_discount">{{Number(color[index].is_discount)}}折</p>
+                        <p class="contentTitle" style="color:#fff" v-if="color[index].is_discount">{{Number(color[index].is_discount)}}折</p>
                       </div>
                     </div>
                     <div v-if="item != ' '&& color[index].index == '00' " style="background-color:#E1F5F6;width:100%;height:100%;display: flex;justify-content: center;align-items: center" >
@@ -61,7 +61,7 @@
                     <div v-if="item != ' '&& color[index].index == '0'" style="cursor:pointer;width:100%;height:100%;display: flex;justify-content: center;align-items: center" :style="{backgroundColor:colorIndex == index?'#14C5CA':'#E5FAFB',color:colorIndex == index?'#FFF':'#14C5CA'}">
                       <div :style="{lineHeight:color[index].is_discount?'20px':'40px'}" style="width:40px;height:40px;text-align: center;position: relative;">
                         <p>{{item}}</p>
-                        <p class="contentTitle" v-if="color[index].is_discount">{{Number(color[index].is_discount)}}折</p>
+                        <p class="contentTitle" style="color:#fff" v-if="color[index].is_discount">{{Number(color[index].is_discount)}}折</p>
                       </div>
                     </div>
                     <div v-if="item != ' '&& color[index].index == '00' " style="background-color:#E1F5F6;width:100%;height:100%;display: flex;justify-content: center;align-items: center" >

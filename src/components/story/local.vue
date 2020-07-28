@@ -121,7 +121,7 @@
           })
             .then(res=>{
               if(res.data.code == 1){
-                console.log(res)
+              
                 item.zan = item.zan - 1
                 item.zanIndex = 0
               }else if(res.data.code == 3){

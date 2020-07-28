@@ -152,7 +152,7 @@
                  <p>实际退款&nbsp;&nbsp;&nbsp;<span style="color:#F73D3D">￥{{Rdata.refund_total_price?Rdata.refund_total_price:0}}</span></p>
                </div>
                <div class=" marginT">
-                 <p>实际支付&nbsp;&nbsp;&nbsp;<span style="color:#F73D3D">￥{{Number( Rdata.total_price) - Number(Rdata.refund_total_price?Rdata.refund_total_price:0) - Number(Rdata.differ_total_price?Rdata.differ_total_price:0)}}</span></p>
+                 <p>实际支付&nbsp;&nbsp;&nbsp;<span style="color:#F73D3D">￥{{(Number( Rdata.total_price) - Number(Rdata.refund_total_price?Rdata.refund_total_price:0) - Number(Rdata.differ_total_price?Rdata.differ_total_price:0)).toFixed(2) }}</span></p>
                </div>
                <div class="marginT">
                  <p>{{type == '3'?'申请时间':'下单时间'}}&nbsp;&nbsp;&nbsp;{{Rdata.create_time}}</p>
@@ -598,7 +598,7 @@ export default {
       },
       goBack(){
         if(this.wherIndex){
-          this.$router.go(-1)
+          // this.$router.go(-1)
           this.$router.push({
             path: '/myPlay',
             query:{

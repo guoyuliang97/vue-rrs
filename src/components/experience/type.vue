@@ -143,7 +143,6 @@
     mounted() {
 		  let _this = this
       _this.complete = this.$route.query.complete
-      console.log(_this.complete)
       _this.getKind()
       _this.getQuestion()
       if(this.active_id){

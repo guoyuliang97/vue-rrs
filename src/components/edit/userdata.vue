@@ -7,7 +7,7 @@
 					<div class="userdata_left_top">
 						<!-- <div class="userdata_left_avator" :style="{backgroundImage:'url('+imgUrl +')',backgroundSize:'100% 100%'}"></div> -->
             <LoadingImg type="user" :src="imgUrl" class="userdata_left_avator" ></LoadingImg>
-          	<p class="userdata_left_username"><span>{{dataForm.family_name +dataForm.middle_name+dataForm.name?dataForm.family_name +dataForm.middle_name+dataForm.name:'匿名用户'}}</span></p>
+          	<p class="userdata_left_username"><span>{{dataForm.family_name +dataForm.middle_name+dataForm.name?(dataForm.family_name?dataForm.family_name+' ':'' )+(dataForm.middle_name?dataForm.middle_name+' ':'')+dataForm.name:'匿名用户'}}</span></p>
             <p class="about_userdata"></p>
             <p class="about_userdata">{{sexA[parseInt(dataForm.six)].label}}&nbsp;&nbsp;<span v-if="dataForm.isplanner == 1 && dataForm.audit_face == 2" class="who">策划者</span><span v-if="dataForm.isvolunteer == 1 && dataForm.audit_idcard" class="who">志愿者</span><span v-if="dataForm.isplanner == 0&&dataForm.isvolunteer == 0" class="who">游客</span></p>
             <p class="about_userdata"></p>
@@ -55,7 +55,7 @@
           <div v-if="!isProblem" class="userdata_right">
             <div style="line-height:40px;">
               <div style="font-size: 30px;font-weight: bold">
-                {{dataForm.family_name +dataForm.middle_name+dataForm.name?'您好，我是'+dataForm.family_name +dataForm.middle_name+dataForm.name:'您好，我是匿名用户'}}
+                {{dataForm.family_name +dataForm.middle_name+dataForm.name?'您好，我是'+(dataForm.family_name?dataForm.family_name+' ':'' )+(dataForm.middle_name?dataForm.middle_name+' ':'')+dataForm.name:'您好，我是匿名用户'}}
               </div>
               <p><b>{{dataForm.city?dataForm.city:''}},{{dataForm.country?dataForm.country+'·':''}}注册时间：{{dataForm.create_time}} </b></p>
               <div style="text-indent: 2rem">

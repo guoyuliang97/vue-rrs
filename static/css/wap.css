@@ -1,0 +1,12 @@
+.sameColor{
+    color:#008489
+}
+.sameBackColor{
+    background-color: #008489;
+}
+
+.home_content{
+    position: absolute;
+    margin-top: -20px;
+    z-index: 2
+}

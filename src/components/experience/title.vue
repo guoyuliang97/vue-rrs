@@ -123,7 +123,6 @@
       window.scroll(0,0)
       this.complete = this.$route.query.complete
       this.active_id = this.$route.query.information
-      console.log(this.complete)
 		},
     mounted() {
 		  let _this = this

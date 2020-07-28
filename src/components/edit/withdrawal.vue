@@ -106,18 +106,20 @@
         </div>
     </div>
 
-      <div v-if="isPassword" style="z-index:999;position:fixed;top:0;left:0;right:0;bottom:0;background-color:rgba(0,0,0,.5);">
-        <div style="position:fixed;width:400px;height:200px;padding:20px;top:50%;left:50%;margin-top:-120px;border-radius:5px;margin-left:-220px;background-color:#fff;">
+      <div v-if="isPassword"  style="z-index:999;position:fixed;top:0;left:0;right:0;bottom:0;background-color:rgba(0,0,0,.5);">
+        <div @click="isPassword = false" style="z-index:999;position:fixed;top:0;left:0;right:0;bottom:0;background-color:rgba(0,0,0,.5);">
+        </div>
+        <div style="z-index:9999;position:fixed;width:400px;height:200px;padding:20px;top:50%;left:50%;margin-top:-120px;border-radius:5px;margin-left:-220px;background-color:#fff;">
           <div style="border-bottom: 1px solid #eee;text-align: left;padding-bottom:10px;">
             <i @click="isPassword = false" style="cursor: pointer;font-size:20px;" class="el-icon-close"></i>
             <span><b>请输入支付密码</b></span>
           </div>
-          <div style="border-bottom: 1px solid #eee;padding:10px 0;">
+          <div @click="pay"  style="border-bottom: 1px solid #eee;padding:10px 0;">
             <p style="font-size:14px">零钱提现</p>
             <p style="margin:10px 0;font-size:20px;"><b>￥{{monney}}</b></p>
             <p style="font-size:12px;color:#A9A9A9">(中国建设银行提现免手续费，其他银行提现收取5元收续费)</p>
           </div>
-          <div class="password-div">
+          <div @click="pay"  class="password-div">
             <ul>
               <li class="list"></li>
               <li class="list"></li>
@@ -313,39 +315,6 @@
         addBank(){
           this.isAddcard = true
         },
-        // saveBank(){
-        //   if(!this.card){
-        //     this.$message({type:'info',message:'请填写银行卡号'})
-        //   }else if(!this.name){
-        //     this.$message({type:'info',message:'请填写用户姓名'})
-        //   }else if(!this.bank){
-        //     this.$message({type:'info',message:'请填写银行名称'})
-        //   }else{
-        //     this.isWait = true
-        //     this.$http.post(this.api + '/banks',{
-        //       token: localStorage.getItem('token'),
-        //       bank_name: this.bank,
-        //       card_number: this.card,
-        //       user_name: this.name
-        //     })
-        //       .then(res=>{
-        //         if(res.data.code == 1){
-        //           this.getbank()
-        //           this.isAddcard = false
-        //           this.isWait = false
-        //         }else if(res.data.code == 3){
-        //           this.$http.post(this.api + '/home/Index/token')
-        //             .then(res=>{
-        //               localStorage.setItem('token',res.data.data)
-        //               this.saveBank()
-        //             })
-        //         }else if(res.data.code == 0){
-        //           this.isWait = false
-        //           alert(res.data.msg)
-        //         }
-        //       })
-        //   }
-        // },
         refer(){
             let reg = /((^[1-9]\d*)|^0)(\.\d{0,2}){0,1}$/
           if(!this.bankList.length){
@@ -375,9 +344,10 @@
             event.keyCode === 55||event.keyCode === 56||event.keyCode === 57){
             list[this.aindex].innerHTML = '*'
             this.aindex +=1
-          }else if(event.keyCode === 8){
+          }else if(event.keyCode === 8 && this.aindex >= 1){
             this.aindex -= 1
             list[this.aindex].innerHTML = ' '
+            
           }
         },
         sendDraw(){

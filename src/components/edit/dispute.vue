@@ -8,8 +8,8 @@
         <el-button icon="el-icon-arrow-left" @click="goBack" circle></el-button>
       </div>
       <div style="display: flex;justify-content: space-between;margin-top:15px;">
-        <div :style="{backgroundColor:index == 1? '#008489':'#F4F6F9',color:index == 1?'#fff':'#A8A8A8'}" style="height:25px;width:50%;text-align: center;line-height:25px;font-size:12px;" >提交纠纷</div>
-        <div :style="{backgroundColor:index == 2? '#008489':'#F4F6F9',color:index == 2?'#fff':'#A8A8A8'}" style="text-align: center;width:50%;line-height:25px;font-size:12px;">提交成功</div>
+        <div :style="{backgroundColor:index == 1? '#14C5CA':'#F4F6F9',color:index == 1?'#fff':'#A8A8A8'}" style="height:25px;width:50%;text-align: center;line-height:25px;font-size:12px;" >提交纠纷</div>
+        <div :style="{backgroundColor:index == 2? '#14C5CA':'#F4F6F9',color:index == 2?'#fff':'#A8A8A8'}" style="text-align: center;width:50%;line-height:25px;font-size:12px;">提交成功</div>
       </div>
       <div >
         <div v-if="index == 1"  style="margin-top:15px;font-size:12px;">

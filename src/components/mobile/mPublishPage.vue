@@ -6,7 +6,7 @@
       </div>
       <swiper loop auto :aspect-ratio="300/800" dots-position="center"  :height="height + 'px'" style="position: relative" >
         <swiper-item class="swiper-demo-img" :height="height + 'px'" v-for="(item, index) in imgList" :key="index">
-          <LoadingImg type="1" :src="item.image_id?item.domain+item.image_url:''" style="position: relative" :style="{height: height + 'px',width: screnWidth + 'px'}"></LoadingImg>
+          <LoadingImg type="2" :src="item.image_id?item.domain+item.image_url:''" style="position: relative" :style="{height: height + 'px',width: screnWidth + 'px'}"></LoadingImg>
         </swiper-item>
         <div style="position: absolute;bottom:8rem;z-index:2;color:#fff;left:1rem;font-size: 1.6rem">
           <p><span v-for="(item,index) in activeData.kind" v-show="index<3">/{{item.kind_name}}</span></p>
@@ -67,8 +67,8 @@
             <div style="margin: 1rem 0;">
               <div v-for='(item,index) in disList' style="display: flex;justify-content: space-between;margin-bottom: 2.5rem;">
                 <div style="display: flex;justify-content: flex-start;">
-                  <div >
-                    <img :src="item.user.head_image?item.user.headimage.domain+item.user.headimage.image_url:'../../../static/img/static/user.png'" style="width:4rem;height:4rem;border-radius: 50%;">
+                  <div>
+                    <LoadingImg type="user" :src="item.user.head_image?item.user.headimage.domain+item.user.headimage.image_url:'../../../static/img/static/user.png'" style="width:4rem;height:4rem;border-radius: 50%;"></LoadingImg>
                   </div>
                   <div style="margin-left:1rem;">
                     <p style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><b>{{item.user.family_name+item.user.middle_name+item.user.name?item.user.family_name+item.user.middle_name+item.user.name:'匿名用户'}}</b></p>
@@ -105,7 +105,7 @@
               <div style="display:flex;margin: 2rem 0;flex-wrap: wrap;justify-content: space-between;font-size: 15px;" >
                 <div v-for="(item,index) in houseImage" style="width:47%;margin: 10px 0;">
                   <div style="position: relative">
-                    <LoadingImg type="3" :src="item.img[0].domain+item.img[0].image_url" style="width:100%;height:10rem;"></LoadingImg>
+                    <LoadingImg type="2" :src="item.img[0].domain+item.img[0].image_url" style="width:100%;height:10rem;"></LoadingImg>
                     <span style="padding: 2px 10px;border-radius: 3px;position: absolute;right:10px;bottom:10px;background-color: #057F83;color:#fff;opacity: .9">露营</span>
                   </div>
                   <div style="display: flex;justify-content: space-between;margin: 1rem 0;">
@@ -121,7 +121,7 @@
               <h2>房源照片</h2>
               <div style="display:flex;margin: 2rem 0;flex-wrap: wrap;justify-content: space-between;font-size: 15px;">
                 <div v-for="(item,index) in houseImage" style="width:47%;margin: 10px 0;">
-                  <LoadingImg type="3" :src="item.domain+item.image_url"  style="width:100%;height:10rem;"></LoadingImg>
+                  <LoadingImg type="2" :src="item.domain+item.image_url"  style="width:100%;height:10rem;"></LoadingImg>
                 </div>
               </div>
             </div>
@@ -150,7 +150,7 @@
             </div>
           </div>
 
-        </div>0
+        </div>
       </div>
 
     </div>
@@ -346,7 +346,10 @@
                 }else{
                   this.long_day = ''
                 }
-                this.SDK(url,obj)
+                if(window.location.href.indexOf('localhost') == -1 && window.location.href.indexOf('.top') == -1){
+                  this.SDK(url,obj)
+                }
+                
               }else if(res.data.code== 3){
                 this.$http.post(this.api + '/home/index/token')
                   .then(res=>{

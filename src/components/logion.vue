@@ -1,5 +1,8 @@
 <template>
     <div>
+      <div style="background-color:#fff;height:100%;width:100%;">
+
+      </div>
       <Dialog v-on:emailLogin="emailLogin" v-on:toPhone="toPhone" v-on:toEmail="toEmail"  v-on:regist="regist" @onLogin="onLogin" v-on:deldialog="deldialog" v-on:passLogin="passLogin" v-on:checkLogin="checkLogin" v-on:emailReset="emailReset" v-on:telReset="telReset" v-on:forgetPass="forgetPass" v-on:emailRegister="emailRegister" v-on:telRegister="telRegister" v-on:loginView="loginView" v-on:registerView="registerView" :model="model" :height="height" :width="width"  ></Dialog>
     </div>
 </template>

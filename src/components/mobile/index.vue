@@ -1,34 +1,38 @@
 <template>
     <div>
       <Head v-on:mobileReload="mobileReload"></Head>
-      <div style="padding: 1rem;background-color: #008489;margin-top: 50px;">
+      <!-- <div style="padding: 1rem;background-color: #008489;margin-top: 50px;">
         <div style="display: flex;justify-content: space-between;align-items: center">
           <div style="width:50%;display: flex;justify-content: flex-start;background-color: #004C4F;padding:1rem;border-radius:2rem;">
             <i style="font-size:2rem;color:rgba(255,255,255,.5);" class="el-icon-search"></i>
             <input @focus="toSeach" style="border: none;background-color: #004C4F;width:100%;" />
           </div>
         </div>
-      </div>
-      <div>
+      </div> -->
+      <div style="margin-top: 50px">
         <swiper loop auto :aspect-ratio="300/800" dots-position="center"  :height="hieght + 'rem'" @on-index-change="onSwiperItemIndexChange" v-model="swiperItemIndex">
           <swiper-item class="swiper-demo-img" :height="hieght + 'rem'" v-for="(item, index) in bannerList" :key="index">
-            <img :src="item.image_id?item.image.domain+item.image.image_url:''" :style="{height:hieght + 'rem'}">
+            <LoadingImg type="new2" :src="item.image_id?item.image.domain+item.image.image_url:''" style="width:100%" :style="{height:hieght + 'rem'}"></LoadingImg>
           </swiper-item>
         </swiper>
       </div>
+      <div class="home_content">
+        
+      </div>
       <div style="display: flex;flex-wrap: wrap;justify-content: flex-start;">
         <div class="buttnL" @click="toPage(item,index)" :style="{marginRight:margin+'px',marginLeft: margin + 'px'}" v-for="(item,index) in buttnList">
-          <img :src="item.imgurl" style="width:4rem;height:4rem">
+          <LoadingImg type="new2" :src="item.imgurl" style="width:4rem;height:4rem"></LoadingImg>
           <p style="font-size:15px;">{{item.title}}</p>
         </div>
       </div>
+
       <div style="padding: 1rem;font-size: 12px;">
         <div>
-          <h2 >即将开展的体验</h2>
-          <div  id="wrap">
+          <h2>即将开展的体验</h2>
+          <div id="wrap">
             <div class="box"  :style="{left:left/10 + 'rem',width: width + 'px'}">
                 <div @click="toPublisha(item,index)" v-for="(item,index) in recentList"  class="boxlist"  >
-                  <LoadingImg type="3"  :src="item.cover_image? item.domain + item.image_url:''" style="width:6rem;height:6rem;border-radius: 5px;overflow: hidden"></LoadingImg>
+                  <LoadingImg type="new2"  :src="item.cover_image? item.domain + item.image_url:''" style="width:6rem;height:6rem;"></LoadingImg>
                   <div  style="margin-left:1rem;line-height: 2rem">
                     <p><b>{{item.title}}</b></p>
                     <p>{{item.kind?item.kind[0].kind_name:''}}</p>
@@ -43,7 +47,7 @@
           <div style="display: flex;justify-content: space-between;flex-wrap: wrap;margin: 2rem 0;">
             <div @click="toPublish(item,index)" v-for="(item,index) in highgScore" style="width:47%;margin: 1rem 0;overflow: hidden">
               <div style="width:100%;overflow: hidden;border-radius: 5px;">
-                <LoadingImg type="3" :src="item.cover_image?item.domain+item.image_url:''" style="width:100%;height:14rem;overflow: hidden"></LoadingImg>
+                <LoadingImg type="new2"  :src="item.cover_image?item.domain+item.image_url:''" style="width:100%;height:14rem;overflow: hidden"></LoadingImg>
               </div>
               <div style="margin-top:1rem;">
                 <p>{{item.kind?item.kind[0].kind_name:''}}</p>
@@ -67,7 +71,7 @@
           <div style="margin: 2rem 0;display: flex;justify-content: space-between;flex-wrap: wrap">
             <div @click="toStory(item,index)" v-for="(item,index) in storyList" style="width:47%;margin: 1rem 0;">
               <div style="width:100%;overflow: hidden;border-radius: 5px;">
-                <LoadingImg type="3" :src="item.cover_image?item.cover.domain+item.cover.image_url:''" style="width:100%;height:14rem;overflow: hidden"></LoadingImg>
+                <LoadingImg type="new2"  :src="item.cover_image?item.cover.domain+item.cover.image_url:''" style="width:100%;height:14rem;overflow: hidden"></LoadingImg>
               </div>
               <div style="margin-top: 1rem;">
                 <p>{{item.kind?item.kind[0].kind_name:''}}</p>

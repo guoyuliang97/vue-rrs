@@ -216,7 +216,7 @@
       methods:{
           //上传进度
         uploadLoading(file,fileList){
-          console.log(file)
+        
           if(file.status == 'ready'){
             this.isFirst = true
           }else if(file.status == 'success'){
@@ -224,7 +224,7 @@
           }
         },
         uploadScecond(file,fileList){
-          console.log(file)
+        
           if(file.status == 'ready'){
             this.isSeccond = true
           }else if(file.status == 'success'){
@@ -378,7 +378,7 @@
         },
         uploadPhoto(file){
           let _this = this
-          console.log(file.target.files[0])
+       
           var File = file.target.files[0]
           var reader = new FileReader();
           reader.readAsDataURL(File);

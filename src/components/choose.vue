@@ -74,17 +74,17 @@
               </div>
               <p @click="addperson = true" style="color:#008489;cursor: pointer;font-size:15px;"><i class="el-icon-plus"></i>添加新旅客</p>
               <div v-show="house.length">
-                <h1>预定的住宿</h1>
+                <h1 class="flexBetween">预定的住宿 <p  style="font-size:15px;cursor:pointer">
+                    <span  @click="toBack">修改</span>
+                    <!-- <span class="marginLeft" @click="delteHouse(item,index)">删除</span> -->
+                  </p></h1>
                 <div v-for="(item,index) in house" v-show="index < house.length -1 " :key="index" style="display: flex;justify-content: space-between;margin-top: 1px solid #eee;border-bottom: 1px solid #eee;">
                   <p style="font-size:15px;">
                     <span>{{item.houseType}}</span>
                     <span class="marginLeft"><i style="font-size:15px;" class="el-icon-close"></i>{{item.number}}</span>
                     <span class="marginLeft"><span>￥</span>{{(item.price * item.number).toFixed(2)}}</span>
                   </p>
-                  <p  style="font-size:15px;cursor:pointer">
-                    <span  @click="toBack">修改</span>
-                    <!-- <span class="marginLeft" @click="delteHouse(item,index)">删除</span> -->
-                  </p>
+                 
                 </div>
                 <hr style="margin:20px 0;border:none;border-bottom: 1px solid #eee">
               </div>
@@ -356,7 +356,9 @@
         </div>
       </div>
       <div  v-if="isPassword" style="position:fixed;top:0;left:0;right:0;bottom:0;background-color:rgba(0,0,0,.5);z-index:999">
-        <div  style="position:fixed;width:400px;height:120px;padding:20px;top:50%;left:50%;margin-top:-120px;margin-left:-220px;background-color:#fff;">
+        <div @click="closePay" style="position:fixed;top:0;left:0;right:0;bottom:0;background-color:rgba(0,0,0,.5);z-index:999">
+        </div>
+        <div  style="z-index:9999;position:fixed;width:400px;height:120px;padding:10px;top:50%;left:50%;margin-top:-120px;margin-left:-220px;background-color:#fff;border-radius:10px;">
           <div style="border-bottom: 1px solid #eee;text-align: center;padding-bottom:10px;position: relative">
             <i @click="closePay" style="cursor: pointer;font-size:20px;position: absolute;left:0;" class="el-icon-close"></i>
             <span><b>请输入安全密码</b></span>
@@ -920,7 +922,19 @@
             })
         },
         toBack(){
-          this.$router.go(-1)
+          if(this.$route.query.chooseHouse){
+             this.$router.push({
+              name: 'allHouse',
+              query:{
+                activeId: this.activeId,
+                slot_id:this.activeList.slot_id,
+                chooseTime: JSON.stringify(this.activeList)
+              }
+            })
+          }else{
+            this.$router.go(-1)
+          }
+          
         },
         getParams(){
           this.isLoading = true
